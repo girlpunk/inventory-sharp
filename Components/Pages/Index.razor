@@ -1,0 +1,17 @@
+@page "/"
+@using InventorySharp.Services
+@inherits ComputedStateComponent<int>
+@inject IItemService ItemService
+
+@if (State.Error != null) {
+  <div class="alert alert-warning" role="alert">Update error: @State.Error.Message</div>
+}
+
+<div class="card w-96 bg-base-100 shadow-sm">
+  <div class="card-body">
+    <div class="flex justify-between">
+      <h2 class="text-2xl">Items</h2>
+      <span class="text-3xl font-bold">@State.ValueOrDefault</span>
+    </div>
+  </div>
+</div>

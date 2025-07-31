@@ -1,0 +1,61 @@
+@using InventorySharp.Models
+
+<button class="btn" onclick="webscan_modal.showModal()">open WebScan</button>
+
+<dialog id="webscan_modal" class="modal">
+    <div class="modal-box">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+        </form>
+
+        <h3 class="text-lg font-bold">WebScan</h3>
+
+        <div class="modal-action">
+            <EditForm Model="@Inputs" OnSubmit="Lookup">
+                <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+                    <legend class="fieldset-legend">Label details</legend>
+
+                    <label class="label">Label Type</label>
+                    <div class="filter">
+                        <InputRadioGroup @bind-Value="Inputs.LabelType" DisplayName="Label Type" >
+                            <InputRadio class="btn filter-reset" TValue="LabelType?" Value="@null"/>
+                            @foreach (var tagType in (LabelType[])Enum.GetValuesAsUnderlyingType<LabelType>())
+                            {
+                                <InputRadio class="btn" Value="@tagType" aria-label="@tagType">@tagType</InputRadio>
+                            }
+                        </InputRadioGroup>
+                    </div>
+
+                    <label class="label">Create Scan Record</label>
+                    <InputCheckbox @bind-Value="@Inputs.CreateScanRecord" DisplayName="Create Scan Record"  class="checkbox"/>
+
+                    <label class="label">Identifier</label>
+                    <InputText @bind-Value="@Inputs.Identifier" DisplayName="Identifier" class="input"/>
+                    QR button here
+
+                    <button class="btn btn-neutral mt-4" type="submit" disabled="@(!Loading)">
+                        Login
+                        @if (Loading)
+                        {
+                            <span class="loading loading-spinner loading-lg"></span>
+                        }
+                    </button>
+                </fieldset>
+            </EditForm>
+
+            @if (ShowCreate)
+            {
+                <div role="alert" class="alert alert-error">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span>Label could not be found.</span>
+                    <div>
+                        <button class="btn btn-sm btn-primary" @onclick="Create">Create New Item</button>
+                        <button class="btn btn-sm btn-primary" @onclick="Create">Link Existing item</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</dialog>

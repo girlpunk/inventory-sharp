@@ -1,0 +1,10 @@
+@using InventorySharp.Services
+@inherits ComputedStateComponent<InventorySharp.Models.Item>
+@inject IItemService ItemService
+
+<h3>ItemWidget</h3>
+
+Name: @State.Value.Name<br/>
+Description: @State.Value.Description<br/>
+Create: @State.Value.Created<br/>
+Parent: @State.Value.ParentId<br/>
