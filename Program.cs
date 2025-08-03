@@ -1,17 +1,24 @@
+using System.Diagnostics;
+using System.Reflection;
 using ActualLab.Fusion.EntityFramework;
-using ActualLab.IO;
+using ActualLab.Fusion.EntityFramework.Npgsql;
 using InventorySharp.Models.Geolocation;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Logging;
+using Npgsql;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 namespace InventorySharp;
 
 using ActualLab.Fusion;
 using ActualLab.Fusion.Blazor;
-using ActualLab.Fusion.Extensions;
-using ActualLab.Fusion.UI;
 using Components;
 //using Components.Pages;
-using FluentValidation;
 using Models;
 using Services;
 
@@ -52,36 +59,54 @@ public static class Program
         builder.Services.AddHttpContextAccessor();
 
         builder.Services.AddRazorComponents()
-            .AddInteractiveServerComponents();
+            .AddInteractiveServerComponents(options =>
+            {
+                if (builder.Environment.IsDevelopment())
+                    options.DetailedErrors = true;
+            });
+
+        builder.Services.Configure<ForwardedHeadersOptions>(static options =>
+        {
+            options.ForwardedHeaders = ForwardedHeaders.All;
+        });
+
+        builder.Services.AddCascadingAuthenticationState();
+
+        builder.Services.AddAuthentication(static options =>
+            {
+                options.DefaultScheme = IdentityConstants.ApplicationScheme;
+                options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+            })
+            .AddOpenIdConnect(
+                OpenIdConnectDefaults.AuthenticationScheme,
+                "Authentik", options =>
+                {
+                    builder.Configuration.GetSection("Auth").Bind(options);
+                    options.Scope.Add("email");
+
+                    options.CorrelationCookie.Name = "OIDC-Correlation";
+                    options.NonceCookie.Name = "OIDC-Nonce";
+                })
+            .AddIdentityCookies();
 
         builder.Services.AddScoped<IGeolocationService, GeolocationService>();
 
         builder.Services.AddPooledDbContextFactory<AppDbContext>(db =>
         {
-            // if (AppSettings.Db.UsePostgreSql) {
-            //     var connectionString =
-            //         "Server=localhost;Database=fusion_hellocart;Port=5432;User Id=postgres;Password=postgres";
-            //     db.UseNpgsql(connectionString, npgsql => {
-            //         npgsql.EnableRetryOnFailure(0);
-            //     });
-            //     db.UseNpgsqlHintFormatter();
-            // }
-            // else {
-                var appTempDir = FilePath.GetApplicationTempDirectory("", true);
-                var dbPath = appTempDir & "HelloCart_v1.db";
-                db.UseSqlite($"Data Source={dbPath}");
-            // }
-            db.EnableSensitiveDataLogging();
+            db.UseNpgsql(
+                builder.Configuration.GetConnectionString("DefaultConnection"),
+                static npgsql => npgsql.EnableRetryOnFailure(0));
+            db.UseNpgsqlHintFormatter();
+
+            if (builder.Environment.IsDevelopment())
+                db.EnableSensitiveDataLogging();
         });
 
-        builder.Services.AddDbContextServices<AppDbContext>(db =>
+        builder.Services.AddDbContextServices<AppDbContext>(static db =>
         {
-            db.AddOperations(operations =>
+            db.AddOperations(static operations =>
             {
-                // if (AppSettings.Db.UsePostgreSql)
-                    // operations.AddNpgsqlOperationLogWatcher();
-                // else
-                    operations.AddFileSystemOperationLogWatcher();
+                operations.AddNpgsqlOperationLogWatcher();
             });
             db.AddEntityResolver<Guid, Item>();
             // db.AddEntityResolver<string, DbCart>(_ => new() {
@@ -93,6 +118,58 @@ public static class Program
         // Operation reprocessor
         fusionBuilder.AddOperationReprocessor();
 
+        builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+        builder.Logging.AddOpenTelemetry(static logging =>
+        {
+            logging.IncludeFormattedMessage = true;
+            logging.IncludeScopes = true;
+        });
+
+        builder.Services.AddOpenTelemetry()
+            .ConfigureResource(static r =>
+            {
+                r.AddService("Inventory-Sharp",
+                    serviceVersion: FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion,
+                    serviceInstanceId: Environment.MachineName);
+                r.AddContainerDetector()
+                    .AddEnvironmentVariableDetector()
+                    .AddHostDetector()
+                    .AddOperatingSystemDetector()
+                    .AddProcessDetector()
+                    .AddProcessRuntimeDetector()
+                    .AddTelemetrySdk();
+            })
+            .WithMetrics(static (metrics) =>
+            {
+                metrics.AddRuntimeInstrumentation()
+                    .AddProcessInstrumentation()
+                    .AddAspNetCoreInstrumentation()
+                    // .AddHttpClientInstrumentation()
+                    .AddNpgsqlInstrumentation()
+                    .AddPrometheusExporter();
+            })
+            .WithTracing(tracing =>
+            {
+                if (builder.Environment.IsDevelopment())
+                    tracing.SetSampler(new AlwaysOnSampler());
+
+                tracing.AddAspNetCoreInstrumentation()
+                    .AddHttpClientInstrumentation()
+                    .AddGrpcClientInstrumentation()
+                    .AddEntityFrameworkCoreInstrumentation()
+                    .AddNpgsql();
+                    // .AddSource(DiagnosticHeaders.DefaultListenerName);
+            });
+
+        builder.Services.AddHealthChecks()
+            .AddDbContextCheck<AppDbContext>("DB");
+
+        builder.Services.AddProblemDetails();
+        builder.Services.AddEndpointsApiExplorer();
+
+        builder.Services.AddOutputCache();
+
         var app = builder.Build();
 
         if (!app.Environment.IsDevelopment())
@@ -103,21 +180,33 @@ public static class Program
         else
         {
             app.UseDeveloperExceptionPage();
+            IdentityModelEventSource.ShowPII = true;
+            app.UseWebAssemblyDebugging();
+            app.UseMigrationsEndPoint();
         }
+
+        app.UseForwardedHeaders();
+
+        app.UseHealthChecks("/healthz");
+        app.MapPrometheusScrapingEndpoint()
+            .AllowAnonymous();
 
         app.UseHttpsRedirection();
         app.UseAntiforgery();
         app.UseSession();
+        app.UseOutputCache();
 
         app.MapStaticAssets();
         app.MapRazorComponents<App>()
             // .AddInteractiveWebAssemblyRenderMode()
             .AddInteractiveServerRenderMode();
 
-        //app.UseAuthorization();
+        app.UseAuthorization();
+        app.UseAuthentication();
 
-        await (await app.Services.GetRequiredService<IDbContextFactory<AppDbContext>>().CreateDbContextAsync()).Database.MigrateAsync();
+        await using var db = await app.Services.GetRequiredService<IDbContextFactory<AppDbContext>>().CreateDbContextAsync().ConfigureAwait(false);
+        await db.Database.MigrateAsync().ConfigureAwait(false);
 
-        await app.RunAsync();
+        await app.RunAsync().ConfigureAwait(false);
     }
 }
