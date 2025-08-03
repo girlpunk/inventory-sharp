@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.IdentityModel.Logging;
 using Npgsql;
 using OpenTelemetry.Metrics;
@@ -101,6 +102,8 @@ public static class Program
             if (builder.Environment.IsDevelopment())
                 db.EnableSensitiveDataLogging();
         });
+        builder.Services.AddScoped(static sp =>
+            sp.GetRequiredService<PooledDbContextFactory<AppDbContext>>().CreateDbContext());
 
         builder.Services.AddDbContextServices<AppDbContext>(static db =>
         {
