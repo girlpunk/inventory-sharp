@@ -3,8 +3,15 @@ using ActualLab.CommandR;
 
 namespace InventorySharp.Commands;
 
+/// <summary>
+/// Delete an instance of <c>T</c>
+/// </summary>
+/// <typeparam name="T">Type of object to be deleted</typeparam>
 [JsonSerializable(typeof(CreateCommand<>))]
-public class DeleteCommand<T> : ICommand<T>
+public record DeleteCommand<T> : ICommand<T>
 {
-    public T Obj { get; init; }
+    /// <summary>
+    /// Object to be deleted
+    /// </summary>
+    public required T Obj { get; init; }
 }

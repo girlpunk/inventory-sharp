@@ -2,6 +2,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace InventorySharp.Models;
 
+/// <inheritdoc />
+/// <summary>
+/// Label attached to an item
+/// </summary>
 public class ItemLabel : BaseModel
 {
     /// <summary>

@@ -3,8 +3,15 @@ using ActualLab.CommandR;
 
 namespace InventorySharp.Commands;
 
+/// <summary>
+/// Create a new <c>T</c>
+/// </summary>
+/// <typeparam name="T">Type of object to be created</typeparam>
 [JsonSerializable(typeof(CreateCommand<>))]
-public class CreateCommand<T> : ICommand<T>
+public record CreateCommand<T> : ICommand<T>
 {
-    public T Obj { get; init; }
+    /// <summary>
+    /// Object to be created
+    /// </summary>
+    public required T Obj { get; init; }
 }

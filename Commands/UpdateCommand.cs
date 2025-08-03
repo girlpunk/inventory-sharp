@@ -3,8 +3,15 @@ using ActualLab.CommandR;
 
 namespace InventorySharp.Commands;
 
+/// <summary>
+/// Update an item
+/// </summary>
+/// <typeparam name="T">Type of the item</typeparam>
 [JsonSerializable(typeof(CreateCommand<>))]
-public class UpdateCommand<T> : ICommand<T>
+public record UpdateCommand<T> : ICommand<T>
 {
-    public T Obj { get; init; }
+    /// <summary>
+    /// Item to be updated
+    /// </summary>
+    public required T Obj { get; init; }
 }

@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace InventorySharp.Models;
 
+/// <inheritdoc />
 /// <summary>
 /// Item that can be tracked
 /// </summary>

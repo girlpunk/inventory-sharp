@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace InventorySharp.Models;
 
+/// <inheritdoc />
 /// <summary>
 /// Photo of an item
 /// </summary>
@@ -10,7 +11,7 @@ public class ItemPhoto : BaseModel
     /// <summary>
     /// Item the photo relates to
     /// </summary>
-    public Guid ItemId { get; set; }
+    public Guid ItemId { get; init; }
 
     /// <summary>
     /// Item the photo relates to
@@ -26,10 +27,10 @@ public class ItemPhoto : BaseModel
     /// <summary>
     /// When the photo was uploaded
     /// </summary>
-    public DateTime Uploaded { get; set; }
+    public DateTime Uploaded { get; init; }
 
     /// <summary>
     /// The photo itself
     /// </summary>
-    public required byte[] Data { get; set; }
+    public required byte[] Data { get; init; }
 }

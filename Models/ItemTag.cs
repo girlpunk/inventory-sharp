@@ -1,9 +1,25 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace InventorySharp.Models;
 
+/// <summary>
+/// Tag applied to an item
+/// </summary>
 public class ItemTag
 {
-    public Guid ItemId { get; set; }
-    public string Tag { get; set; }
+    /// <summary>
+    /// Item the tag is applied to
+    /// </summary>
+    public required Guid ItemId { get; init; }
 
+    /// <summary>
+    /// Tag value
+    /// </summary>
+    [MaxLength(128)]
+    public required string Tag { get; set; }
+
+    /// <summary>
+    /// Item the tag is applied to
+    /// </summary>
     public virtual Item Item { get; init; }
 }

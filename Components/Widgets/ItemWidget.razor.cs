@@ -4,9 +4,13 @@ namespace InventorySharp.Components.Widgets;
 
 public partial class ItemWidget
 {
-    [Parameter] public Guid ItemId { get; set; }
+    /// <summary>
+    /// Item to show details for
+    /// </summary>
+    [Parameter]
+    public Guid ItemId { get; set; }
 
     /// <inheritdoc />
-    protected override async Task<Models.Item> ComputeState(CancellationToken cancellationToken) =>
-        await ItemService.Get(ItemId, cancellationToken);
+    protected override Task<Models.Item> ComputeState(CancellationToken cancellationToken) =>
+        ItemService.Get(ItemId, cancellationToken);
 }

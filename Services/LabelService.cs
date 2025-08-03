@@ -47,8 +47,7 @@ public class LabelService(IServiceProvider serviceProvider) : CRUDService<ItemLa
                 return null!;
 
             _ = Get(id.Value, default);
-            _ = List(default);
-            _ = Count(default);
+            _ = List(id.Value, default);
 
             return null!;
         }
@@ -94,7 +93,8 @@ public class LabelService(IServiceProvider serviceProvider) : CRUDService<ItemLa
         if (label == null)
             return result;
 
-        result.LabelId = label.Id;
+        result.Label = label;
+        result.Item = label.Item;
 
         if (!command.CreateScanRecord)
             return result;
@@ -122,7 +122,7 @@ public class LabelService(IServiceProvider serviceProvider) : CRUDService<ItemLa
 
         await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
-        result.ScanId = scanRecord.Id;
+        result.Scan = scanRecord;
 
         return result;
     }
@@ -131,6 +131,6 @@ public class LabelService(IServiceProvider serviceProvider) : CRUDService<ItemLa
     public virtual async Task<ICollection<ItemLabel>> List(Guid itemId, CancellationToken cancellationToken = default)
     {
         await using var dbContext = await DbHub.CreateDbContext(cancellationToken);
-        return await DbSet(dbContext).Where(l => l.ItemId == itemId).ToListAsync(cancellationToken);
+        return await DbSet(dbContext).Where(l => l.ItemId == itemId).ToListAsync(cancellationToken).ConfigureAwait(false);
     }
 }

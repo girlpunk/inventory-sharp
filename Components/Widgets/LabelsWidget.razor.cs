@@ -5,8 +5,13 @@ namespace InventorySharp.Components.Widgets;
 
 public partial class LabelsWidget
 {
-    [Parameter] public Guid ItemId { get; set; }
+    /// <summary>
+    /// Item to show labels for
+    /// </summary>
+    [Parameter]
+    public Guid ItemId { get; set; }
 
-    protected override async Task<ICollection<ItemLabel>> ComputeState(CancellationToken cancellationToken) =>
-        await LabelService.List(ItemId, cancellationToken);
+    /// <inheritdoc />
+    protected override Task<ICollection<ItemLabel>> ComputeState(CancellationToken cancellationToken) =>
+        LabelService.List(ItemId, cancellationToken);
 }

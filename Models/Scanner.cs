@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace InventorySharp.Models;
 
+/// <inheritdoc />
 /// <summary>
 /// Label scanner
 /// </summary>
@@ -11,7 +12,7 @@ public class Scanner : BaseModel
     /// Name of the scanner
     /// </summary>
     [MaxLength(128)]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// Types of label that can be scanned

@@ -18,12 +18,3 @@ Scan Type: @State.Value.ScanType<br/>
 {
     <MapBox Latitude="@State.Value.Latitude" Longitude="@State.Value.Longitude" Zoom="9" />
 }
-
-
-@code {
-    [Parameter]
-    public Guid Id { get; set; }
-
-    /// <inheritdoc />
-    protected override async Task<LabelScan> ComputeState(CancellationToken cancellationToken) => await ScanService.Get(Id, cancellationToken);
-}

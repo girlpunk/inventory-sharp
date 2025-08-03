@@ -7,23 +7,27 @@ namespace InventorySharp.Components;
 
 public partial class WebScan
 {
-    public ScanLabelCommand Inputs { get; set; } = new();
+    /// <summary>
+    /// Scan details
+    /// </summary>
+    public ScanLabelCommand Inputs { get; } = new();
 
-    private bool ShowCreate { get; set; }
+    private ScanLabelResult? LastScan { get; set; }
+
+    // private bool ShowCreate { get; set; }
+    // private LabelScan? Scan { get; set; }
+    // private ItemLabel? Label { get; set; }
+    // private Item? Item { get; set; }
     private bool Loading { get; set; }
-
-    [Inject]
-    public ICommander Commander { get; set; } = null!;
-
-    [Inject]
-    public NavigationManager NavigationManager { get; set; } = null!;
-
-    [Inject] public IGeolocationService GeolocationService { get; set; } = null!;
 
     private async Task Lookup()
     {
-        ShowCreate = false;
+        // ShowCreate = false;
         Loading = true;
+        // Scan = null;
+        // Label = null;
+        // Item = null;
+        LastScan = null;
         StateHasChanged();
 
         //Get location
@@ -31,7 +35,7 @@ public partial class WebScan
         {
             EnableHighAccuracy = true,
             MaximumAge = 30,
-        });
+        }).ConfigureAwait(false);
 
         if (location.IsSuccess)
         {
@@ -39,30 +43,37 @@ public partial class WebScan
             Inputs.ScannerLongitude = location.Position?.Coords.Longitude;
         }
 
-        var lookupResult = await Commander.Call(Inputs);
+        var lookupResult = await Commander.Call(Inputs).ConfigureAwait(false);
 
-        if (lookupResult.LabelId == null)
-        {
-            // Could not find item, offer to create?
-            ShowCreate = true;
-            Loading = false;
+        LastScan = lookupResult;
 
-            return;
-        }
-
-        if (lookupResult.ScanId != null)
-        {
-            // Go to scan
-            NavigationManager.NavigateTo($"/Scan/{lookupResult.ScanId}");
-        }
-        else
-        {
-            // Go to item
-            NavigationManager.NavigateTo($"/Label/{lookupResult.LabelId}");
-        }
+        // if (lookupResult.Label == null)
+        // {
+        //     // Could not find item, offer to create?
+        //     ShowCreate = true;
+        //     Loading = false;
+        //
+        //     return;
+        // }
+        //
+        // if (lookupResult.Scan -= null)
+        // {
+        //     Scan = await ScanService.Get(lookupResult.ScanId, cancellationToken)
+        //     // Go to scan
+        //     NavigationManager.NavigateTo($"/Scan/{lookupResult.ScanId}");
+        // }
+        //
+        //
+        // {
+        //     // Go to item
+        //     NavigationManager.NavigateTo($"/Label/{lookupResult.LabelId}");
+        // }
     }
 
-    public void Create()
+    /// <summary>
+    /// Go to the "Create Item" page
+    /// </summary>
+    private void Create()
     {
         var url = NavigationManager.GetUriWithQueryParameters("/Item/Create", new Dictionary<string, object?>()
         {

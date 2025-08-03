@@ -5,9 +5,13 @@ namespace InventorySharp.Components.Widgets;
 
 public partial class ScansWidget
 {
-    [Parameter] public Guid ItemId { get; set; }
+    /// <summary>
+    /// Item to display scans for
+    /// </summary>
+    [Parameter]
+    public Guid ItemId { get; set; }
 
     /// <inheritdoc />
-    protected override async Task<ICollection<LabelScan>> ComputeState(CancellationToken cancellationToken) =>
-        await ScanService.List(ItemId, cancellationToken);
+    protected override Task<ICollection<LabelScan>> ComputeState(CancellationToken cancellationToken) =>
+        ScanService.List(ItemId, cancellationToken);
 }

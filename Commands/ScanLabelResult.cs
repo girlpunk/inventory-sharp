@@ -1,7 +1,24 @@
+using InventorySharp.Models;
+
 namespace InventorySharp.Commands;
 
+/// <summary>
+/// Results of completing a scan
+/// </summary>
 public record ScanLabelResult
 {
-    public Guid? LabelId { get; set; }
-    public Guid? ScanId { get; set; }
+    /// <summary>
+    /// Label that was scanned
+    /// </summary>
+    public ItemLabel? Label { get; set; }
+
+    /// <summary>
+    /// Record of the scan
+    /// </summary>
+    public LabelScan? Scan { get; set; }
+
+    /// <summary>
+    /// Item that was scanned
+    /// </summary>
+    public Item? Item { get; set; }
 }

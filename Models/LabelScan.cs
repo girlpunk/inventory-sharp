@@ -1,5 +1,6 @@
 namespace InventorySharp.Models;
 
+/// <inheritdoc />
 /// <summary>
 /// Scan of a label
 /// </summary>

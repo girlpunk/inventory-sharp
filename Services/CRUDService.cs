@@ -20,21 +20,21 @@ public abstract class CRUDService<T>(IServiceProvider services) : DbServiceBase<
     public virtual async Task<int> Count(CancellationToken cancellationToken = default)
     {
         await using var dbContext = await DbHub.CreateDbContext(cancellationToken);
-        return await DbSet(dbContext).CountAsync(cancellationToken);
+        return await DbSet(dbContext).CountAsync(cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public virtual async Task<ICollection<T>> List(CancellationToken cancellationToken = default)
     {
         await using var dbContext = await DbHub.CreateDbContext(cancellationToken);
-        return await DbSet(dbContext).ToListAsync(cancellationToken);
+        return await DbSet(dbContext).ToListAsync(cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public virtual async Task<T> Get(Guid id, CancellationToken cancellationToken = default)
     {
         await using var dbContext = await DbHub.CreateDbContext(cancellationToken);
-        return await DbSet(dbContext).SingleAsync(i => i.Id == id, cancellationToken);
+        return await DbSet(dbContext).SingleAsync(i => i.Id == id, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -64,14 +64,14 @@ public abstract class CRUDService<T>(IServiceProvider services) : DbServiceBase<
 
         await using var dbContext = await DbHub.CreateOperationDbContext(cancellationToken);
 
-        var item = await DbSet(dbContext).FindAsync(DbKey.Compose(command.Obj.Id), cancellationToken);
+        var item = await DbSet(dbContext).FindAsync(DbKey.Compose(command.Obj.Id), cancellationToken).ConfigureAwait(false);
 
         if (item != null)
             DoUpdate(command.Obj, item);
         else
             DbSet(dbContext).Add(command.Obj);
 
-        await dbContext.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -97,7 +97,7 @@ public abstract class CRUDService<T>(IServiceProvider services) : DbServiceBase<
         await using var dbContext = await DbHub.CreateOperationDbContext(cancellationToken);
 
         DbSet(dbContext).Add(command.Obj);
-        await dbContext.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
         context.Operation.Items.KeylessSet(command.Obj.Id);
         return command.Obj;
@@ -122,6 +122,6 @@ public abstract class CRUDService<T>(IServiceProvider services) : DbServiceBase<
         await using var dbContext = await DbHub.CreateOperationDbContext(cancellationToken);
 
         DbSet(dbContext).Remove(command.Obj);
-        await dbContext.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
     }
 }

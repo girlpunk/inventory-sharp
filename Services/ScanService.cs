@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InventorySharp.Services;
 
-/// <inheritdoc />
+/// <inheritdoc cref="IScanService" />
 public class ScanService(IServiceProvider serviceProvider) : CRUDService<LabelScan>(serviceProvider), IScanService
 {
     /// <inheritdoc />
@@ -28,6 +28,6 @@ public class ScanService(IServiceProvider serviceProvider) : CRUDService<LabelSc
     public virtual async Task<ICollection<LabelScan>> List(Guid itemId, CancellationToken cancellationToken = default)
     {
         await using var dbContext = await DbHub.CreateDbContext(cancellationToken);
-        return await DbSet(dbContext).Where(s => s.Label.ItemId == itemId).ToListAsync(cancellationToken);
+        return await DbSet(dbContext).Where(s => s.Label.ItemId == itemId).ToListAsync(cancellationToken).ConfigureAwait(false);
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InventorySharp.Services;
 
-/// <inheritdoc />
+/// <inheritdoc cref="IItemService"  />
 public class ItemService(IServiceProvider serviceProvider) : CRUDService<Item>(serviceProvider), IItemService
 {
     /// <inheritdoc />

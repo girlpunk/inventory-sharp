@@ -2,21 +2,34 @@
 <div id="map"></div>
 
 @code {
+    /// <summary>
+    /// Javascript Runtime
+    /// </summary>
     [Inject]
     public required IJSRuntime JSRuntime { get; init; }
 
+    /// <summary>
+    /// Latitude to be displayed on the map
+    /// </summary>
     [Parameter]
     [EditorRequired]
     public double? Latitude { get; set; }
 
+    /// <summary>
+    /// Longitude to be displayed on the map
+    /// </summary>
     [Parameter]
     [EditorRequired]
     public double? Longitude { get; set; }
 
+    /// <summary>
+    /// Zoom level of the map
+    /// </summary>
     [Parameter]
     [EditorRequired]
     public int? Zoom { get; set; }
 
+    /// <inheritdoc />
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
@@ -27,11 +40,11 @@
 
             var mapboxgl = await module.GetModule();
 
-            var map = await mapboxgl.InvokeAsync<IJSObjectReference>("Map", new Dictionary<string, object>()
+            var map = await mapboxgl.InvokeAsync<IJSObjectReference>("Map", new Dictionary<string, object>
             {
                 {"container", "map"},
                 {"center", new List<double?> {Longitude, Latitude}},
-                {"zoom", Zoom}
+                {"zoom", Zoom ?? -1}
             });
         }
     }
