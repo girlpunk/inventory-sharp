@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Logging;
@@ -76,7 +77,11 @@ public static class Program
 
         builder.Services.AddCascadingAuthenticationState();
 
-        builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+        builder.Services.AddAuthentication(static options =>
+            {
+                options.DefaultScheme = IdentityConstants.ApplicationScheme; // OpenIdConnectDefaults.AuthenticationScheme
+                options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+            })
             .AddOpenIdConnect(
                 OpenIdConnectDefaults.AuthenticationScheme,
                 "Authentik", options =>
