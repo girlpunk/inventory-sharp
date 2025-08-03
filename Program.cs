@@ -64,7 +64,8 @@ public static class Program
             {
                 if (builder.Environment.IsDevelopment())
                     options.DetailedErrors = true;
-            });
+            })
+            .AddAuthenticationStateSerialization();
 
         builder.Services.Configure<ForwardedHeadersOptions>(static options =>
         {
@@ -73,6 +74,7 @@ public static class Program
 
         builder.Services.AddCascadingAuthenticationState();
 
+        builder.Services.AddAuthenticationCore();
         builder.Services.AddAuthentication(static options =>
             {
                 options.DefaultScheme = IdentityConstants.ApplicationScheme;
