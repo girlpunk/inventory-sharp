@@ -79,8 +79,8 @@ public static class Program
 
         builder.Services.AddAuthentication(static options =>
             {
-                options.DefaultScheme = IdentityConstants.ApplicationScheme; // OpenIdConnectDefaults.AuthenticationScheme
-                options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = OpenIdConnectDefaults.AuthenticationScheme;
             })
             .AddOpenIdConnect(
                 OpenIdConnectDefaults.AuthenticationScheme,
