@@ -103,7 +103,7 @@ public static class Program
                 db.EnableSensitiveDataLogging();
         });
         builder.Services.AddScoped(static sp =>
-            sp.GetRequiredService<PooledDbContextFactory<AppDbContext>>().CreateDbContext());
+            sp.GetRequiredService<IDbContextFactory<AppDbContext>>().CreateDbContext());
 
         builder.Services.AddDbContextServices<AppDbContext>(static db =>
         {
