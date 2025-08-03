@@ -86,6 +86,8 @@ public static class Program
 
                     options.CorrelationCookie.Name = "OIDC-Correlation";
                     options.NonceCookie.Name = "OIDC-Nonce";
+
+                    options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 })
             .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
 
