@@ -69,4 +69,8 @@
     <AdditionalFiles Include="Components\Pages\Shared\_Layout.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Components\Pages\Shared\" />
+  </ItemGroup>
+
 </Project>

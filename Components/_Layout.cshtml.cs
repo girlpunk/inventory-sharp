@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace InventorySharp.Pages.Shared;
+namespace InventorySharp.Components;
 
 public class _Layout : PageModel
 {
