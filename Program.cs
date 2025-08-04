@@ -76,7 +76,7 @@ public static class Program
 
         builder.Services.AddCascadingAuthenticationState();
 
-        builder.Services.AddAuthentication();
+        // builder.Services.AddAuthentication();
         // builder.Services.AddMsalAuthentication(options =>
         // {
         //     options.ProviderOptions.Authentication.
@@ -93,7 +93,7 @@ public static class Program
         //         options.DefaultSignInScheme = OpenIdConnectDefaults.AuthenticationScheme;
         //     })
 
-        builder.Services.AddAuthentication()
+        builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
             .AddOpenIdConnect(
                 OpenIdConnectDefaults.AuthenticationScheme,
                 "Authentik", options =>
