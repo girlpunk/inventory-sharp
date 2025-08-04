@@ -234,7 +234,7 @@ public static class Program
             .AddInteractiveServerRenderMode()
             .AddInteractiveWebAssemblyRenderMode();
 
-        // app.MapGroup("/authentication").MapLoginAndLogout();
+        app.MapGroup("/authentication").MapLoginAndLogout();
 
         app.UseAuthentication();
         app.UseAuthorization();
