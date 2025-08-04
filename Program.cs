@@ -225,7 +225,7 @@ public static class Program
         // app.UseSession();
         app.UseOutputCache();
 
-        app.MapControllers();
+        // app.MapControllers();
         app.MapStaticAssets();
         app.MapRazorComponents<App>()
             .AddInteractiveServerRenderMode()
