@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Logging;
@@ -93,7 +94,8 @@ public static class Program
         //         options.DefaultSignInScheme = OpenIdConnectDefaults.AuthenticationScheme;
         //     })
 
-        builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+        builder.Services.AddAuthentication()
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddOpenIdConnect(
                 OpenIdConnectDefaults.AuthenticationScheme,
                 "Authentik", options =>
@@ -104,7 +106,7 @@ public static class Program
                     options.CorrelationCookie.Name = "OIDC-Correlation";
                     options.NonceCookie.Name = "OIDC-Nonce";
 
-                    // options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 });
         //     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
         //
