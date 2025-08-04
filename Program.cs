@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Logging;
@@ -77,28 +76,39 @@ public static class Program
 
         builder.Services.AddCascadingAuthenticationState();
 
-        builder.Services.AddAuthentication(static options =>
-            {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = OpenIdConnectDefaults.AuthenticationScheme;
-            })
-            .AddOpenIdConnect(
-                OpenIdConnectDefaults.AuthenticationScheme,
-                "Authentik", options =>
-                {
-                    builder.Configuration.GetSection("Auth").Bind(options);
-                    options.Scope.Add("email");
-
-                    options.CorrelationCookie.Name = "OIDC-Correlation";
-                    options.NonceCookie.Name = "OIDC-Nonce";
-
-                    options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                })
-            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
-
-        builder.Services.ConfigureCookieOidc(CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
+        builder.Services.AddAuthentication();
+        builder.Services.AddMsalAuthentication(options =>
+        {
+            builder.Configuration.GetSection("Auth").Bind(options.ProviderOptions.Authentication);
+        });
 
         builder.Services.AddAuthorization();
+
+        builder.Services.AddControllersWithViews();
+        builder.Services.AddMvc(static options => options.EnableEndpointRouting = false);
+
+        // builder.Services.AddAuthentication(static options =>
+        //     {
+        //         options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        //         options.DefaultSignInScheme = OpenIdConnectDefaults.AuthenticationScheme;
+        //     })
+        //     .AddOpenIdConnect(
+        //         OpenIdConnectDefaults.AuthenticationScheme,
+        //         "Authentik", options =>
+        //         {
+        //             builder.Configuration.GetSection("Auth").Bind(options);
+        //             options.Scope.Add("email");
+        //
+        //             options.CorrelationCookie.Name = "OIDC-Correlation";
+        //             options.NonceCookie.Name = "OIDC-Nonce";
+        //
+        //             options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        //         })
+        //     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
+        //
+        // builder.Services.ConfigureCookieOidc(CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
+        //
+        // builder.Services.AddAuthorization();
 
         builder.Services.AddScoped<IGeolocationService, GeolocationService>();
 
@@ -200,7 +210,10 @@ public static class Program
             app.UseMigrationsEndPoint();
         }
 
-        app.UseForwardedHeaders();
+        app.UseForwardedHeaders(new ForwardedHeadersOptions()
+        {
+            ForwardedHeaders = ForwardedHeaders.All,
+        });
 
         app.UseHealthChecks("/healthz");
         app.MapPrometheusScrapingEndpoint()
@@ -208,18 +221,21 @@ public static class Program
 
         app.UseHttpsRedirection();
         app.UseAntiforgery();
-        app.UseSession();
+        // app.UseSession();
         app.UseOutputCache();
 
+        app.MapControllers();
         app.MapStaticAssets();
         app.MapRazorComponents<App>()
             .AddInteractiveServerRenderMode()
             .AddInteractiveWebAssemblyRenderMode();
 
-        app.MapGroup("/authentication").MapLoginAndLogout();
+        // app.MapGroup("/authentication").MapLoginAndLogout();
 
-        app.UseAuthorization();
         app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.UseMvcWithDefaultRoute();
 
         await using var db = await app.Services.GetRequiredService<IDbContextFactory<AppDbContext>>().CreateDbContextAsync().ConfigureAwait(false);
         await db.Database.MigrateAsync().ConfigureAwait(false);
@@ -250,17 +266,10 @@ public static class Program
 
         // Prevent open redirects.
         if (string.IsNullOrEmpty(returnUrl))
-        {
             returnUrl = pathBase;
-        }
         else if (!Uri.IsWellFormedUriString(returnUrl, UriKind.Relative))
-        {
             returnUrl = new Uri(returnUrl, UriKind.Absolute).PathAndQuery;
-        }
-        else if (returnUrl[0] != '/')
-        {
-            returnUrl = $"{pathBase}{returnUrl}";
-        }
+        else if (returnUrl[0] != '/') returnUrl = $"{pathBase}{returnUrl}";
 
         return new AuthenticationProperties { RedirectUri = returnUrl };
     }
@@ -268,11 +277,11 @@ public static class Program
     public static IServiceCollection ConfigureCookieOidc(this IServiceCollection services, string cookieScheme, string oidcScheme)
     {
         // services.AddSingleton<CookieOidcRefresher>();
-        services.AddOptions<CookieAuthenticationOptions>(cookieScheme)/*.Configure<CookieOidcRefresher>((cookieOptions, refresher) =>
+        services.AddOptions<CookieAuthenticationOptions>(cookieScheme) /*.Configure<CookieOidcRefresher>((cookieOptions, refresher) =>
         {
             cookieOptions.Events.OnValidatePrincipal = context => refresher.ValidateOrRefreshCookieAsync(context, oidcScheme);
         })*/;
-        services.AddOptions<OpenIdConnectOptions>(oidcScheme).Configure(oidcOptions =>
+        services.AddOptions<OpenIdConnectOptions>(oidcScheme).Configure(static oidcOptions =>
         {
             // Request a refresh_token.
             oidcOptions.Scope.Add(OpenIdConnectScope.OfflineAccess);
