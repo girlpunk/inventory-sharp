@@ -77,10 +77,10 @@ public static class Program
         builder.Services.AddCascadingAuthenticationState();
 
         builder.Services.AddAuthentication();
-        builder.Services.AddMsalAuthentication(options =>
-        {
-            builder.Configuration.GetSection("Auth").Bind(options.ProviderOptions.Authentication);
-        });
+        // builder.Services.AddMsalAuthentication(options =>
+        // {
+        //     options.ProviderOptions.Authentication.
+        // });
 
         builder.Services.AddAuthorization();
 
@@ -92,18 +92,20 @@ public static class Program
         //         options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
         //         options.DefaultSignInScheme = OpenIdConnectDefaults.AuthenticationScheme;
         //     })
-        //     .AddOpenIdConnect(
-        //         OpenIdConnectDefaults.AuthenticationScheme,
-        //         "Authentik", options =>
-        //         {
-        //             builder.Configuration.GetSection("Auth").Bind(options);
-        //             options.Scope.Add("email");
-        //
-        //             options.CorrelationCookie.Name = "OIDC-Correlation";
-        //             options.NonceCookie.Name = "OIDC-Nonce";
-        //
-        //             options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        //         })
+
+        builder.Services.AddAuthentication()
+            .AddOpenIdConnect(
+                OpenIdConnectDefaults.AuthenticationScheme,
+                "Authentik", options =>
+                {
+                    builder.Configuration.GetSection("Auth").Bind(options);
+                    options.Scope.Add("email");
+
+                    options.CorrelationCookie.Name = "OIDC-Correlation";
+                    options.NonceCookie.Name = "OIDC-Nonce";
+
+                    // options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                });
         //     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
         //
         // builder.Services.ConfigureCookieOidc(CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
