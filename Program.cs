@@ -85,9 +85,6 @@ public static class Program
 
         builder.Services.AddAuthorization();
 
-        builder.Services.AddControllersWithViews();
-        builder.Services.AddMvc(static options => options.EnableEndpointRouting = false);
-
         // builder.Services.AddAuthentication(static options =>
         //     {
         //         options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -238,8 +235,6 @@ public static class Program
 
         app.UseAuthentication();
         app.UseAuthorization();
-
-        app.UseMvcWithDefaultRoute();
 
         await using var db = await app.Services.GetRequiredService<IDbContextFactory<AppDbContext>>().CreateDbContextAsync().ConfigureAwait(false);
         await db.Database.MigrateAsync().ConfigureAwait(false);
