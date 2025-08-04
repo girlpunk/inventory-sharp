@@ -94,7 +94,7 @@ public static class Program
         //         options.DefaultSignInScheme = OpenIdConnectDefaults.AuthenticationScheme;
         //     })
 
-        builder.Services.AddAuthentication()
+        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddOpenIdConnect(
                 OpenIdConnectDefaults.AuthenticationScheme,
