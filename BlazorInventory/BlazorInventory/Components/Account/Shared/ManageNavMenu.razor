@@ -1,0 +1,25 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using BlazorInventory.Data
+
+@inject SignInManager<ApplicationUser> SignInManager
+
+<RadzenMenu>
+    <RadzenMenuItem Path="Account/Manage">Profile</RadzenMenuItem>
+    <RadzenMenuItem Path="Account/Manage/Email">Email</RadzenMenuItem>
+    <RadzenMenuItem Path="Account/Manage/ChangePassword">Password</RadzenMenuItem>
+    @if (_hasExternalLogins)
+    {
+        <RadzenMenuItem Path="Account/Manage/ExternalLogins">External logins</RadzenMenuItem>
+    }
+    <RadzenMenuItem Path="Account/Manage/TwoFactorAuthentication">Two-factor authentication</RadzenMenuItem>
+    <RadzenMenuItem Path="Account/Manage/PersonalData">Personal data</RadzenMenuItem>
+</RadzenMenu>
+
+@code {
+    private bool _hasExternalLogins;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+    }
+}

@@ -1,0 +1,75 @@
+﻿@using ActualLab.Fusion
+@using ActualLab.Fusion.Blazor
+@using ActualLab.Fusion.Server.Endpoints
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <link rel="stylesheet" href="@Assets["app.css"]" />
+    <link rel="stylesheet" href="@Assets["BlazorInventory.styles.css"]" />
+    <ImportMap />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <HeadOutlet />
+
+    <RadzenTheme Theme="material" @rendermode="InteractiveAuto" />
+
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.css" rel="stylesheet">
+</head>
+
+<body>
+    <BlazorInventory.Client.App @rendermode="@(_renderMode?.Mode)" SessionId="@_sessionId" RenderModeKey="@(_renderMode?.Key)"/>
+
+    <script src="_framework/blazor.web.js"></script>
+    <script src="_content/Radzen.Blazor/Radzen.Blazor.js?v=@(typeof(Radzen.Colors).Assembly.GetName().Version)"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.js"></script>
+</body>
+
+</html>
+
+@code {
+    private bool _isInitialized;
+    private RenderModeDef? _renderMode; // Static by default
+    private string _sessionId = "";
+
+    [Inject] private ISessionResolver SessionResolver { get; init; } = null!;
+
+    [CascadingParameter] private HttpContext HttpContext { get; set; } = null!;
+
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        // We want to postpone the very first render till the moment the async code below completes.
+        // That's why we override SetParametersAsync instead of OnInitializedAsync.
+        if (!_isInitialized)
+        {
+            _isInitialized = true;
+            parameters.SetParameterProperties(this); // This call must be executed ASAP
+            if (HttpContext.AcceptsInteractiveRouting())
+                _renderMode = RenderModeEndpoint.GetRenderMode(HttpContext);
+            _sessionId = SessionResolver.Session.Id;
+        }
+
+        await base.SetParametersAsync(parameters);
+    }
+
+    [Inject]
+    private ThemeService ThemeService { get; set; } = null!;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        if (HttpContext != null)
+        {
+            var theme = HttpContext.Request.Cookies["MyApplicationTheme"];
+
+            if (!string.IsNullOrEmpty(theme))
+            {
+                ThemeService.SetTheme(theme, false);
+            }
+        }
+    }
+}

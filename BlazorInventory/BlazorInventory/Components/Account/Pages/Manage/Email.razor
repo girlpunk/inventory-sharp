@@ -1,0 +1,94 @@
+﻿@page "/Account/Manage/Email"
+
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Identity
+@using BlazorInventory.Data
+
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@inject IdentityUserAccessor UserAccessor
+
+<PageTitle>Manage email</PageTitle>
+
+<h3>Manage email</h3>
+
+<StatusMessage Message="@_message"/>
+
+<RadzenRow>
+    <RadzenColumn SizeXL="6">
+        <RadzenTemplateForm Data=@Input Submit="@OnValidSubmitAsync" Method="post" TItem="InputModel">
+            <DataAnnotationsValidator/>
+            <RadzenStack Gap="1rem">
+                <ValidationSummary class="text-danger" role="alert"/>
+
+                <RadzenFormField Text="Email">
+                    <ChildContent>
+                    <RadzenTextBox @bind-Value="@_email" ReadOnly="true" Disabled="true"/>
+                    </ChildContent>
+                </RadzenFormField>
+
+                <RadzenFormField Text="New email">
+                    <ChildContent>
+                        <RadzenTextBox @bind-Value="@Input.NewEmail" Name="NewEmail" AutoCompleteType="AutoCompleteType.Email" Placeholder="Enter a new email" aria-required="true"/>
+                    </ChildContent>
+                    <Helper>
+                        <RadzenText TextStyle="TextStyle.Caption">* required</RadzenText>
+                        <ValidationMessage For="() => Input.NewEmail" class="text-danger"/>
+                        <RadzenEmailValidator Component="NewEmail" Text="New email is required." />
+                    </Helper>
+                </RadzenFormField>
+
+                <RadzenButton ButtonType="ButtonType.Submit" Text="Change email" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Large" />
+            </RadzenStack>
+        </RadzenTemplateForm>
+    </RadzenColumn>
+</RadzenRow>
+
+@code {
+    private string? _message;
+    private ApplicationUser _user = default!;
+    private string? _email;
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromForm(FormName = "change-email")]
+    private InputModel Input { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _user = await UserAccessor.GetRequiredUserAsync(HttpContext);
+        _email = await UserManager.GetEmailAsync(_user);
+
+        Input.NewEmail ??= _email;
+    }
+
+    private async Task OnValidSubmitAsync(InputModel input)
+    {
+        if (input.NewEmail is null || input.NewEmail == _email)
+        {
+            _message = "Your email is unchanged.";
+            return;
+        }
+
+        var code = await UserManager.GenerateChangeEmailTokenAsync(_user, input.NewEmail);
+        var setUserNameResult = await UserManager.ChangeEmailAsync(_user, input.NewEmail, code);
+
+        if (!setUserNameResult.Succeeded)
+        {
+            _message = "Error changing user name.";
+            return;
+        }
+
+        await SignInManager.RefreshSignInAsync(_user);
+        _message = "Thank you for confirming your email change.";
+    }
+
+    private sealed class InputModel
+    {
+        [Required]
+        [EmailAddress]
+        [Display(Name = "New email")]
+        public string? NewEmail { get; set; }
+    }
+}

@@ -1,0 +1,39 @@
+﻿@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Identity
+@using BlazorInventory.Data
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject TooltipService TooltipService
+
+<form class="form-horizontal" action="Account/PerformExternalLogin" method="post">
+    <div>
+        <AntiforgeryToken />
+        <input type="hidden" name="returnUrl" value="@ReturnUrl" />
+        <p>
+            @foreach (var provider in _externalLogins)
+            {
+                <RadzenButton
+                    ButtonType="ButtonType.Submit"
+                    Text="@provider.DisplayName"
+                    ButtonStyle="ButtonStyle.Primary"
+                    name="provider"
+                    value="@provider.Name"
+                    MouseEnter="@(args => ShowTooltip(args, provider.DisplayName) )" />
+            }
+        </p>
+    </div>
+</form>
+
+@code {
+    private AuthenticationScheme[] _externalLogins = [];
+
+    [SupplyParameterFromQuery]
+    private string? ReturnUrl { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _externalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToArray();
+    }
+
+    void ShowTooltip(ElementReference elementReference, string? provider, TooltipOptions? options = null) => TooltipService.Open(elementReference, $"Log in using your {provider} account", options);
+}

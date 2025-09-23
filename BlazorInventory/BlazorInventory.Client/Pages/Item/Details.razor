@@ -1,0 +1,39 @@
+@page "/Item/{id:guid}"
+@attribute [Authorize]
+@using ActualLab.CommandR
+@using BlazorInventory.Abstractions.Service
+@inherits ActualLab.Fusion.Blazor.ComputedStateComponent<BlazorInventory.Abstractions.Models.Item>
+@inject IItemService ItemService
+@inject ICommander Commander
+@inject NavigationManager NavigationManager
+
+<h3>Item Details</h3>
+
+<RadzenCardGroup >
+    <RadzenCard>
+        Item Details go Here<br/>
+        Name: @State.Value.Name<br/>
+        Description: @State.Value.Description<br/>
+        Create: @State.Value.Created<br/>
+        Parent: @State.Value.ParentId<br/>
+        Tags: <TagsWidget ItemId="@Id"/><br/>
+
+        <a class="btn btn-danger" @onclick="Delete">Delete</a>
+    </RadzenCard>
+
+    <RadzenCard>
+        <RadzenColumn>
+            <RadzenCard>
+                <LabelsWidget ItemId="@Id"/>
+            </RadzenCard>
+
+            <RadzenCard>
+                <ImagesWidget ItemId="@Id"/>
+            </RadzenCard>
+
+            <RadzenCard>
+                <ScansWidget ItemId="@Id"/>
+            </RadzenCard>
+        </RadzenColumn>
+    </RadzenCard>
+</RadzenCardGroup>

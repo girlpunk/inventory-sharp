@@ -1,0 +1,14 @@
+@page "/Label/{Id:guid}"
+@attribute [Authorize]
+@using BlazorInventory.Abstractions.Service
+@using Microsoft.AspNetCore.Authorization
+@inherits ActualLab.Fusion.Blazor.ComputedStateComponent<BlazorInventory.Abstractions.Models.ItemLabel>
+@inject ILabelService LabelService
+
+<h3>Details</h3>
+
+Created: @State.Value.Created<br/>
+Foreign Server: @State.Value.ForeignServerId<br/>
+Identifier: @State.Value.Identifier<br/>
+Item ID: @State.Value.ItemId<br/>
+Label Type: @State.Value.LabelType<br/>

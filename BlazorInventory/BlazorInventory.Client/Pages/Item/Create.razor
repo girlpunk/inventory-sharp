@@ -1,0 +1,60 @@
+@page "/Item/Create"
+@attribute [Authorize]
+@using ActualLab.CommandR
+@using BlazorInventory.Abstractions.Models
+@using BlazorInventory.Abstractions.Service
+@inject IForeignServerService ForeignServerService
+@inject ICommander Commander
+@inject NavigationManager NavigationManager
+
+<h3>Create</h3>
+
+<RadzenTemplateForm Data="@Model" Submit="@Submit" TItem="CreateModel">
+    <RadzenFieldset Text="Item Details">
+        <RadzenFormField Text="Name">
+            <RadzenTextBox @bind-Value="Model.Name" MaxLength="120" Placeholder="Name" />
+        </RadzenFormField>
+
+        <RadzenFormField Text="Description">
+            <RadzenTextArea @bind-Value="Model.Description" MaxLength="1024" Name="Description"/>
+        </RadzenFormField>
+
+        <RadzenFormField Text="Parent">
+            @* <InputSelect @bind-Value="Model.ParentId" DisplayName="Parent" class="select"> *@
+            @* </InputSelect> *@
+            <RadzenTextBox Value="@Model.ParentId.ToString()" />
+        </RadzenFormField>
+    </RadzenFieldset>
+
+    <RadzenFieldset Text="Label Details">
+        <RadzenFormField Text="Identifier">
+            <RadzenTextBox @bind-Value="Model.Identifier" MaxLength="256" Placeholder="Name"/>
+        </RadzenFormField>
+
+        <RadzenFormField Text="Label Type">
+            <div class="filter">
+                <RadzenRadioButtonList @bind-Value="Model.LabelType" Name="Label Type">
+                    <RadzenRadioButtonListItem TValue="LabelType?" Value="@null">None</RadzenRadioButtonListItem>
+                    @foreach (var tagType in (LabelType[])Enum.GetValuesAsUnderlyingType<LabelType>())
+                    {
+                        <RadzenRadioButtonListItem Value="@tagType">@tagType</RadzenRadioButtonListItem>
+                    }
+                </RadzenRadioButtonList>
+            </div>
+        </RadzenFormField>
+
+        <RadzenFormField Text="Foreign Server">
+            <RadzenTextBox Value="@Model.ForeignServerId.ToString()"/>
+            @* <InputSelect @bind-Value="Model.ForeignServerId" DisplayName="Foreign Server" class="select"> *@
+            @* </InputSelect> *@
+            @if (Model.ForeignServerId == null &&
+                 (Model.Identifier.StartsWith("https://", StringComparison.OrdinalIgnoreCase) ||
+                  Model.Identifier.StartsWith("http://", StringComparison.OrdinalIgnoreCase)))
+            {
+                <RadzenButton @onclick="ConvertNamespace">Convert to Foreign Server</RadzenButton>
+            }
+        </RadzenFormField>
+    </RadzenFieldset>
+
+    <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Primary">Create</RadzenButton>
+</RadzenTemplateForm>

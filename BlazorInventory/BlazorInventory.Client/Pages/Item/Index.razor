@@ -1,0 +1,24 @@
+@page "/Item/"
+@attribute [Authorize]
+@using BlazorInventory.Abstractions.Models
+@using BlazorInventory.Abstractions.Service
+@inherits ActualLab.Fusion.Blazor.ComputedStateComponent<IList<BlazorInventory.Abstractions.Models.Item>>
+@inject IItemService ItemService
+
+@if (State.Error != null) {
+    <RadzenAlert AlertStyle="AlertStyle.Warning">Update error: @State.Error.Message</RadzenAlert>
+}
+
+<div class="overflow-x-auto">
+    <RadzenDataGrid Data="State.Value" AllowAlternatingRows="true">
+        <Columns>
+            <RadzenDataGridColumn Property="@(nameof(Item.Name))" Title="Name"/>
+            <RadzenDataGridColumn Property="@(nameof(Item.Description))" Title="Description"/>
+            <RadzenDataGridColumn>
+                <Template Context="row">
+                    <a href="/Item/@row.Id" class="btn btn-ghost btn-xs">details</a>
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+</div>

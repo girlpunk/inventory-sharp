@@ -1,0 +1,20 @@
+@page "/Scan/{Id:guid}"
+@attribute [Authorize]
+@using BlazorInventory.Abstractions.Service
+@using Microsoft.AspNetCore.Authorization
+@inherits ActualLab.Fusion.Blazor.ComputedStateComponent<BlazorInventory.Abstractions.Models.LabelScan>
+@inject IScanService ScanService
+
+<h3>Details</h3>
+
+Label ID: @State.Value.LabelId<br/>
+Latitude: @State.Value.Latitude<br/>
+Longitude: @State.Value.Longitude<br/>
+Scanner: @State.Value.Scanned<br/>
+Scanner: @State.Value.ScannerId<br/>
+Scan Type: @State.Value.ScanType<br/>
+
+@if (State.Value.Latitude != null)
+{
+    <MapBox Latitude="@State.Value.Latitude" Longitude="@State.Value.Longitude" Zoom="9" />
+}

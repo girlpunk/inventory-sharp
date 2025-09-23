@@ -1,0 +1,15 @@
+@using BlazorInventory.Abstractions.Service
+@inherits ActualLab.Fusion.Blazor.ComputedStateComponent<ICollection<BlazorInventory.Abstractions.Models.ItemLabel>>
+@inject ILabelService LabelService
+
+<h3>LabelsWidget</h3>
+
+@foreach(var label in State.Value) {
+    <div>
+        Create: @label.Created<br/>
+        Foreign Server ID: @label.ForeignServerId<br/>
+        Identifier: @label.Identifier<br/>
+        Item ID: @label.ItemId<br/>
+        Label Type: @label.LabelType<br/>
+    </div>
+}

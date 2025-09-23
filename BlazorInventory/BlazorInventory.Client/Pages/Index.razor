@@ -1,0 +1,28 @@
+@page "/"
+@attribute [Authorize]
+@using BlazorInventory.Abstractions.Service
+@inherits ActualLab.Fusion.Blazor.ComputedStateComponent<Index.Counts>
+@inject IItemService ItemService
+@inject ILabelService LabelService
+@inject IScanService ScanService
+
+@if (State.Error != null) {
+  <RadzenAlert AlertStyle="AlertStyle.Warning">Update error: @State.Error.Message</RadzenAlert>
+}
+
+<RadzenCardGroup>
+<RadzenCard Style="width: 300px;">
+  <RadzenText TextStyle="TextStyle.Overline">Total Items</RadzenText>
+  <RadzenText TextStyle="TextStyle.H4">@State.ValueOrDefault?.Items</RadzenText>
+</RadzenCard>
+
+<RadzenCard Style="width: 300px;">
+  <RadzenText TextStyle="TextStyle.Overline">Total Labels</RadzenText>
+  <RadzenText TextStyle="TextStyle.H4">@State.ValueOrDefault?.Labels</RadzenText>
+</RadzenCard>
+
+<RadzenCard Style="width: 300px;">
+  <RadzenText TextStyle="TextStyle.Overline">Total Scans</RadzenText>
+  <RadzenText TextStyle="TextStyle.H4">@State.ValueOrDefault?.Scans</RadzenText>
+</RadzenCard>
+</RadzenCardGroup>

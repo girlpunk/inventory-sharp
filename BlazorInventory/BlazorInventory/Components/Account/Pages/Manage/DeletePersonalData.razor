@@ -1,0 +1,51 @@
+﻿@page "/Account/Manage/DeletePersonalData"
+@using Microsoft.AspNetCore.Identity
+@using BlazorInventory.Data
+
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@inject IdentityUserAccessor UserAccessor
+@inject IdentityRedirectManager RedirectManager
+@inject ILogger<DeletePersonalData> Logger
+
+<PageTitle>Delete Personal Data</PageTitle>
+
+<h3>Delete Personal Data</h3>
+
+<RadzenAlert AlertStyle="AlertStyle.Danger" AllowClose="false">
+    Deleting this data will permanently remove your account, and this cannot be recovered.
+</RadzenAlert>
+
+<EditForm FormName="delete-user" OnValidSubmit="OnValidSubmitAsync" method="post">
+    <DataAnnotationsValidator />
+    <ValidationSummary class="text-danger" role="alert" />
+    <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Danger" Size="ButtonSize.Medium">Delete data and close my account</RadzenButton>
+</EditForm>
+
+@code {
+    private ApplicationUser _user = default!;
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _user = await UserAccessor.GetRequiredUserAsync(HttpContext);
+    }
+
+    private async Task OnValidSubmitAsync()
+    {
+        var result = await UserManager.DeleteAsync(_user);
+        if (!result.Succeeded)
+        {
+            throw new InvalidOperationException("Unexpected error occurred deleting user.");
+        }
+
+        await SignInManager.SignOutAsync();
+
+        var userId = await UserManager.GetUserIdAsync(_user);
+        Logger.LogInformation("User with ID '{UserId}' deleted themselves.", userId);
+
+        RedirectManager.RedirectToCurrentPage();
+    }
+}

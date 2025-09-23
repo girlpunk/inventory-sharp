@@ -1,0 +1,82 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
+        <StaticWebAssetProjectMode>Default</StaticWebAssetProjectMode>
+
+        <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <InvariantGlobalization>true</InvariantGlobalization>
+        <PublishTrimmed>true</PublishTrimmed>
+        <TrimMode>full</TrimMode>
+        <IsTrimmable>true</IsTrimmable>
+        <RunAOTCompilation>false</RunAOTCompilation>
+        <WasmStripILAfterAOT>true</WasmStripILAfterAOT>
+        <WasmEnableWebcil>true</WasmEnableWebcil>
+        <WasmEnableSIMD>true</WasmEnableSIMD>
+    </PropertyGroup>
+
+    <!-- Extra trimming roots -->
+    <ItemGroup>
+        <TrimmerRootAssembly Include="BlazorInventory.Client" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\BlazorInventory.Abstractions\BlazorInventory.Abstractions.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="ActualLab.Fusion" Version="10.4.15" />
+        <PackageReference Include="Humanizer.Core" Version="2.14.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.8" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="9.0.8" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.8" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.8" />
+        <PackageReference Include="ActualLab.Fusion.Blazor" Version="10.4.15" />
+        <PackageReference Include="ActualLab.Fusion.Blazor.Authentication" Version="10.3.43" />
+        <PackageReference Include="ActualLab.Fusion.Ext.Contracts" Version="10.3.43" />
+        <PackageReference Include="Radzen.Blazor" Version="7.2.1" />
+        <PackageReference Include="Roslynator.Analyzers" Version="4.14.0">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Roslynator.Formatting.Analyzers" Version="4.14.0">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="UAParser" Version="3.1.47" />
+        <PackageReference Include="ZXingBlazor" Version="1.1.5" />
+    </ItemGroup>
+
+    <!-- Roslyn generators/analyzers -->
+    <ItemGroup>
+        <PackageReference Include="ActualLab.Generators" PrivateAssets="all" Version="10.4.15" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <AdditionalFiles Include="Layout\MainLayout.razor" />
+      <AdditionalFiles Include="Pages\Item\Create.razor" />
+      <AdditionalFiles Include="Pages\Item\Details.razor" />
+      <AdditionalFiles Include="Pages\Item\Index.razor" />
+      <AdditionalFiles Include="Pages\Label\Details.razor" />
+      <AdditionalFiles Include="Pages\Scan\Details.razor" />
+      <AdditionalFiles Include="Widgets\ImagesWidget.razor" />
+      <AdditionalFiles Include="Widgets\ItemWidget.razor" />
+      <AdditionalFiles Include="Widgets\LabelsWidget.razor" />
+      <AdditionalFiles Include="Widgets\MapBox.razor" />
+      <AdditionalFiles Include="Widgets\ScansWidget.razor" />
+      <AdditionalFiles Include="Widgets\TagsWidget.razor" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <Folder Include="Pages\Shared\" />
+    </ItemGroup>
+
+</Project>

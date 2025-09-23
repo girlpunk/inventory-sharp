@@ -1,0 +1,66 @@
+@page "/Item/{id:guid}/reconcile"
+@attribute [Authorize]
+@using ActualLab.Collections
+@using ActualLab.CommandR
+@using BlazorInventory.Abstractions.Models
+@using BlazorInventory.Abstractions.Service
+@inject IItemService ItemService
+@inject IItemService IScanService
+
+<h3>Reconciliation</h3>
+
+<RadzenStack Orientation="Orientation.Horizontal">
+    <RadzenStack>
+        <RadzenCard Style="width: 300px;">
+            <RadzenText TextStyle="TextStyle.Overline">Outstanding Items</RadzenText>
+            <RadzenText TextStyle="TextStyle.H4">@OutstandingItems.Count</RadzenText>
+        </RadzenCard>
+
+        _&lt;_
+        RadzenPickList AllowMoveAll="@false" AllowMoveAllSourceToTarget="@false" AllowMoveAllTargetToSource="@false" @@bind-Source="@@OutstandingItems" @@bind-Target="@@CompletedItems" Style="height:500px; width:100%;" Orientation="Orientation.Horizontal"
+                        TextProperty="@@nameof(Customer.CompanyName)" AllowFiltering="@@allowFilter" MoveFilteredItemsOnlyOnMoveAll="@@moveFilteredItemsOnlyOnMoveAll" Multiple="@@multiple" ShowHeader="@@showHeader" Disabled="@@disabled"
+                        ButtonGap="@@gap" ButtonJustifyContent="@@justifyContent" ButtonStyle="@@style" ButtonSize="@@size" ButtonShade="@@shade" ButtonVariant="@@variant"
+                        AllowSelectAll="@@allowSelectAll"
+                        ItemRender="OnItemRender">
+            <SourceHeader>
+                Customers:
+            </SourceHeader>
+            <TargetHeader>
+                Selected Customers:
+            </TargetHeader>
+            <Template>
+                Company: @@context.CompanyName
+            </Template>
+        _&lt;_/_
+        RadzenPickList>
+    </RadzenStack>
+    <RadzenStack>
+        <RadzenCard Style="width: 300px;">
+            <RadzenText TextStyle="TextStyle.Overline">Completed Items</RadzenText>
+            <RadzenText TextStyle="TextStyle.H4">@CompletedItems.Count</RadzenText>
+        </RadzenCard>
+    </RadzenStack>
+</RadzenStack>
+
+@code {
+    private ICollection<Item> OutstandingItems { get; } = [];
+    private ICollection<Item> CompletedItems { get; } = [];
+    private Item? Item { get; set; }
+
+    /// <summary>
+    /// ID of the item to reconcile the contents of
+    /// </summary>
+    [Parameter]
+    public Guid? Id { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+
+        if (Item == null && Id != null)
+        {
+            Item = await ItemService.Get(Id.Value);
+            OutstandingItems.AddRange(await ItemService.ListChildren(Id.Value));
+        }
+    }
+}
