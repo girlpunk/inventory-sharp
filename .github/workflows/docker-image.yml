@@ -116,7 +116,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: "./"
-          file: "./Dockerfile"
+          file: "./BlazorInventory/BlazorInventory/Dockerfile"
           push: ${{ github.ref == 'refs/heads/main' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
