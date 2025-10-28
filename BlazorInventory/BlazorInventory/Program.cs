@@ -26,6 +26,9 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
+using IPAddress = System.Net.IPAddress;
+using IPNetwork = Microsoft.AspNetCore.HttpOverrides.IPNetwork;
+
 var builder = WebApplication.CreateBuilder(args);
 
 ConfigureLogging();
@@ -57,7 +60,7 @@ builder.Services.AddRazorComponents(options =>
     .AddInteractiveWebAssemblyComponents()
     .AddAuthenticationStateSerialization(static options => options.SerializeAllClaims = true);
 
-builder.Services.Configure<ForwardedHeadersOptions>(static options =>
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
     options.ForwardedHeaders = ForwardedHeaders.All;
 
