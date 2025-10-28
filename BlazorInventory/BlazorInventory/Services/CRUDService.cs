@@ -20,6 +20,7 @@ namespace BlazorInventory.Services;
 public abstract class CRUDService<T>(IServiceProvider services) : DbServiceBase<ApplicationDbContext>(services), ICRUDService<T> where T : BaseModel
 {
     /// <inheritdoc />
+    [ComputeMethod]
     public virtual async Task<int> Count(CancellationToken cancellationToken = default)
     {
         await using var dbContext = await DbHub.CreateDbContext(cancellationToken);
@@ -27,6 +28,7 @@ public abstract class CRUDService<T>(IServiceProvider services) : DbServiceBase<
     }
 
     /// <inheritdoc />
+    [ComputeMethod]
     public virtual async Task<ICollection<T>> List(CancellationToken cancellationToken = default)
     {
         await using var dbContext = await DbHub.CreateDbContext(cancellationToken);
@@ -34,6 +36,7 @@ public abstract class CRUDService<T>(IServiceProvider services) : DbServiceBase<
     }
 
     /// <inheritdoc />
+    [ComputeMethod]
     public virtual async Task<T> Get(Guid id, CancellationToken cancellationToken = default)
     {
         await using var dbContext = await DbHub.CreateDbContext(cancellationToken);
@@ -53,7 +56,7 @@ public abstract class CRUDService<T>(IServiceProvider services) : DbServiceBase<
     public abstract void DoUpdate(T input, T output);
 
     /// <inheritdoc />
-    public virtual async Task Update(UpdateCommand<T> command, CancellationToken cancellationToken = default)
+    public async Task Update(UpdateCommand<T> command, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(command);
         ArgumentNullException.ThrowIfNull(command.Obj);
@@ -78,7 +81,7 @@ public abstract class CRUDService<T>(IServiceProvider services) : DbServiceBase<
     }
 
     /// <inheritdoc />
-    public virtual async Task<T> Create(CreateCommand<T> command, CancellationToken cancellationToken = default)
+    public async Task<T> Create(CreateCommand<T> command, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(command);
 
@@ -107,7 +110,7 @@ public abstract class CRUDService<T>(IServiceProvider services) : DbServiceBase<
     }
 
     /// <inheritdoc />
-    public virtual async Task Delete(DeleteCommand<T> command, CancellationToken cancellationToken = default)
+    public async Task Delete(DeleteCommand<T> command, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(command);
 

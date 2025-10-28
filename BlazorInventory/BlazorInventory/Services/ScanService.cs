@@ -2,6 +2,7 @@ using BlazorInventory.Abstractions.Models;
 using BlazorInventory.Abstractions.Service;
 using BlazorInventory.Data;
 using Microsoft.EntityFrameworkCore;
+using ActualLab.Fusion;
 
 namespace BlazorInventory.Services;
 
@@ -27,6 +28,7 @@ public class ScanService(IServiceProvider serviceProvider) : CRUDService<LabelSc
     }
 
     /// <inheritdoc />
+    [ComputeMethod]
     public virtual async Task<ICollection<LabelScan>> List(Guid itemId, CancellationToken cancellationToken = default)
     {
         await using var dbContext = await DbHub.CreateDbContext(cancellationToken);

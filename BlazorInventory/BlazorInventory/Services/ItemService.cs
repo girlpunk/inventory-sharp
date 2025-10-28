@@ -2,6 +2,7 @@ using BlazorInventory.Abstractions.Models;
 using BlazorInventory.Abstractions.Service;
 using BlazorInventory.Data;
 using Microsoft.EntityFrameworkCore;
+using ActualLab.Fusion;
 
 namespace BlazorInventory.Services;
 
@@ -25,7 +26,8 @@ public class ItemService(IServiceProvider serviceProvider) : CRUDService<Item>(s
     }
 
     /// <inheritdoc />
-    public async Task<ICollection<Item>> ListChildren(Guid id, CancellationToken cancellationToken = default)
+    [ComputeMethod]
+    public virtual async Task<ICollection<Item>> ListChildren(Guid id, CancellationToken cancellationToken = default)
     {
         await using var dbContext = await DbHub.CreateDbContext(cancellationToken);
         return await dbContext.Items.Where(i => i.ParentId == id).ToListAsync(cancellationToken).ConfigureAwait(false);

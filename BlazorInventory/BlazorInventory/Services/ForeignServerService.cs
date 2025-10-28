@@ -2,6 +2,7 @@ using BlazorInventory.Abstractions.Models;
 using BlazorInventory.Abstractions.Service;
 using BlazorInventory.Data;
 using Microsoft.EntityFrameworkCore;
+using ActualLab.Fusion;
 
 namespace BlazorInventory.Services;
 
@@ -23,7 +24,8 @@ public class ForeignServerService(IServiceProvider serviceProvider)
     }
 
     /// <inheritdoc />
-    public async Task<Guid?> Find(string domain, CancellationToken cancellationToken = default)
+    [ComputeMethod]
+    public virtual async Task<Guid?> Find(string domain, CancellationToken cancellationToken = default)
     {
         await using var dbContext = await DbHub.CreateDbContext(cancellationToken);
         return (await dbContext.ForeignServers.SingleOrDefaultAsync(i => i.Namespace == domain, cancellationToken).ConfigureAwait(false))?.Id;

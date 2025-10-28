@@ -24,6 +24,7 @@
     <!-- Extra trimming roots -->
     <ItemGroup>
         <TrimmerRootAssembly Include="BlazorInventory.Client" />
+        <TrimmerRootAssembly Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" />
     </ItemGroup>
 
     <ItemGroup>

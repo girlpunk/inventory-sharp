@@ -11,6 +11,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <TrimmerRootAssembly Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" />
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="..\BlazorInventory.Client\BlazorInventory.Client.csproj"/>
         <ProjectReference Include="..\..\BlazorInventory.Abstractions\BlazorInventory.Abstractions.csproj"/>
     </ItemGroup>

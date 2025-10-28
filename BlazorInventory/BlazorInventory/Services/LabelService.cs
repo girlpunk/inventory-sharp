@@ -33,7 +33,7 @@ public class LabelService(IServiceProvider serviceProvider) : CRUDService<ItemLa
     }
 
     /// <inheritdoc />
-    public virtual async Task<ScanLabelResult> Scan(ScanLabelCommand command, CancellationToken cancellationToken = default)
+    public async Task<ScanLabelResult> Scan(ScanLabelCommand command, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(command);
 
@@ -131,6 +131,7 @@ public class LabelService(IServiceProvider serviceProvider) : CRUDService<ItemLa
     }
 
     /// <inheritdoc />
+    [ComputeMethod]
     public virtual async Task<ICollection<ItemLabel>> List(Guid itemId, CancellationToken cancellationToken = default)
     {
         await using var dbContext = await DbHub.CreateDbContext(cancellationToken);
