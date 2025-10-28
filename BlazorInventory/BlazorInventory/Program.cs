@@ -206,11 +206,6 @@ else
     app.UseHsts();
 }
 
-app.UseForwardedHeaders(new ForwardedHeadersOptions
-{
-    ForwardedHeaders = ForwardedHeaders.All,
-});
-
 app.UseHttpsRedirection();
 
 app.UseHealthChecks("/healthz");
@@ -222,7 +217,11 @@ app.UseWebSockets(new WebSocketOptions
     KeepAliveInterval = TimeSpan.FromSeconds(30),
 });
 app.UseFusionSession();
+
 app.UseRouting();
+
+app.UseForwardedHeaders();
+
 
 app.UseAuthentication();
 app.UseAuthorization();
