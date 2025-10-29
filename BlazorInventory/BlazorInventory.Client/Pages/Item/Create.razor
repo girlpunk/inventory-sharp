@@ -33,7 +33,7 @@
 
         <RadzenFormField Text="Label Type">
             <div class="filter">
-                <RadzenRadioButtonList @bind-Value="Model.LabelType" Name="Label Type">
+                <RadzenRadioButtonList @bind-Value="Model.LabelType" Name="Label Type" TValue="LabelType?">
                     <RadzenRadioButtonListItem TValue="LabelType?" Value="@null">None</RadzenRadioButtonListItem>
                     @foreach (var tagType in (LabelType[])Enum.GetValuesAsUnderlyingType<LabelType>())
                     {

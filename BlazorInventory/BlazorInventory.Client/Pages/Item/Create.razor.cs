@@ -81,7 +81,7 @@ public sealed partial class Create
         /// <summary>
         /// What type of label this is
         /// </summary>
-        public LabelType LabelType { get; set; }
+        public LabelType? LabelType { get; set; }
 
         /// <summary>
         /// ID of the foreign server the item belongs to, or null for no foreign server
@@ -104,32 +104,39 @@ public sealed partial class Create
         }).ConfigureAwait(false);
 
         //Create Label
-        var label = await Commander.Call(new CreateCommand<ItemLabel>
+        //TODO: Generate Identifier
+        if(model.LabelType != null && model.Identifier != null)
         {
-            Obj = new ItemLabel
+            var label = await Commander.Call(new CreateCommand<ItemLabel>
             {
-                Identifier = model.Identifier,
-                LabelType = model.LabelType,
-                ItemId = item.Id,
-                ForeignServerId = model.ForeignServerId,
-                Created = DateTime.Now,
-            }
-        }).ConfigureAwait(false);
+                Obj = new ItemLabel
+                {
+                    Identifier = model.Identifier,
+                    LabelType = model.LabelType.Value,
+                    ItemId = item.Id,
+                    ForeignServerId = model.ForeignServerId,
+                    Created = DateTime.Now,
+                }
+            }).ConfigureAwait(false);
 
-        //Create Scan
-        var scan = await Commander.Call(new ScanLabelCommand
-        {
-            LabelId = label.Id,
-            ScannerId = ScannerId,
-            LabelType = model.LabelType,
-            //TODO: Make optional
-            CreateScanRecord = true,
-            ScannerLatitude = Latitude,
-            ScannerLongitude = Longitude
-        }).ConfigureAwait(false);
+            //Create Scan
+            var scan = await Commander.Call(new ScanLabelCommand
+            {
+                LabelId = label.Id,
+                ScannerId = ScannerId,
+                LabelType = model.LabelType.Value,
+                //TODO: Make optional
+                CreateScanRecord = true,
+                ScannerLatitude = Latitude,
+                ScannerLongitude = Longitude
+            }).ConfigureAwait(false);
 
-        //Go to scan page
-        NavigationManager.NavigateTo($"/Scan/{scan.Scan!.Id}");
+            //Go to scan page
+            NavigationManager.NavigateTo($"/Scan/{scan.Scan!.Id}");
+        }
+
+        //Go to item page
+        NavigationManager.NavigateTo($"/Item/{item.Id}");
     }
 
     /// <inheritdoc />
