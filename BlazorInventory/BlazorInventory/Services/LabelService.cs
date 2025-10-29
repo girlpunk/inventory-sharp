@@ -33,7 +33,7 @@ public class LabelService(IServiceProvider serviceProvider) : CRUDService<ItemLa
     }
 
     /// <inheritdoc />
-    public async Task<ScanLabelResult> Scan(ScanLabelCommand command, CancellationToken cancellationToken = default)
+    public virtual async Task<ScanLabelResult> Scan(ScanLabelCommand command, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(command);
 

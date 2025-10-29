@@ -56,7 +56,7 @@ public abstract class CRUDService<T>(IServiceProvider services) : DbServiceBase<
     public abstract void DoUpdate(T input, T output);
 
     /// <inheritdoc />
-    public async Task Update(UpdateCommand<T> command, CancellationToken cancellationToken = default)
+    public virtual async Task Update(UpdateCommand<T> command, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(command);
         ArgumentNullException.ThrowIfNull(command.Obj);
@@ -81,7 +81,7 @@ public abstract class CRUDService<T>(IServiceProvider services) : DbServiceBase<
     }
 
     /// <inheritdoc />
-    public async Task<T> Create(CreateCommand<T> command, CancellationToken cancellationToken = default)
+    public virtual async Task<T> Create(CreateCommand<T> command, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(command);
 
@@ -110,7 +110,7 @@ public abstract class CRUDService<T>(IServiceProvider services) : DbServiceBase<
     }
 
     /// <inheritdoc />
-    public async Task Delete(DeleteCommand<T> command, CancellationToken cancellationToken = default)
+    public virtual async Task Delete(DeleteCommand<T> command, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(command);
 
