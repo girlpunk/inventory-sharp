@@ -15,8 +15,6 @@
     <link rel="icon" type="image/png" href="favicon.png" />
     <HeadOutlet />
 
-    <RadzenTheme Theme="material" @rendermode="InteractiveAuto" />
-
     <link href="https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.css" rel="stylesheet">
 </head>
 
@@ -24,7 +22,6 @@
     <BlazorInventory.Client.App @rendermode="@(_renderMode?.Mode)" SessionId="@_sessionId" RenderModeKey="@(_renderMode?.Key)"/>
 
     <script src="_framework/blazor.web.js"></script>
-    <script src="_content/Radzen.Blazor/Radzen.Blazor.js?v=@(typeof(Radzen.Colors).Assembly.GetName().Version)"></script>
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.js"></script>
 </body>
 
@@ -53,23 +50,5 @@
         }
 
         await base.SetParametersAsync(parameters);
-    }
-
-    [Inject]
-    private ThemeService ThemeService { get; set; } = null!;
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-
-        if (HttpContext != null)
-        {
-            var theme = HttpContext.Request.Cookies["MyApplicationTheme"];
-
-            if (!string.IsNullOrEmpty(theme))
-            {
-                ThemeService.SetTheme(theme, false);
-            }
-        }
     }
 }

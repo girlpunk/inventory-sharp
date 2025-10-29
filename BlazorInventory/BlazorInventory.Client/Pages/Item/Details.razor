@@ -9,31 +9,29 @@
 
 <h3>Item Details</h3>
 
-<RadzenCardGroup >
-    <RadzenCard>
-        Item Details go Here<br/>
-        Name: @State.Value.Name<br/>
-        Description: @State.Value.Description<br/>
-        Create: @State.Value.Created<br/>
-        Parent: @State.Value.ParentId<br/>
-        Tags: <TagsWidget ItemId="@Id"/><br/>
+<Card>
+    Item Details go Here<br/>
+    Name: @State.Value.Name<br/>
+    Description: @State.Value.Description<br/>
+    Create: @State.Value.Created<br/>
+    Parent: @State.Value.ParentId<br/>
+    Tags: <TagsWidget ItemId="@Id"/><br/>
 
-        <a class="btn btn-danger" @onclick="Delete">Delete</a>
-    </RadzenCard>
+    <a class="btn btn-danger" @onclick="Delete">Delete</a>
+</Card>
 
-    <RadzenCard>
-        <RadzenColumn>
-            <RadzenCard>
-                <LabelsWidget ItemId="@Id"/>
-            </RadzenCard>
+<Card>
+    <Col>
+        <Card>
+            <LabelsWidget ItemId="@Id"/>
+        </Card>
 
-            <RadzenCard>
-                <ImagesWidget ItemId="@Id"/>
-            </RadzenCard>
+        <Card>
+            <ImagesWidget ItemId="@Id"/>
+        </Card>
 
-            <RadzenCard>
-                <ScansWidget ItemId="@Id"/>
-            </RadzenCard>
-        </RadzenColumn>
-    </RadzenCard>
-</RadzenCardGroup>
+        <Card>
+            <ScansWidget ItemId="@Id"/>
+        </Card>
+    </Col>
+</Card>

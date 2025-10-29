@@ -1,8 +1,8 @@
 ﻿@if (!string.IsNullOrEmpty(DisplayMessage))
 {
-    <RadzenAlert AllowClose="false" AlertStyle="@(DisplayMessage.StartsWith("Error", StringComparison.Ordinal) ? AlertStyle.Danger : AlertStyle.Success)">
+    <Alert AllowClose="false" Type="@(DisplayMessage.StartsWith("Error", StringComparison.Ordinal) ? AlertType.Error : AlertType.Success)">
         @DisplayMessage
-    </RadzenAlert>
+    </Alert>
 }
 
 @code {

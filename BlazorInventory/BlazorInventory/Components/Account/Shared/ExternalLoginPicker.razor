@@ -3,7 +3,6 @@
 @using BlazorInventory.Data
 
 @inject SignInManager<ApplicationUser> SignInManager
-@inject TooltipService TooltipService
 
 <form class="form-horizontal" action="Account/PerformExternalLogin" method="post">
     <div>
@@ -12,13 +11,15 @@
         <p>
             @foreach (var provider in _externalLogins)
             {
-                <RadzenButton
-                    ButtonType="ButtonType.Submit"
-                    Text="@provider.DisplayName"
-                    ButtonStyle="ButtonStyle.Primary"
-                    name="provider"
-                    value="@provider.Name"
-                    MouseEnter="@(args => ShowTooltip(args, provider.DisplayName) )" />
+                <Tooltip Title="@($"Log in using your {provider.DisplayName} account")">
+                    <Button
+                        ButtonType="ButtonType.Submit"
+                        Text="@provider.DisplayName"
+                        ButtonStyle="ButtonStyle.Primary"
+                        name="provider"
+                        value="@provider.Name"
+                    />
+                </Tooltip>
             }
         </p>
     </div>
@@ -34,6 +35,4 @@
     {
         _externalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToArray();
     }
-
-    void ShowTooltip(ElementReference elementReference, string? provider, TooltipOptions? options = null) => TooltipService.Open(elementReference, $"Log in using your {provider} account", options);
 }

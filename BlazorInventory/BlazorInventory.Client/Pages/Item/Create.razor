@@ -9,52 +9,46 @@
 
 <h3>Create</h3>
 
-<RadzenTemplateForm Data="@Model" Submit="@Submit" TItem="CreateModel">
-    <RadzenFieldset Text="Item Details">
-        <RadzenFormField Text="Name">
-            <RadzenTextBox @bind-Value="Model.Name" MaxLength="120" Placeholder="Name" />
-        </RadzenFormField>
+<Form Model="@Model" OnFinish="@Submit" TItem="CreateModel" LabelColSpan="8" WrapperColSpan="16">
+    Item Details
+        <FormItem Label="Name">
+            <Input @bind-Value="Model.Name" MaxLength="120" Placeholder="Name" Required/>
+        </FormItem>
 
-        <RadzenFormField Text="Description">
-            <RadzenTextArea @bind-Value="Model.Description" MaxLength="1024" Name="Description"/>
-        </RadzenFormField>
+        <FormItem Label="Description">
+            <TextArea @bind-Value="Model.Description" MaxLength="1024" Name="Description" ShowCount/>
+        </FormItem>
 
-        <RadzenFormField Text="Parent">
-            @* <InputSelect @bind-Value="Model.ParentId" DisplayName="Parent" class="select"> *@
-            @* </InputSelect> *@
-            <RadzenTextBox Value="@Model.ParentId.ToString()" />
-        </RadzenFormField>
-    </RadzenFieldset>
+        <FormItem Label="Parent">
+            @* <AutoComplete @bind-Value="Model.ParentId" DisplayName="Parent" /> *@
+            <AntDesign.InputNumber TValue="int" @bind-Balue="Model.ParentId" />
+        </FormItem>
 
-    <RadzenFieldset Text="Label Details">
-        <RadzenFormField Text="Identifier">
-            <RadzenTextBox @bind-Value="Model.Identifier" MaxLength="256" Placeholder="Name"/>
-        </RadzenFormField>
+    Label Details
+        <FormItem Label="Identifier">
+            <Input @bind-Value="Model.Identifier" MaxLength="256" Placeholder="Identifier"/>
+        </FormItem>
 
-        <RadzenFormField Text="Label Type">
-            <div class="filter">
-                <RadzenRadioButtonList @bind-Value="Model.LabelType" Name="Label Type" TValue="LabelType?">
-                    <RadzenRadioButtonListItem TValue="LabelType?" Value="@null">None</RadzenRadioButtonListItem>
-                    @foreach (var tagType in (LabelType[])Enum.GetValuesAsUnderlyingType<LabelType>())
-                    {
-                        <RadzenRadioButtonListItem Value="@tagType">@tagType</RadzenRadioButtonListItem>
-                    }
-                </RadzenRadioButtonList>
-            </div>
-        </RadzenFormField>
+        <FormItem Label="Label Type">
+            <RadioGroup @bind-Value="Model.LabelType" Name="Label Type" TValue="LabelType?">
+                <Radio TValue="LabelType?" Value="@null">None</Radio>
+                @foreach (var tagType in (LabelType[])Enum.GetValuesAsUnderlyingType<LabelType>())
+                {
+                    <Radio Value="@tagType">@tagType</Radio>
+                }
+            </RadioGroup>
+        </FormItem>
 
-        <RadzenFormField Text="Foreign Server">
-            <RadzenTextBox Value="@Model.ForeignServerId.ToString()"/>
-            @* <InputSelect @bind-Value="Model.ForeignServerId" DisplayName="Foreign Server" class="select"> *@
-            @* </InputSelect> *@
+        <FormItem Label="Foreign Server">
+            <Input Value="@Model.ForeignServerId.ToString()"/>
+            @* <Autocomplete @bind-Value="Model.ForeignServerId" DisplayName="Foreign Server" /> *@
             @if (Model.ForeignServerId == null &&
                  (Model.Identifier.StartsWith("https://", StringComparison.OrdinalIgnoreCase) ||
                   Model.Identifier.StartsWith("http://", StringComparison.OrdinalIgnoreCase)))
             {
-                <RadzenButton @onclick="ConvertNamespace">Convert to Foreign Server</RadzenButton>
+                <Button @onclick="ConvertNamespace">Convert to Foreign Server</Button>
             }
-        </RadzenFormField>
-    </RadzenFieldset>
+        </FormItem>
 
-    <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Primary">Create</RadzenButton>
-</RadzenTemplateForm>
+    <Button Type="ButtonType.Primary" HtmlType="submit">Create</Button>
+</Form>

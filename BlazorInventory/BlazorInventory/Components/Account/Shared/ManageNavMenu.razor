@@ -3,17 +3,17 @@
 
 @inject SignInManager<ApplicationUser> SignInManager
 
-<RadzenMenu>
-    <RadzenMenuItem Path="Account/Manage">Profile</RadzenMenuItem>
-    <RadzenMenuItem Path="Account/Manage/Email">Email</RadzenMenuItem>
-    <RadzenMenuItem Path="Account/Manage/ChangePassword">Password</RadzenMenuItem>
+<Menu>
+    <MenuItem Path="Account/Manage">Profile</MenuItem>
+    <MenuItem Path="Account/Manage/Email">Email</MenuItem>
+    <MenuItem Path="Account/Manage/ChangePassword">Password</MenuItem>
     @if (_hasExternalLogins)
     {
-        <RadzenMenuItem Path="Account/Manage/ExternalLogins">External logins</RadzenMenuItem>
+        <MenuItem Path="Account/Manage/ExternalLogins">External logins</MenuItem>
     }
-    <RadzenMenuItem Path="Account/Manage/TwoFactorAuthentication">Two-factor authentication</RadzenMenuItem>
-    <RadzenMenuItem Path="Account/Manage/PersonalData">Personal data</RadzenMenuItem>
-</RadzenMenu>
+    <MenuItem Path="Account/Manage/TwoFactorAuthentication">Two-factor authentication</MenuItem>
+    <MenuItem Path="Account/Manage/PersonalData">Personal data</MenuItem>
+</Menu>
 
 @code {
     private bool _hasExternalLogins;

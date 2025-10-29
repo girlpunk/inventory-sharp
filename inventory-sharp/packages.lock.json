@@ -332,6 +332,15 @@
           "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "9.0.0"
         }
       },
+      "AntDesign": {
+        "type": "Transitive",
+        "resolved": "1.4.3",
+        "contentHash": "hLcdpPAdEbn3snOM28qbabsAH6aHhuzKBDpX066e+MciLu/W+wp3nAmw5/I1CJ3BwaGs1en1eNRYPLocCBKCZw==",
+        "dependencies": {
+          "Microsoft.AspNetCore.Components.Web": "9.0.0",
+          "OneOf": "3.0.271"
+        }
+      },
       "CommunityToolkit.HighPerformance": {
         "type": "Transitive",
         "resolved": "8.4.0",
@@ -1245,6 +1254,11 @@
         "resolved": "1.21.15",
         "contentHash": "Vxwg0EjbM/gmILPtzfmzlf0MDu9a17OQb8b57oTgoHoRsZNHWIFQFa00Izcvuam3Hbw2eH272TfczDRHSXgSlA=="
       },
+      "OneOf": {
+        "type": "Transitive",
+        "resolved": "3.0.271",
+        "contentHash": "pqpqeK8xQGggExhr4tesVgJkjdn+9HQAO0QgrYV2hFjE3y90okzk1kQMntMiUOGfV7FrCUfKPaVvPBD4IANqKg=="
+      },
       "OpenTelemetry": {
         "type": "Transitive",
         "resolved": "1.12.0",
@@ -1521,15 +1535,6 @@
         "type": "Transitive",
         "resolved": "0.12.1",
         "contentHash": "8i/Vnx/lbWzqqJ6J5lofguT4wBS99rfqKujWrFrTGAclQBZ5h1CgBlzGOTqsNjmMsxSTLpC+Ns6/f1RB0c4O/g=="
-      },
-      "Radzen.Blazor": {
-        "type": "Transitive",
-        "resolved": "7.2.1",
-        "contentHash": "qm6YqbPnWLhOmY/is9BuQM2XTSj/ffstP3FO/8FFUu/EOrL9aOrT4nViGyZnLFL7tGcL1I4AUGgMMQJbDmwm3Q==",
-        "dependencies": {
-          "Microsoft.AspNetCore.Components": "9.0.8",
-          "Microsoft.AspNetCore.Components.Web": "9.0.8"
-        }
       },
       "SharpAbp.Abp.OpenTelemetry": {
         "type": "Transitive",
@@ -2230,13 +2235,13 @@
           "ActualLab.Fusion.Blazor": "[10.4.15, )",
           "ActualLab.Fusion.Blazor.Authentication": "[10.3.43, )",
           "ActualLab.Fusion.Ext.Contracts": "[10.3.43, )",
+          "AntDesign": "[1.4.3, )",
           "BlazorInventory.Abstractions": "[1.0.0, )",
           "Humanizer.Core": "[2.14.1, )",
           "Microsoft.AspNetCore.Components.WebAssembly": "[9.0.8, )",
           "Microsoft.AspNetCore.Components.WebAssembly.Authentication": "[9.0.8, )",
           "Microsoft.AspNetCore.Components.WebAssembly.DevServer": "[9.0.8, )",
           "Microsoft.Extensions.Logging.Debug": "[9.0.8, )",
-          "Radzen.Blazor": "[7.2.1, )",
           "UAParser": "[3.1.47, )",
           "ZXingBlazor": "[1.1.5, )"
         }

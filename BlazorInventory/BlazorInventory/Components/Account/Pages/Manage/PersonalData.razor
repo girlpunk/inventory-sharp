@@ -7,21 +7,21 @@
 <StatusMessage />
 <h3>Personal Data</h3>
 
-<RadzenRow>
-    <RadzenColumn SizeMD="6">
+<Row>
+    <Col SizeMD="6">
         <p>Your account contains personal data that you have given us. This page allows you to download or delete that data.</p>
         <p>
             <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
         </p>
         <form action="Account/Manage/DownloadPersonalData" method="post">
             <AntiforgeryToken/>
-            <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit">Download</RadzenButton>
+            <Button ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit">Download</Button>
         </form>
         <p>
-            <RadzenLink Path="Account/Manage/DeletePersonalData" class="btn btn-danger">Delete</RadzenLink>
+            <a Path="Account/Manage/DeletePersonalData" class="btn btn-danger">Delete</a>
         </p>
-    </RadzenColumn>
-</RadzenRow>
+    </Col>
+</Row>
 
 @code {
     [CascadingParameter]

@@ -89,7 +89,7 @@ public sealed partial class Create
         public Guid? ForeignServerId { get; set; }
     }
 
-    private async Task Submit(CreateModel model)
+    private async Task Submit()
     {
         //Create Item
         var item = await Commander.Call(new CreateCommand<Abstractions.Models.Item>
@@ -97,24 +97,24 @@ public sealed partial class Create
             Obj = new Abstractions.Models.Item
             {
                 Created = DateTime.Now,
-                Description = model.Description,
-                Name = model.Name,
-                ParentId = model.ParentId,
+                Description = Model.Description,
+                Name = Model.Name,
+                ParentId = Model.ParentId,
             }
         }).ConfigureAwait(false);
 
         //Create Label
         //TODO: Generate Identifier
-        if(model.LabelType != null && model.Identifier != null)
+        if(Model.LabelType != null && Model.Identifier != null)
         {
             var label = await Commander.Call(new CreateCommand<ItemLabel>
             {
                 Obj = new ItemLabel
                 {
-                    Identifier = model.Identifier,
-                    LabelType = model.LabelType.Value,
+                    Identifier = Model.Identifier,
+                    LabelType = Model.LabelType.Value,
                     ItemId = item.Id,
-                    ForeignServerId = model.ForeignServerId,
+                    ForeignServerId = Model.ForeignServerId,
                     Created = DateTime.Now,
                 }
             }).ConfigureAwait(false);
@@ -124,7 +124,7 @@ public sealed partial class Create
             {
                 LabelId = label.Id,
                 ScannerId = ScannerId,
-                LabelType = model.LabelType.Value,
+                LabelType = Model.LabelType.Value,
                 //TODO: Make optional
                 CreateScanRecord = true,
                 ScannerLatitude = Latitude,

@@ -12,14 +12,14 @@
 
 <h3>Delete Personal Data</h3>
 
-<RadzenAlert AlertStyle="AlertStyle.Danger" AllowClose="false">
+<Alert Type="AlertType.Error" AllowClose="false">
     Deleting this data will permanently remove your account, and this cannot be recovered.
-</RadzenAlert>
+</Alert>
 
 <EditForm FormName="delete-user" OnValidSubmit="OnValidSubmitAsync" method="post">
     <DataAnnotationsValidator />
     <ValidationSummary class="text-danger" role="alert" />
-    <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Danger" Size="ButtonSize.Medium">Delete data and close my account</RadzenButton>
+    <Button ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Danger">Delete data and close my account</Button>
 </EditForm>
 
 @code {

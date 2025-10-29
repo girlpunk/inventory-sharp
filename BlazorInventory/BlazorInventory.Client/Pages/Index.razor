@@ -7,22 +7,17 @@
 @inject IScanService ScanService
 
 @if (State.Error != null) {
-  <RadzenAlert AlertStyle="AlertStyle.Warning">Update error: @State.Error.Message</RadzenAlert>
+  <Alert Type="AlertType.Warning">Update error: @State.Error.Message</Alert>
 }
 
-<RadzenCardGroup>
-<RadzenCard Style="width: 300px;">
-  <RadzenText TextStyle="TextStyle.Overline">Total Items</RadzenText>
-  <RadzenText TextStyle="TextStyle.H4">@State.ValueOrDefault?.Items</RadzenText>
-</RadzenCard>
-
-<RadzenCard Style="width: 300px;">
-  <RadzenText TextStyle="TextStyle.Overline">Total Labels</RadzenText>
-  <RadzenText TextStyle="TextStyle.H4">@State.ValueOrDefault?.Labels</RadzenText>
-</RadzenCard>
-
-<RadzenCard Style="width: 300px;">
-  <RadzenText TextStyle="TextStyle.Overline">Total Scans</RadzenText>
-  <RadzenText TextStyle="TextStyle.H4">@State.ValueOrDefault?.Scans</RadzenText>
-</RadzenCard>
-</RadzenCardGroup>
+<Row Gutter="16">
+    <Col Span="12">
+        <Statistic Title="Total Items" Value="@State.ValueOrDefault?.Items" />
+    </Col>
+    <Col Span="12">
+        <Statistic Title="Total Labels" Value="@State.ValueOrDefault?.Labels" />
+    </Col>
+    <Col Span="12">
+        <Statistic Title="Total Scans" Value="@State.ValueOrDefault?.Scans" />
+    </Col>
+</Row>

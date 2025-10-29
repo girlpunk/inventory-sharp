@@ -14,31 +14,20 @@
 <h3>Profile</h3>
 <StatusMessage />
 
-<RadzenRow>
-    <RadzenColumn SizeXL="6">
-        <EditForm Model="Input" FormName="profile" OnValidSubmit="OnValidSubmitAsync" method="post">
-            <DataAnnotationsValidator />
-            <ValidationSummary class="text-danger" role="alert" />
+<Form Model="Input" FormName="profile" OnValidSubmit="OnValidSubmitAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary class="text-danger" role="alert" />
 
-            <RadzenFormField Text="Username">
-                <ChildContent>
-                    <RadzenTextBox @bind-Value="_username" Name="username" Disabled="true"/>
-                </ChildContent>
-            </RadzenFormField>
+    <FormInput Text="Username">
+        <Input @bind-Value="_username" Name="username" Disabled="true"/>
+    </FormInput>
 
-            <RadzenFormField Text="Phone number">
-                <ChildContent>
-                    <RadzenTextBox @bind-Value="@Input.PhoneNumber" AutoCompleteType="AutoCompleteType.Tel" Placeholder="Enter your phone number"/>
-                </ChildContent>
-                <Helper>
-                    <ValidationMessage For="() => Input.PhoneNumber" class="text-danger"/>
-                </Helper>
-            </RadzenFormField>
+    <FormInput Text="Phone number">
+        <Input @bind-Value="@Input.PhoneNumber" AutoCompleteType="AutoCompleteType.Tel" Placeholder="Enter your phone number"/>
+    </FormInput>
 
-            <RadzenButton ButtonType="ButtonType.Submit" Size="ButtonSize.Large" ButtonStyle="ButtonStyle.Primary">Save</RadzenButton>
-        </EditForm>
-    </RadzenColumn>
-</RadzenRow>
+    <Button ButtonType="ButtonType.Submit" Size="ButtonSize.Large" ButtonStyle="ButtonStyle.Primary">Save</Button>
+</Form>
 
 @code {
     private ApplicationUser _user = default!;

@@ -14,35 +14,20 @@
 
 <StatusMessage Message="@_message"/>
 
-<RadzenRow>
-    <RadzenColumn SizeXL="6">
-        <RadzenTemplateForm Data=@Input Submit="@OnValidSubmitAsync" Method="post" TItem="InputModel">
-            <DataAnnotationsValidator/>
-            <RadzenStack Gap="1rem">
-                <ValidationSummary class="text-danger" role="alert"/>
+<Form Model="@Input" Submit="@OnValidSubmitAsync()">
+    <DataAnnotationsValidator/>
+    <ValidationSummary class="text-danger" role="alert"/>
 
-                <RadzenFormField Text="Email">
-                    <ChildContent>
-                    <RadzenTextBox @bind-Value="@_email" ReadOnly="true" Disabled="true"/>
-                    </ChildContent>
-                </RadzenFormField>
+    <FormItem Text="Email">
+        <Input @bind-Value="@_email" ReadOnly="true" Disabled="true"/>
+    </FormItem>
 
-                <RadzenFormField Text="New email">
-                    <ChildContent>
-                        <RadzenTextBox @bind-Value="@Input.NewEmail" Name="NewEmail" AutoCompleteType="AutoCompleteType.Email" Placeholder="Enter a new email" aria-required="true"/>
-                    </ChildContent>
-                    <Helper>
-                        <RadzenText TextStyle="TextStyle.Caption">* required</RadzenText>
-                        <ValidationMessage For="() => Input.NewEmail" class="text-danger"/>
-                        <RadzenEmailValidator Component="NewEmail" Text="New email is required." />
-                    </Helper>
-                </RadzenFormField>
+    <FormItem Text="New email" Required>
+        <Input @bind-Value="@Input.NewEmail" Name="NewEmail" AutoCompleteType="AutoCompleteType.Email" Placeholder="Enter a new email" aria-required="true"/>
+    </FormItem>
 
-                <RadzenButton ButtonType="ButtonType.Submit" Text="Change email" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Large" />
-            </RadzenStack>
-        </RadzenTemplateForm>
-    </RadzenColumn>
-</RadzenRow>
+    <Button ButtonType="ButtonType.Submit" Text="Change email" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Large" />
+</Form>
 
 @code {
     private string? _message;
@@ -63,16 +48,16 @@
         Input.NewEmail ??= _email;
     }
 
-    private async Task OnValidSubmitAsync(InputModel input)
+    private async Task OnValidSubmitAsync()
     {
-        if (input.NewEmail is null || input.NewEmail == _email)
+        if (Input.NewEmail is null || Input.NewEmail == _email)
         {
             _message = "Your email is unchanged.";
             return;
         }
 
-        var code = await UserManager.GenerateChangeEmailTokenAsync(_user, input.NewEmail);
-        var setUserNameResult = await UserManager.ChangeEmailAsync(_user, input.NewEmail, code);
+        var code = await UserManager.GenerateChangeEmailTokenAsync(_user, Input.NewEmail);
+        var setUserNameResult = await UserManager.ChangeEmailAsync(_user, Input.NewEmail, code);
 
         if (!setUserNameResult.Succeeded)
         {

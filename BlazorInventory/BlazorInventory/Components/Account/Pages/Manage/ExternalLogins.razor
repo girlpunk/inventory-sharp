@@ -16,13 +16,13 @@
 @if (_currentLogins?.Count > 0)
 {
     <h3>Registered Logins</h3>
-    <RadzenTable>
-        <RadzenTableBody>
+    <table>
+        <tableBody>
             @foreach (var login in _currentLogins)
             {
-                <RadzenTableRow>
-                    <RadzenTableCell>@login.ProviderDisplayName</RadzenTableCell>
-                    <RadzenTableCell>
+                <tr>
+                    <td>@login.ProviderDisplayName</td>
+                    <td>
                         @if (_showRemoveButton)
                         {
                             <form @formname="@($"remove-login-{login.LoginProvider}")" @onsubmit="OnSubmitAsync" method="post">
@@ -30,7 +30,7 @@
                                 <div>
                                     <input type="hidden" name="@nameof(LoginProvider)" value="@login.LoginProvider" />
                                     <input type="hidden" name="@nameof(ProviderKey)" value="@login.ProviderKey" />
-                                    <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Primary" title="@($"Remove this {login.ProviderDisplayName} login from your account")">Remove</RadzenButton>
+                                    <Button ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Primary" title="@($"Remove this {login.ProviderDisplayName} login from your account")">Remove</Button>
                                 </div>
                             </form>
                         }
@@ -38,11 +38,11 @@
                         {
                             @: &nbsp;
                         }
-                    </RadzenTableCell>
-                </RadzenTableRow>
+                    </td>
+                </tr>
             }
-        </RadzenTableBody>
-    </RadzenTable>
+        </tableBody>
+    </table>
 }
 @if (_otherLogins?.Count > 0)
 {
@@ -54,9 +54,9 @@
             <p>
                 @foreach (var provider in _otherLogins)
                 {
-                    <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Primary" name="Provider" value="@provider.Name" title="@($"Log in using your {provider.DisplayName} account")">
+                    <Button ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Primary" name="Provider" value="@provider.Name" title="@($"Log in using your {provider.DisplayName} account")">
                         @provider.DisplayName
-                    </RadzenButton>
+                    </Button>
                 }
             </p>
         </div>

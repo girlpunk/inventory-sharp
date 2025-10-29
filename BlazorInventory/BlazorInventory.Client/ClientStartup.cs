@@ -6,7 +6,7 @@ using ActualLab.Fusion.UI;
 using BlazorInventory.Abstractions.Service;
 using BlazorInventory.Client.Geolocation;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Radzen;
+using AntDesign;
 
 namespace BlazorInventory.Client;
 
@@ -44,19 +44,7 @@ public static class ClientStartup
 
         services.AddScoped<IGeolocationService, GeolocationService>();
 
-        // Also adds AI crap, so done manually below
-        // services.AddRadzenComponents();
-
-        services.AddScoped<DialogService>();
-        services.AddScoped<NotificationService>();
-        services.AddScoped<TooltipService>();
-        services.AddScoped<ContextMenuService>();
-        services.AddScoped<ThemeService>();
-
-        services.AddRadzenCookieThemeService(static options =>
-        {
-            options.Name = "InventorySharpTheme"; // The name of the cookie
-            options.Duration = TimeSpan.FromDays(365); // The duration of the cookie
-        });
+        services.AddAntDesign();
+        LocaleProvider.DefaultLanguage = "en-GB";
     }
 }
