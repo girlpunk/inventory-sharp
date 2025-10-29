@@ -15,7 +15,7 @@
             </div>
 
             <RadzenMenu>
-                <RadzenMenuItem Text="Items" Path="Items/"/>
+                <RadzenMenuItem Text="Items" Path="Item/"/>
 
                 <RadzenMenuItem Text="Parent">
                     <RadzenMenuItem Text="Submenu 1"/>
@@ -59,7 +59,7 @@
         </RadzenContentContainer>
     </RadzenBody>
     <RadzenFooter class="rz-background-color-base-darker">
-        <footer style="min-height: 400px; max-width: 1200px;">
+        <footer style="max-width: 1200px;">
             <RadzenStack AlignItems="AlignItems.Normal" Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Normal" Gap="1rem">
                 <div class="rz-col-12 rz-col-xs-6 rz-col-lg-4">
                     <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Normal" Wrap="FlexWrap.NoWrap">
@@ -86,7 +86,6 @@
 
                                 <RadzenLink>Product 1</RadzenLink>
                                 <RadzenLink>Product 2</RadzenLink>
-                                <RadzenLink>Product 3</RadzenLink>
                                 <a href="/ui-blocks-footers" class="rz-link rz-text-tertiary-color active" aria-current="page"><span class="rz-link-text">Product 4</span></a>
                             </RadzenStack>
                         </div>
@@ -95,10 +94,6 @@
                             <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Normal" Gap="1rem" Wrap="FlexWrap.NoWrap">
                                 <RadzenText TextStyle="TextStyle.H6" class="rz-color-on-base-darker">Solutions</RadzenText>
                                 <RadzenLink>Solution 1</RadzenLink>
-                                <RadzenLink>Solution 2</RadzenLink>
-                                <RadzenLink>Solution 3</RadzenLink>
-                                <RadzenLink>Solution 4</RadzenLink>
-                                <RadzenLink>Solution 5</RadzenLink>
                             </RadzenStack>
                         </div>
 
@@ -106,9 +101,6 @@
                             <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Normal" Gap="1rem" Wrap="FlexWrap.NoWrap">
                                 <RadzenText TextStyle="TextStyle.H6" class="rz-color-on-base-darker">Company</RadzenText>
                                 <RadzenLink>About us</RadzenLink>
-                                <RadzenLink>Blogs</RadzenLink>
-                                <RadzenLink>Support</RadzenLink>
-                                <RadzenLink>Jobs</RadzenLink>
                             </RadzenStack>
                         </div>
 
@@ -123,7 +115,7 @@
                 </div>
             </RadzenStack>
 
-            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Normal" JustifyContent="JustifyContent.Normal" class="rz-border-top rz-border-color-base-800 rz-mt-12 rz-pt-8">
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Normal" JustifyContent="JustifyContent.Normal" class="rz-border-top rz-border-color-base-800 rz-mt-8 rz-pt-4">
                 <div class="rz-col-12" style="height: fit-content;">
                     <p class="rz-text-body2 rz-m-0 rz-text-disabled-color">Copyright © 2024 - @DateTime.Now.Year, Company Name Inc. All rights reserved.</p>
                 </div>
