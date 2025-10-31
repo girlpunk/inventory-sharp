@@ -12,6 +12,7 @@ COPY ["BlazorInventory/BlazorInventory.Client/BlazorInventory.Client.csproj", "B
 RUN dotnet restore "BlazorInventory/BlazorInventory/BlazorInventory.csproj"
 COPY . .
 WORKDIR "/src/BlazorInventory/BlazorInventory"
+RUN dotnet workload restore
 RUN dotnet build "./BlazorInventory.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
