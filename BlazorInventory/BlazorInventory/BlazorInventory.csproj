@@ -7,7 +7,6 @@
         <UserSecretsId>aspnet-BlazorInventory-7af14402-96ed-454d-b9ea-9462f414d919</UserSecretsId>
 
         <ServerGarbageCollection>true</ServerGarbageCollection>
-        <InvariantGlobalization>true</InvariantGlobalization>
 
         <MvcBuildViews Condition="'$(Configuration)'=='Debug'">false</MvcBuildViews>
         <MvcBuildViews Condition="'$(Configuration)'=='Release'">true</MvcBuildViews>
