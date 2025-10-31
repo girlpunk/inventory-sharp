@@ -6,9 +6,9 @@ using BlazorInventory.Abstractions.Response;
 
 namespace BlazorInventory.Client;
 
-public partial class WebScan
+public sealed partial class WebScan
 {
-    bool _visible = false;
+    private bool _visible;
 
     /// <summary>
     /// Scan details
@@ -18,12 +18,12 @@ public partial class WebScan
     /// <summary>
     /// Show the QR code scanner
     /// </summary>
-    private bool ShowScanBarcode { get; set; } = false;
+    private bool ShowScanBarcode { get; set; }
 
     private ScanLabelResult? LastScan { get; set; }
     private bool Loading { get; set; }
 
-    public void showModal()
+    private void ShowModal()
     {
         _visible = true;
 

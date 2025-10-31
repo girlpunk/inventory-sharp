@@ -5,7 +5,7 @@ namespace BlazorInventory.Abstractions.Response;
 /// <summary>
 /// Results of completing a scan
 /// </summary>
-public record ScanLabelResult
+public sealed record ScanLabelResult
 {
     /// <summary>
     /// Label that was scanned

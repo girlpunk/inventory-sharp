@@ -12,14 +12,14 @@
 
 <h3>Delete Personal Data</h3>
 
-<Alert Type="AlertType.Error" AllowClose="false">
+<Alert Type="AlertType.Error" Closable="@false">
     Deleting this data will permanently remove your account, and this cannot be recovered.
 </Alert>
 
-<EditForm FormName="delete-user" OnValidSubmit="OnValidSubmitAsync" method="post">
+<EditForm FormName="delete-user" OnValidSubmit="OnValidSubmitAsync">
     <DataAnnotationsValidator />
     <ValidationSummary class="text-danger" role="alert" />
-    <Button ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Danger">Delete data and close my account</Button>
+    <Button Danger="@true" Loading="@true">Delete data and close my account</Button>
 </EditForm>
 
 @code {

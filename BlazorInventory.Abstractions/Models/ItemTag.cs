@@ -21,5 +21,5 @@ public class ItemTag
     /// <summary>
     /// Item the tag is applied to
     /// </summary>
-    public virtual Item Item { get; init; }
+    public virtual Item Item { get; init; } = null!;
 }

@@ -16,7 +16,7 @@ public class ItemLabel : BaseModel
     /// <summary>
     /// Item the label is associated with
     /// </summary>
-    public virtual Item Item { get; set; }
+    public virtual Item Item { get; set; } = null!;
 
     /// <summary>
     /// Identifier shown on the label

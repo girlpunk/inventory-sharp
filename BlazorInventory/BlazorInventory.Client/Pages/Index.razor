@@ -10,14 +10,14 @@
   <Alert Type="AlertType.Warning">Update error: @State.Error.Message</Alert>
 }
 
-<Row Gutter="16">
-    <Col Span="12">
+<GridRow Gutter="16">
+    <GridCol Span="12">
         <Statistic Title="Total Items" Value="@State.ValueOrDefault?.Items" />
-    </Col>
-    <Col Span="12">
+    </GridCol>
+    <GridCol Span="12">
         <Statistic Title="Total Labels" Value="@State.ValueOrDefault?.Labels" />
-    </Col>
-    <Col Span="12">
+    </GridCol>
+    <GridCol Span="12">
         <Statistic Title="Total Scans" Value="@State.ValueOrDefault?.Scans" />
-    </Col>
-</Row>
+    </GridCol>
+</GridRow>

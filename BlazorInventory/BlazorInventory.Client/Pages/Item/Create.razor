@@ -9,19 +9,19 @@
 
 <h3>Create</h3>
 
-<Form Model="@Model" OnFinish="@Submit" TItem="CreateModel" LabelColSpan="8" WrapperColSpan="16">
+<Form Model="@Model" OnFinish="@Submit" TModel="CreateModel" LabelColSpan="8" WrapperColSpan="16">
     Item Details
-        <FormItem Label="Name">
-            <Input @bind-Value="Model.Name" MaxLength="120" Placeholder="Name" Required/>
+        <FormItem Label="Name" Required="@true">
+            <Input @bind-Value="Model.Name" MaxLength="120" Placeholder="Name" required/>
         </FormItem>
 
         <FormItem Label="Description">
-            <TextArea @bind-Value="Model.Description" MaxLength="1024" Name="Description" ShowCount/>
+            <TextArea @bind-Value="Model.Description" MaxLength="1024" Name="Description" ShowCount></TextArea>
         </FormItem>
 
         <FormItem Label="Parent">
             @* <AutoComplete @bind-Value="Model.ParentId" DisplayName="Parent" /> *@
-            <AntDesign.InputNumber TValue="int" @bind-Balue="Model.ParentId" />
+            @* <Input @bind-Value="Model.ParentId" /> *@
         </FormItem>
 
     Label Details
@@ -50,5 +50,5 @@
             }
         </FormItem>
 
-    <Button Type="ButtonType.Primary" HtmlType="submit">Create</Button>
+    <Button Type="@ButtonType.Primary" HtmlType="submit">Create</Button>
 </Form>

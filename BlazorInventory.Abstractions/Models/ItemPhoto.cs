@@ -16,7 +16,7 @@ public class ItemPhoto : BaseModel
     /// <summary>
     /// Item the photo relates to
     /// </summary>
-    public virtual Item Item { get; init; }
+    public virtual Item Item { get; init; } = null!;
 
     /// <summary>
     /// Title of the photo

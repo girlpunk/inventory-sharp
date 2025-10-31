@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BlazorInventory.Services;
 
-/// <inheritdoc cref="ICRUDService" />
+/// <inheritdoc cref="ICRUDService{T}" />
 /// <summary>
 /// Basic implementation of CRUD operations for a db-backed object
 /// </summary>
@@ -63,8 +63,8 @@ public abstract class CRUDService<T>(IServiceProvider services) : DbServiceBase<
 
         if (Invalidation.IsActive)
         {
-            _ = Get(command.Obj.Id, default);
-            _ = List(default);
+            _ = Get(command.Obj.Id, CancellationToken.None);
+            _ = List(CancellationToken.None);
             return;
         }
 
@@ -92,12 +92,12 @@ public abstract class CRUDService<T>(IServiceProvider services) : DbServiceBase<
         {
             var id = context.Operation.Items.KeylessGet<Guid>();
 
-            _ = Get(command.Obj.Id, default);
-            _ = Get(id, default);
-            _ = List(default);
-            _ = Count(default);
+            _ = Get(command.Obj.Id, CancellationToken.None);
+            _ = Get(id, CancellationToken.None);
+            _ = List(CancellationToken.None);
+            _ = Count(CancellationToken.None);
 
-            return default!;
+            return null!;
         }
 
         await using var dbContext = await DbHub.CreateOperationDbContext(cancellationToken);
@@ -119,9 +119,9 @@ public abstract class CRUDService<T>(IServiceProvider services) : DbServiceBase<
 
         if (Invalidation.IsActive)
         {
-            _ = Get(command.Obj.Id, default);
-            _ = List(default);
-            _ = Count(default);
+            _ = Get(command.Obj.Id, CancellationToken.None);
+            _ = List(CancellationToken.None);
+            _ = Count(CancellationToken.None);
             return;
         }
 

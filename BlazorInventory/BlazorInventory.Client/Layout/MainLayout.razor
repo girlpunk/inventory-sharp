@@ -12,33 +12,35 @@
         </div>
 
         <Menu Mode="MenuMode.Horizontal">
-            <MenuItem Text="Items" Path="Item/"/>
+            <MenuItem  Title="Items" RouterLink="Item/" />
 
-            <MenuItem Text="Parent">
-                <MenuItem Text="Submenu 1"/>
-                <MenuItem Text="Submenu 2"/>
-            </MenuItem>
+            <SubMenu Title="Parent">
+                <MenuItem Title="Submenu 1"/>
+                <MenuItem Title="Submenu 2"/>
+            </SubMenu>
 
-            <MenuItem Text="Item 3"/>
+            <MenuItem Title="Item 3"/>
         </Menu>
 
-        <Input Placeholder="Search" class="input input-bordered w-24 md:w-auto" TValue="string" />
+        <Input Placeholder="Search" class="input input-bordered w-24 md:w-auto" />
 
         <WebScan/>
 
         <AuthorizeView>
             <Authorized>
-                <ProfileMenu>
-                    <Template>
-                        <Gravatar Email="@context.User.FindFirst(ClaimTypes.Email)?.Value"/>
-                        @context.User.Identity?.Name
-                    </Template>
+                <Dropdown>
+                    <Overlay>
+                        <Menu>
+                            <MenuItem RouterLink="Account/Manage" Title="Profile"/>
+                            <MenuItem RouterLink="Account/Manage" Title="Settings"/>
+                            <MenuItem RouterLink="Account/Logout" Title="Log Out"/>
+                        </Menu>
+                    </Overlay>
                     <ChildContent>
-                        <ProfileMenuItem Text="Profile" Path="Account/Manage"/>
-                        <ProfileMenuItem Text="Settings" Path="Account/Manage"/>
-                        <ProfileMenuItem Text="Log Out" Path="Account/Logout"/>
+                        <Avatar Src="@context.User.FindFirst(ClaimTypes.Email)?.Value"/>
+                        @context.User.Identity?.Name
                     </ChildContent>
-                </ProfileMenu>
+                </Dropdown>
             </Authorized>
             <NotAuthorized>
                 <a href="Account/Login">Login</a>
@@ -51,9 +53,9 @@
     </Content>
     <Footer class="rz-background-color-base-darker">
         <footer style="max-width: 1200px;">
-            <Flex AlignItems="AlignItems.Normal" Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Normal" Gap="FlexGap.Middle">
+            <Flex Justify="FlexJustify.SpaceEvenly">
                 <div class="rz-col-12 rz-col-xs-6 rz-col-lg-4">
-                    <Flex Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Normal" Wrap="FlexWrap.NoWrap">
+                    <Flex Direction="FlexDirection.Vertical" Justify="FlexJustify.SpaceEvenly" Wrap="FlexWrap.NoWrap">
                         <svg
                             width="36"
                             height="36"
@@ -70,11 +72,10 @@
                 </div>
 
                 <div class="rz-col-12 rz-col-lg-8 rz-col-xl-6 rz-offset-xl-2">
-                    <Flex Orientation="Orientation.Horizontal" AlignItems="AlignItems.Normal" JustifyContent="JustifyContent.Normal" Gap="FlexGap.Middle">
+                    <Flex Justify="FlexJustify.SpaceEvenly" Gap="FlexGap.Middle">
                         <div class="rz-col-12 rz-col-xs-6 rz-col-md-3">
-                            <Flex Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Normal" Gap="FlexGap.Middle" Wrap="FlexWrap.NoWrap">
-                                <Text TextStyle="TextStyle.H6" class="rz-color-on-base-darker">Products</Text>
-
+                            <Flex Direction="FlexDirection.Vertical" Align="FlexAlign.Start" Gap="FlexGap.Middle" Wrap="FlexWrap.NoWrap">
+                                <h6 class="rz-color-on-base-darker">Products</h6>
                                 <a>Product 1</a>
                                 <a>Product 2</a>
                                 <a href="/ui-blocks-footers" class="rz-link rz-text-tertiary-color active" aria-current="page"><span class="rz-link-text">Product 4</span></a>
@@ -82,22 +83,22 @@
                         </div>
 
                         <div class="rz-col-12 rz-col-xs-6 rz-col-md-3">
-                            <Flex Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Normal" Gap="FlexGap.Middle" Wrap="FlexWrap.NoWrap">
-                                <Text TextStyle="TextStyle.H6" class="rz-color-on-base-darker">Solutions</Text>
+                            <Flex Direction="FlexDirection.Vertical" Align="FlexAlign.Start" Gap="FlexGap.Middle" Wrap="FlexWrap.NoWrap">
+                                <h6 class="rz-color-on-base-darker">Solutions</h6>
                                 <a>Solution 1</a>
                             </Flex>
                         </div>
 
                         <div class="rz-col-12 rz-col-xs-6 rz-col-md-3">
-                            <Flex Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Normal" Gap="FlexGap.Middle" Wrap="FlexWrap.NoWrap">
-                                <Text TextStyle="TextStyle.H6" class="rz-color-on-base-darker">Company</Text>
+                            <Flex Direction="FlexDirection.Vertical" Align="FlexAlign.Start" Gap="FlexGap.Middle" Wrap="FlexWrap.NoWrap">
+                                <h6 class="rz-color-on-base-darker">Company</h6>
                                 <a>About us</a>
                             </Flex>
                         </div>
 
                         <div class="rz-col-12 rz-col-xs-6 rz-col-md-3">
-                            <Flex Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" JustifyContent="JustifyContent.Normal" Gap="FlexGap.Middle" Wrap="FlexWrap.NoWrap">
-                                <Text TextStyle="TextStyle.H6" class="rz-color-on-base-darker">Legal</Text>
+                            <Flex Direction="FlexDirection.Vertical" Align="FlexAlign.Start" Gap="FlexGap.Middle" Wrap="FlexWrap.NoWrap">
+                                <h6 class="rz-color-on-base-darker">Legal</h6>
                                 <a>Privacy policy</a>
                                 <a>Terms of use</a>
                             </Flex>
@@ -106,7 +107,7 @@
                 </div>
             </Flex>
 
-            <Flex Orientation="Orientation.Horizontal" AlignItems="AlignItems.Normal" JustifyContent="JustifyContent.Normal" class="rz-border-top rz-border-color-base-800 rz-mt-8 rz-pt-4">
+            <Flex Direction="FlexDirection.Horizontal" class="rz-border-top rz-border-color-base-800 rz-mt-8 rz-pt-4">
                 <div class="rz-col-12" style="height: fit-content;">
                     <p class="rz-text-body2 rz-m-0 rz-text-disabled-color">Copyright © 2024 - @DateTime.Now.Year, Company Name Inc. All rights reserved.</p>
                 </div>

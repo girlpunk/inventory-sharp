@@ -8,7 +8,7 @@ namespace BlazorInventory.Abstractions.Command;
 /// Set the parent of an item
 /// </summary>
 [JsonSerializable(typeof(SetItemParentCommand))]
-public record SetItemParentCommand : ICommand<Unit>
+public sealed record SetItemParentCommand : ICommand<Unit>
 {
     /// <summary>
     /// Item to be updated

@@ -75,9 +75,4 @@
       <AdditionalFiles Include="Widgets\TagsWidget.razor" />
     </ItemGroup>
 
-
-    <ItemGroup>
-      <Folder Include="Pages\Shared\" />
-    </ItemGroup>
-
 </Project>

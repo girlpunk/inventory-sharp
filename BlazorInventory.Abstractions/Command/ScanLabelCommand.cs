@@ -9,7 +9,7 @@ namespace BlazorInventory.Abstractions.Command;
 /// Scan a label, record details (if appropriate) and return information about the label, item, and scan
 /// </summary>
 [JsonSerializable(typeof(ScanLabelCommand))]
-public record ScanLabelCommand : ICommand<ScanLabelResult>
+public sealed record ScanLabelCommand : ICommand<ScanLabelResult>
 {
     /// <summary>
     /// Identifier that was scanned, if a lookup is required

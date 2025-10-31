@@ -1,7 +1,6 @@
 @page "/Scan/{Id:guid}"
 @attribute [Authorize]
 @using BlazorInventory.Abstractions.Service
-@using Microsoft.AspNetCore.Authorization
 @inherits ActualLab.Fusion.Blazor.ComputedStateComponent<BlazorInventory.Abstractions.Models.LabelScan>
 @inject IScanService ScanService
 

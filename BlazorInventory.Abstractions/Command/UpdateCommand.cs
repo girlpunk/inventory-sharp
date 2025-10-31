@@ -8,7 +8,7 @@ namespace BlazorInventory.Abstractions.Command;
 /// </summary>
 /// <typeparam name="T">Type of the item</typeparam>
 [JsonSerializable(typeof(CreateCommand<>))]
-public record UpdateCommand<T> : ICommand<T>
+public sealed record UpdateCommand<T> : ICommand<T>
 {
     /// <summary>
     /// Item to be updated

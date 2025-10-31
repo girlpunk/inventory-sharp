@@ -9,14 +9,14 @@
     <Alert Type="AlertType.Warning" Message="@State.Error.Message" Banner />
 }
 
-<Table TItem="BlazorInventory.Abstractions.Models.Item" DataSource="State.Value" AllowAlternatingRows="true">
+<Table TItem="Item" DataSource="State.Value" AllowAlternatingRows="true">
     <TitleTemplate>
         <Flex Justify="FlexJustify.End" Gap="@("10")">
-            <a href="/Item/Create"><Button Type="ButtonType.Primary">New</Button></a>
+            <a href="/Item/Create"><Button Type="@ButtonType.Primary">New</Button></a>
         </Flex>
     </TitleTemplate>
     <ColumnDefinitions Context="row">
-        <GenerateColumns Definitions="@((n,c) => { c.Filterable = true; c.Sortable = true; })" />
+        <GenerateColumns Definitions="@(static (_,c) => { c.Filterable = true; c.Sortable = true; })" />
 
 @* <Column Title="Name" @bind-Field="@context.Name" Sortable /> *@
 @* <Column Title="Description" @bind-Field="@context.Description" Sortable /> *@

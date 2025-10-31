@@ -8,7 +8,7 @@ namespace BlazorInventory.Abstractions.Command;
 /// </summary>
 /// <typeparam name="T">Type of object to be deleted</typeparam>
 [JsonSerializable(typeof(CreateCommand<>))]
-public record DeleteCommand<T> : ICommand<T>
+public sealed record DeleteCommand<T> : ICommand<T>
 {
     /// <summary>
     /// Object to be deleted

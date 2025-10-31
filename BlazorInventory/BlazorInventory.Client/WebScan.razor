@@ -6,10 +6,9 @@
 @inject ICommander Commander
 @inject NavigationManager NavigationManager
 @inject IGeolocationService GeolocationService
-@inject ModalService ModalService
 
 <div class="rz-p-12 rz-text-align-center">
-    <Button Text="Open WebScan" Type="ButtonType.Primary" Click="@showModal" />
+    <Button Type="@ButtonType.Primary" OnClick="@(() => ShowModal())">Open WebScan</Button>
 </div>
 
 <Modal Title="@("20px to Top")"
@@ -20,9 +19,8 @@
        DefaultMaximized="@false"
        Draggable="@true"
        Width="700"
-
        @bind-Visible="_visible">
-    <Form Model="@Inputs" OnSubmit="@Lookup()">
+    <Form Model="@Inputs" OnFinish="@(() => Lookup())">
         <div class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">Label details
             <FormItem Label="Label Type">
                 <EnumSelect TEnum="LabelType" @bind-Value="Inputs.LabelType" Mode="SelectMode.Multiple" />
@@ -33,7 +31,7 @@
             </FormItem>
 
             <FormItem Label="Identifier" Required>
-                <Input @bind-Value="Inputs.Identifier">Identifier</Input>
+                <Input @bind-Value="Inputs.Identifier"/>
             </FormItem>
 
             @if (ShowScanBarcode)
@@ -47,10 +45,10 @@
             }
             else
             {
-                <Button Click="@(() => { ShowScanBarcode = true; })">Scan Barcode</Button>
+                <Button OnClick="@(() => { ShowScanBarcode = true; })">Scan Barcode</Button>
             }
 
-            <Button Disabled="@(Loading)" Click="@Lookup">
+            <Button Disabled="@(Loading)" OnClick="@(() => Lookup())" HtmlType="submit" Loading="@true">
                 Submit
                 @if (Loading)
                 {
@@ -68,10 +66,10 @@
             {
                 @if (LastScan.Label == null || LastScan.Item == null)
                 {
-                    <Alert AlertStyle="AlertStyle.Warning" Message="Label could not be found.">
+                    <Alert Type="AlertType.Warning" Message="Label could not be found.">
                         <div>
-                            <Button class="btn btn-sm btn-primary" Click="@Create">Create New Item</Button>
-                            <Button class="btn btn-sm btn-primary" Click="@Create">Link Existing item</Button>
+                            <Button class="btn btn-sm btn-primary" OnClick="@(() => Create())">Create New Item</Button>
+                            <Button class="btn btn-sm btn-primary" OnClick="@(() => Create())">Link Existing item</Button>
                         </div>
                     </Alert>
                 }

@@ -49,8 +49,8 @@ public class LabelService(IServiceProvider serviceProvider) : CRUDService<ItemLa
             if (id == null)
                 return null!;
 
-            _ = Get(id.Value, default);
-            _ = List(id.Value, default);
+            _ = Get(id.Value, CancellationToken.None);
+            _ = List(id.Value, CancellationToken.None);
 
             return null!;
         }

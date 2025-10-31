@@ -14,7 +14,7 @@ public class LabelScan : BaseModel
     /// <summary>
     /// ID of the label being scanned
     /// </summary>
-    public virtual ItemLabel Label { get; set; }
+    public virtual ItemLabel Label { get; set; } = null!;
 
     /// <summary>
     /// ID of the scanner that was used

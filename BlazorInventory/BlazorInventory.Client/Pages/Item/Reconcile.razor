@@ -16,23 +16,26 @@
             <Text TextStyle="TextStyle.H4">@OutstandingItems.Count</Text>
         </Card>
 
-        _&lt;_
-        RadzenPickList AllowMoveAll="@false" AllowMoveAllSourceToTarget="@false" AllowMoveAllTargetToSource="@false" @@bind-Source="@@OutstandingItems" @@bind-Target="@@CompletedItems" Style="height:500px; width:100%;" Orientation="Orientation.Horizontal"
-                        TextProperty="@@nameof(Customer.CompanyName)" AllowFiltering="@@allowFilter" MoveFilteredItemsOnlyOnMoveAll="@@moveFilteredItemsOnlyOnMoveAll" Multiple="@@multiple" ShowHeader="@@showHeader" Disabled="@@disabled"
-                        ButtonGap="@@gap" ButtonJustifyContent="@@justifyContent" ButtonStyle="@@style" ButtonSize="@@size" ButtonShade="@@shade" ButtonVariant="@@variant"
-                        AllowSelectAll="@@allowSelectAll"
-                        ItemRender="OnItemRender">
-            <SourceHeader>
-                Customers:
-            </SourceHeader>
-            <TargetHeader>
-                Selected Customers:
-            </TargetHeader>
-            <Template>
-                Company: @@context.CompanyName
-            </Template>
-        _&lt;_/_
-        RadzenPickList>
+        <GridRow Style="max-height: 500px;">
+            <GridCol Span="12">
+                Remaining:
+                <ul>
+                @foreach (var item in OutstandingItems)
+                {
+                    <li>@item.Name</li>
+                }
+                </ul>
+            </GridCol>
+            <GridCol Span="12">
+                Completed:
+                <ul>
+                    @foreach (var item in CompletedItems)
+                    {
+                        <li>@item.Name</li>
+                    }
+                </ul>
+            </GridCol>
+        </GridRow>
     </Flex>
     <Flex>
         <Card Style="width: 300px;">
