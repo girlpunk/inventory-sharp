@@ -30,7 +30,9 @@
                                 <div>
                                     <input type="hidden" name="@nameof(LoginProvider)" value="@login.LoginProvider" />
                                     <input type="hidden" name="@nameof(ProviderKey)" value="@login.ProviderKey" />
-                                    <Button Type="@ButtonType.Primary" title="@($"Remove this {login.ProviderDisplayName} login from your account")">Remove</Button>
+                                    <Tooltip Title="@($"Remove this {login.ProviderDisplayName} login from your account")">
+                                        <Button Type="@ButtonType.Primary" >Remove</Button>
+                                    </Tooltip>
                                 </div>
                             </form>
                         }
@@ -54,9 +56,11 @@
             <p>
                 @foreach (var provider in _otherLogins)
                 {
-                    <Button Type="@ButtonType.Primary" name="Provider" value="@provider.Name" title="@($"Log in using your {provider.DisplayName} account")">
-                        @provider.DisplayName
-                    </Button>
+                    <Tooltip Title="@($"Log in using your {provider.DisplayName} account")">
+                        <Button Type="@ButtonType.Primary" value="@provider.Name">
+                            @provider.DisplayName
+                        </Button>
+                    </Tooltip>
                 }
             </p>
         </div>
