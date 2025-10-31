@@ -15,10 +15,16 @@
         <PublishTrimmed>true</PublishTrimmed>
         <TrimMode>full</TrimMode>
         <IsTrimmable>true</IsTrimmable>
-        <RunAOTCompilation>false</RunAOTCompilation>
-        <WasmStripILAfterAOT>true</WasmStripILAfterAOT>
         <WasmEnableWebcil>true</WasmEnableWebcil>
         <WasmEnableSIMD>true</WasmEnableSIMD>
+
+        <RunAOTCompilation>true</RunAOTCompilation>
+        <WasmStripILAfterAOT>true</WasmStripILAfterAOT>
+
+        <MvcBuildViews Condition="'$(Configuration)'=='Debug'">false</MvcBuildViews>
+        <MvcBuildViews Condition="'$(Configuration)'=='Release'">true</MvcBuildViews>
+
+        <MvcRazorCompileOnPublish>true</MvcRazorCompileOnPublish>
     </PropertyGroup>
 
     <!-- Extra trimming roots -->
