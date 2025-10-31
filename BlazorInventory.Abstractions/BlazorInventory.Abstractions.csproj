@@ -7,9 +7,6 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
-        <RunAOTCompilation>true</RunAOTCompilation>
-        <!--<WasmStripILAfterAOT>true</WasmStripILAfterAOT>-->
-
         <MvcBuildViews Condition="'$(Configuration)'=='Debug'">false</MvcBuildViews>
         <MvcBuildViews Condition="'$(Configuration)'=='Release'">true</MvcBuildViews>
 

@@ -9,8 +9,6 @@
         <ServerGarbageCollection>true</ServerGarbageCollection>
         <InvariantGlobalization>true</InvariantGlobalization>
 
-        <RunAOTCompilation>true</RunAOTCompilation>
-        <!--<WasmStripILAfterAOT>true</WasmStripILAfterAOT>-->
         <MvcBuildViews Condition="'$(Configuration)'=='Debug'">false</MvcBuildViews>
         <MvcBuildViews Condition="'$(Configuration)'=='Release'">true</MvcBuildViews>
         <MvcRazorCompileOnPublish>true</MvcRazorCompileOnPublish>
