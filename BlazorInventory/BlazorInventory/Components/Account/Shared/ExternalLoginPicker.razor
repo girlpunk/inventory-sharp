@@ -12,9 +12,9 @@
             @foreach (var provider in _externalLogins)
             {
                 <Tooltip Title="@($"Log in using your {provider.DisplayName} account")">
-                    <Button
+                    <button
                         Type="@ButtonType.Primary"
-                        value="@provider.Name">@provider.DisplayName</Button>
+                        value="@provider.Name">@provider.DisplayName</button>
                 </Tooltip>
             }
         </p>
