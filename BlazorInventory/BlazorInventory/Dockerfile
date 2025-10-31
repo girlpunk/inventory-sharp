@@ -9,7 +9,7 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["BlazorInventory/BlazorInventory/BlazorInventory.csproj", "BlazorInventory/BlazorInventory/"]
 COPY ["BlazorInventory/BlazorInventory.Client/BlazorInventory.Client.csproj", "BlazorInventory/BlazorInventory.Client/"]
-RUN dotnet workload restore
+RUN dotnet workload restore "BlazorInventory/BlazorInventory/BlazorInventory.csproj"
 RUN dotnet restore "BlazorInventory/BlazorInventory/BlazorInventory.csproj"
 COPY . .
 WORKDIR "/src/BlazorInventory/BlazorInventory"
