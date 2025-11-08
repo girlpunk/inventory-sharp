@@ -13,7 +13,8 @@
             {
                 <Tooltip Title="@($"Log in using your {provider.DisplayName} account")">
                     <button
-                        Type="@ButtonType.Primary"
+                        name="provider"
+                        type="submit"
                         value="@provider.Name">@provider.DisplayName</button>
                 </Tooltip>
             }
