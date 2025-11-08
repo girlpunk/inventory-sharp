@@ -48,12 +48,8 @@
                 <Button OnClick="@(() => { ShowScanBarcode = true; })">Scan Barcode</Button>
             }
 
-            <Button Disabled="@(Loading)" OnClick="@(() => Lookup())" HtmlType="submit" Loading="@true">
+            <Button Disabled="@(Loading)" OnClick="@(() => Lookup())" HtmlType="submit" Loading="@Loading">
                 Submit
-                @if (Loading)
-                {
-                    <Spin Size="SpinSize.Large" />
-                }
             </Button>
         </div>
 

@@ -16,10 +16,10 @@
         </Flex>
     </TitleTemplate>
     <ColumnDefinitions Context="row">
-        <GenerateColumns Definitions="@(static (_,c) => { c.Filterable = true; c.Sortable = true; })" />
+        @* <GenerateColumns Definitions="@(static (_,c) => { c.Filterable = true; c.Sortable = true; })" /> *@
 
-@* <Column Title="Name" @bind-Field="@context.Name" Sortable /> *@
-@* <Column Title="Description" @bind-Field="@context.Description" Sortable /> *@
+        <PropertyColumn Title="Name" Property="static r => r.Name" Sortable />
+        <PropertyColumn Title="Description" Property="static r => r.Description" Sortable />
 
         <ActionColumn Title="Action">
             <a href="/Item/@row.Id" class="btn btn-ghost btn-xs">Details</a>

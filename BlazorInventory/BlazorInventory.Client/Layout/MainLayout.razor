@@ -2,9 +2,8 @@
 @inherits LayoutComponentBase
 
 <Layout>
-    <Header>
-        <Flex Justify="FlexJustify.SpaceEvenly" Direction="FlexDirection.Horizontal">
-        <div tabindex="0" role="button">
+    <Header Class="header">
+        <div tabindex="0" role="button" class="logo">
             <a href="/">
                 <svg xmlns="http://www.w3.org/2000/svg" style="height: 25px;width: 15px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16"/>
@@ -12,7 +11,7 @@
             </a>
         </div>
 
-        <Menu Mode="MenuMode.Horizontal">
+        <Menu Mode="MenuMode.Horizontal" Theme="MenuTheme.Dark">
             <MenuItem Title="Items" RouterLink="Item/"/>
 
             <SubMenu Title="Parent">
@@ -48,9 +47,8 @@
             </NotAuthorized>
             <Authorizing>Logging in, please wait...</Authorizing>
         </AuthorizeView>
-        </Flex>
     </Header>
-    <Content>
+    <Content Style="padding: 0 50px;">
         @Body
     </Content>
     <Footer class="rz-background-color-base-darker">
