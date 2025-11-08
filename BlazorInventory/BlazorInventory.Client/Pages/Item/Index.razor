@@ -9,7 +9,7 @@
     <Alert Type="AlertType.Warning" Message="@State.Error.Message" Banner />
 }
 
-<Table TItem="Item" DataSource="State.Value" AllowAlternatingRows="true">
+<Table TItem="Item" DataSource="State.Value" >
     <TitleTemplate>
         <Flex Justify="FlexJustify.End" Gap="@("10")">
             <a href="/Item/Create"><Button Type="@ButtonType.Primary">New</Button></a>
