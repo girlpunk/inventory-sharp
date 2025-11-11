@@ -48,10 +48,8 @@ ConfigureFusionServices();
 // Add services to the container.
 builder.Services.AddRazorComponents(options =>
     {
-        {
-            if (builder.Environment.IsDevelopment())
-                options.DetailedErrors = true;
-        }
+        if (builder.Environment.IsDevelopment())
+            options.DetailedErrors = true;
     })
     .AddInteractiveServerComponents(options =>
     {
@@ -89,7 +87,7 @@ builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuth
 builder.Services.AddAuthentication(static options =>
     {
         options.DefaultScheme = IdentityConstants.ApplicationScheme;
-        options.DefaultSignInScheme = OpenIdConnectDefaults.AuthenticationScheme; //IdentityConstants.ExternalScheme;
+        options.DefaultSignInScheme = OpenIdConnectDefaults.AuthenticationScheme;
     })
     .AddOpenIdConnect(
         OpenIdConnectDefaults.AuthenticationScheme,
@@ -104,6 +102,10 @@ builder.Services.AddAuthentication(static options =>
             options.SignInScheme = IdentityConstants.ApplicationScheme;
         })
     .AddIdentityCookies();
+
+builder.Services.AddSession();
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddPooledDbContextFactory<ApplicationDbContext>(options =>
 {
@@ -196,6 +198,7 @@ builder.Services.AddProblemDetails();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddOutputCache();
+builder.Services.AddDistributedMemoryCache();
 
 var app = builder.Build();
 
@@ -247,6 +250,7 @@ app.MapRazorComponents<BlazorInventory.Components.App>()
 
 // Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();
+
 
 app.MapRpcWebSocketServer();
 app.MapFusionRenderModeEndpoints();
