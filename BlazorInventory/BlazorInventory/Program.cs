@@ -289,6 +289,7 @@ void ConfigureFusionServices()
     fusion.AddService<ILabelService, LabelService>();
     fusion.AddService<IForeignServerService, ForeignServerService>();
     fusion.AddService<IScanService, ScanService>();
+    fusion.AddService<ITagService, TagService>();
 
     fusion.AddBlazor();
     fusion.AddOperationReprocessor();

@@ -28,6 +28,7 @@ public static class ClientStartup
         fusion.AddClient<ILabelService>();
         fusion.AddClient<IForeignServerService>();
         fusion.AddClient<IScanService>();
+        fusion.AddClient<ITagService>();
 
         ConfigureSharedServices(services);
     }

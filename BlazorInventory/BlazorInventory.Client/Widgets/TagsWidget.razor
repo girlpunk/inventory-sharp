@@ -1,4 +1,35 @@
-<h3>TagsWidget</h3>
+@using BlazorInventory.Abstractions.Service
+@inherits ActualLab.Fusion.Blazor.ComputedStateComponent<ICollection<ItemTagView>>
+@inject ITagService TagService
+
+@if (State.HasValue)
+{
+    @if (State.Value != null)
+    {
+        @if (State.Value.Count > 0)
+        {
+            @foreach (var tag in State.Value)
+            {
+                <Tag>
+                    @tag.Tag
+                </Tag>
+            }
+        }
+        else
+        {
+            <span>No tags</span>
+        }
+    }
+    else
+    {
+        <span>State is null</span>
+    }
+}
+else
+{
+    <span>Waiting for State...</span>
+}
+
 
 @code {
     /// <summary>
@@ -6,4 +37,8 @@
     /// </summary>
     [Parameter]
     public Guid ItemId { get; set; }
+
+    /// <inheritdoc />
+    protected override Task<ICollection<ItemTagView>> ComputeState(CancellationToken cancellationToken) =>
+        TagService.List(ItemId, cancellationToken);
 }

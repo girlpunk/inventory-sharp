@@ -3,9 +3,9 @@
 @inherits ActualLab.Fusion.Blazor.ComputedStateComponent<ItemView>
 @inject IItemService ItemService
 
-<h3>ItemWidget</h3>
-
-Name: @State.Value.Name<br/>
-Description: @State.Value.Description<br/>
-Create: @State.Value.Created<br/>
-Parent: @State.Value.ParentId<br/>
+<Descriptions Bordered Title="Item Details" Size="DescriptionsSize.Middle">
+    <DescriptionsItem Title="Name">@State.Value.Name</DescriptionsItem>
+    <DescriptionsItem Title="Description">@State.Value.Description</DescriptionsItem>
+    <DescriptionsItem Title="Created">@State.Value.Created.Humanize()</DescriptionsItem>
+    <DescriptionsItem Title="Parent"><pre>@State.Value.ParentId</pre></DescriptionsItem>
+</Descriptions>

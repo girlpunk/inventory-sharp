@@ -97,7 +97,7 @@ public sealed partial class Create
         {
             Obj = new ItemView
             {
-                Created = DateTime.Now,
+                Created = DateTimeOffset.Now,
                 Description = Model.Description,
                 Name = Model.Name,
                 ParentId = Model.ParentId,
@@ -116,7 +116,7 @@ public sealed partial class Create
                     LabelType = Model.LabelType.Value,
                     ItemId = item.Id,
                     ForeignServerId = Model.ForeignServerId,
-                    Created = DateTime.Now,
+                    Created = DateTimeOffset.Now,
                 }
             });
 
