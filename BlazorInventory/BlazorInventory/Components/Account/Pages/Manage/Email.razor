@@ -14,12 +14,12 @@
 
 <StatusMessage Message="@_message"/>
 
-<Form Model="@Input" Submit="@OnValidSubmitAsync()">
+<Form Model="@Input" OnFinish="@OnValidSubmitAsync">
     <DataAnnotationsValidator/>
     <ValidationSummary class="text-danger" role="alert"/>
 
     <FormItem Text="Email">
-        <Input @bind-Value="@_email" ReadOnly="true" Disabled="true"/>
+        <Input @bind-Value="@_email" ReadOnly Disabled/>
     </FormItem>
 
     <FormItem Text="New email" Required>

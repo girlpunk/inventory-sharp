@@ -1,6 +1,7 @@
 @page "/"
 @attribute [Authorize]
 @using BlazorInventory.Abstractions.Service
+@using Humanizer
 @inherits ActualLab.Fusion.Blazor.ComputedStateComponent<Index.Counts>
 @inject IItemService ItemService
 @inject ILabelService LabelService
@@ -12,12 +13,27 @@
 
 <GridRow Gutter="16">
     <GridCol Span="6">
-        <Statistic Title="Total Items" Value="@State.ValueOrDefault?.Items" />
+        <Statistic Title="Total Items" Value="@State.ValueOrDefault?.Items.ToMetric()" />
     </GridCol>
     <GridCol Span="6">
-        <Statistic Title="Total Labels" Value="@State.ValueOrDefault?.Labels" />
+        <Statistic Title="Total Labels" Value="@State.ValueOrDefault?.Labels.ToMetric()" />
     </GridCol>
     <GridCol Span="6">
-        <Statistic Title="Total Scans" Value="@State.ValueOrDefault?.Scans" />
+        <Statistic Title="Total Scans" Value="@State.ValueOrDefault?.Scans.ToMetric()" />
+    </GridCol>
+</GridRow>
+
+<GridRow Gutter="16" Style="margin-top: 24px;">
+    <GridCol Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
+        <Button Block>Look Up Item</Button>
+    </GridCol>
+    <GridCol Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
+        <Button Block>Move Item</Button>
+    </GridCol>
+    <GridCol Xs="24" Sm="24" Md="12" Lg="12" Xl="12" Style="margin-top: 16px;">
+        <Button Block>Reconcile Location</Button>
+    </GridCol>
+    <GridCol Xs="24" Sm="24" Md="12" Lg="12" Xl="12" Style="margin-top: 16px;">
+        <Button Block>Print Labels</Button>
     </GridCol>
 </GridRow>

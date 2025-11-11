@@ -4,15 +4,15 @@
 @inject SignInManager<ApplicationUser> SignInManager
 
 <Menu>
-    <MenuItem Path="Account/Manage">Profile</MenuItem>
-    <MenuItem Path="Account/Manage/Email">Email</MenuItem>
-    <MenuItem Path="Account/Manage/ChangePassword">Password</MenuItem>
+    <MenuItem RouterLink="Account/Manage">Profile</MenuItem>
+    <MenuItem RouterLink="Account/Manage/Email">Email</MenuItem>
+    <MenuItem RouterLink="Account/Manage/ChangePassword">Password</MenuItem>
     @if (_hasExternalLogins)
     {
-        <MenuItem Path="Account/Manage/ExternalLogins">External logins</MenuItem>
+        <MenuItem RouterLink="Account/Manage/ExternalLogins">External logins</MenuItem>
     }
-    <MenuItem Path="Account/Manage/TwoFactorAuthentication">Two-factor authentication</MenuItem>
-    <MenuItem Path="Account/Manage/PersonalData">Personal data</MenuItem>
+    <MenuItem RouterLink="Account/Manage/TwoFactorAuthentication">Two-factor authentication</MenuItem>
+    <MenuItem RouterLink="Account/Manage/PersonalData">Personal data</MenuItem>
 </Menu>
 
 @code {

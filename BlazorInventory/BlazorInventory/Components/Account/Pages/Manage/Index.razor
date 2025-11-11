@@ -14,17 +14,17 @@
 <h3>Profile</h3>
 <StatusMessage />
 
-<Form Model="Input" FormName="profile" OnValidSubmit="OnValidSubmitAsync">
+<Form Model="Input" FormName="profile" OnFinish="@OnValidSubmitAsync">
     <DataAnnotationsValidator />
     <ValidationSummary class="text-danger" role="alert" />
 
-    <FormInput Text="Username">
-        <Input @bind-Value="_username" Name="username" Disabled="true"/>
-    </FormInput>
+    <FormItem Text="Username">
+        <Input @bind-Value="_username" name="username" Disabled/>
+    </FormItem>
 
-    <FormInput Text="Phone number">
-        <Input @bind-Value="@Input.PhoneNumber" AutoCompleteType="AutoCompleteType.Tel" Placeholder="Enter your phone number"/>
-    </FormInput>
+    <FormItem Text="Phone number">
+        <Input @bind-Value="@Input.PhoneNumber" AutoComplete="@true" Placeholder="Enter your phone number"/>
+    </FormItem>
 
     <Button Size="ButtonSize.Large" Type="@ButtonType.Primary">Save</Button>
 </Form>

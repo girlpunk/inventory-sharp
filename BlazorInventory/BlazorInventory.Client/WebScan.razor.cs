@@ -2,6 +2,7 @@ using BlazorInventory.Client.Geolocation;
 using Microsoft.AspNetCore.Components;
 using ActualLab.CommandR;
 using BlazorInventory.Abstractions.Command;
+using BlazorInventory.Abstractions.Models;
 using BlazorInventory.Abstractions.Response;
 
 namespace BlazorInventory.Client;
@@ -13,7 +14,7 @@ public sealed partial class WebScan
     /// <summary>
     /// Scan details
     /// </summary>
-    public ScanLabelCommand Inputs { get; } = new();
+    public ScanLabelCommand Inputs { get; set; } = new();
 
     /// <summary>
     /// Show the QR code scanner
@@ -25,59 +26,58 @@ public sealed partial class WebScan
 
     private void ShowModal()
     {
+        Inputs = new ScanLabelCommand();
         _visible = true;
-
-        // Height = "512px",
     }
 
     private async Task Lookup()
     {
-        // ShowCreate = false;
-        Loading = true;
-        // Scan = null;
-        // Label = null;
-        // Item = null;
-        LastScan = null;
-        StateHasChanged();
+        if (Loading)
+            return;
 
-        //Get location
-        var location = await GeolocationService.GetCurrentPosition(new PositionOptions()
+        try
         {
-            EnableHighAccuracy = true,
-            MaximumAge = 30,
-        }).ConfigureAwait(false);
+            Loading = true;
+            LastScan = null;
+            await InvokeAsync(StateHasChanged);
 
-        if (location.IsSuccess)
-        {
-            Inputs.ScannerLatitude = location.Position?.Coords.Latitude;
-            Inputs.ScannerLongitude = location.Position?.Coords.Longitude;
+            //Get location
+            var location = await GeolocationService.GetCurrentPosition(new PositionOptions()
+            {
+                EnableHighAccuracy = true,
+                MaximumAge = 30,
+            });
+
+            if (location.IsSuccess)
+            {
+                Inputs.ScannerLatitude = location.Position?.Coords.Latitude;
+                Inputs.ScannerLongitude = location.Position?.Coords.Longitude;
+            }
+            else
+            {
+                location = await GeolocationService.GetCurrentPosition(new PositionOptions()
+                {
+                    EnableHighAccuracy = false,
+                    MaximumAge = 30,
+                });
+
+                if (location.IsSuccess)
+                {
+                    Inputs.ScannerLatitude = location.Position?.Coords.Latitude;
+                    Inputs.ScannerLongitude = location.Position?.Coords.Longitude;
+                }
+            }
+
+            var lookupResult = await Commander.Call(Inputs);
+            ArgumentNullException.ThrowIfNull(lookupResult);
+
+            LastScan = lookupResult;
         }
-
-        var lookupResult = await Commander.Call(Inputs).ConfigureAwait(false);
-
-        LastScan = lookupResult;
-        Loading = false;
-
-        // if (lookupResult.Label == null)
-        // {
-        //     // Could not find item, offer to create?
-        //     ShowCreate = true;
-        //
-        //     return;
-        // }
-        //
-        // if (lookupResult.Scan -= null)
-        // {
-        //     Scan = await ScanService.Get(lookupResult.ScanId, cancellationToken)
-        //     // Go to scan
-        //     NavigationManager.NavigateTo($"/Scan/{lookupResult.ScanId}");
-        // }
-        //
-        //
-        // {
-        //     // Go to item
-        //     NavigationManager.NavigateTo($"/Label/{lookupResult.LabelId}");
-        // }
+        finally
+        {
+            Loading = false;
+            await InvokeAsync(StateHasChanged);
+        }
     }
 
     /// <summary>
@@ -85,14 +85,48 @@ public sealed partial class WebScan
     /// </summary>
     private void Create()
     {
-        var url = NavigationManager.GetUriWithQueryParameters("/Item/Create", new Dictionary<string, object?>()
+        var parameters = new Dictionary<string, object?>()
         {
-            { "scanner", Inputs.ScannerId },
-            { "type", Inputs.LabelType },
-            { "identifier", Inputs.Identifier },
-            { "latitude", Inputs.ScannerLatitude },
-            { "longitude", Inputs.ScannerLongitude }
-        });
+            { "identifier", Inputs.Identifier }
+        };
+
+        if (Inputs.ScannerId != null)
+            parameters["scanner"] = Inputs.ScannerId;
+
+        if (Inputs.LabelType != LabelType.None)
+            parameters["type"] = Inputs.LabelType;
+
+        if (Inputs is { ScannerLatitude: not null, ScannerLongitude: not null })
+        {
+            parameters["latitude"] = Inputs.ScannerLatitude;
+            parameters["longitude"] = Inputs.ScannerLongitude;
+        }
+
+        var url = NavigationManager.GetUriWithQueryParameters("/Item/Create", parameters);
+
+        NavigationManager.NavigateTo(url);
+    }
+
+    private void Link()
+    {
+        var parameters = new Dictionary<string, object?>()
+        {
+            { "identifier", Inputs.Identifier }
+        };
+
+        if (Inputs.ScannerId != null)
+            parameters["scanner"] = Inputs.ScannerId;
+
+        if (Inputs.LabelType != LabelType.None)
+            parameters["type"] = Inputs.LabelType;
+
+        if (Inputs is { ScannerLatitude: not null, ScannerLongitude: not null })
+        {
+            parameters["latitude"] = Inputs.ScannerLatitude;
+            parameters["longitude"] = Inputs.ScannerLongitude;
+        }
+
+        var url = NavigationManager.GetUriWithQueryParameters("/Item/Create", parameters);
 
         NavigationManager.NavigateTo(url);
     }

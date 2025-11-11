@@ -1,0 +1,55 @@
+using BlazorInventory.Client.Geolocation;
+using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
+
+namespace BlazorInventory.Client.Widgets;
+
+public partial class MapBox
+{
+    /// <summary>
+    /// Javascript Runtime
+    /// </summary>
+    [Inject]
+    public required IJSRuntime JSRuntime { get; init; }
+
+    /// <summary>
+    /// Latitude to be displayed on the map
+    /// </summary>
+    [Parameter]
+    [EditorRequired]
+    public double? Latitude { get; set; }
+
+    /// <summary>
+    /// Longitude to be displayed on the map
+    /// </summary>
+    [Parameter]
+    [EditorRequired]
+    public double? Longitude { get; set; }
+
+    /// <summary>
+    /// Zoom level of the map
+    /// </summary>
+    [Parameter]
+    [EditorRequired]
+    public int? Zoom { get; set; }
+
+    /// <inheritdoc />
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            var module = new JSBinder(JSRuntime, "https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.js");
+
+            var mapboxgl = await module.GetModule();
+
+            var map = await mapboxgl.InvokeAsync<IJSObjectReference>("Map", new Dictionary<string, object>
+            {
+                { "container", "map" },
+                { "center", new List<double?> { Longitude, Latitude } },
+                { "zoom", Zoom ?? -1 }
+            });
+        }
+    }
+}

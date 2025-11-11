@@ -8,10 +8,10 @@
 @inject IGeolocationService GeolocationService
 
 <div class="rz-p-12 rz-text-align-center">
-    <Button Type="@ButtonType.Primary" OnClick="@(() => ShowModal())">Open WebScan</Button>
+    <Button Type="@ButtonType.Primary" OnClick="@ShowModal">Open WebScan</Button>
 </div>
 
-<Modal Title="@("20px to Top")"
+<Modal Title="WebScan"
        Style="top: 20px"
        Resizable="@true"
        Maximizable="@true"
@@ -20,43 +20,46 @@
        Draggable="@true"
        Width="700"
        @bind-Visible="_visible">
-    <Form Model="@Inputs" OnFinish="@(() => Lookup())">
-        <div class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">Label details
-            <FormItem Label="Label Type">
-                <EnumSelect TEnum="LabelType" @bind-Value="Inputs.LabelType" Mode="SelectMode.Multiple" />
-            </FormItem>
+    <Flex Direction="FlexDirection.Horizontal">
+        <Form Model="@Inputs" OnFinish="@Lookup">
+            <ValidationSummary/>
+            <div class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">Label details
+                <FormItem Label="Label Type">
+                    <EnumSelect TEnum="LabelType" @bind-Value="Inputs.LabelType" Mode="SelectMode.Multiple" EnableSearch="true" AllowClear="true" HideSelected="true" ItemLabel="@(static l => l != LabelType.None ? l.Humanize() : "All")"/>
+                </FormItem>
 
-            <FormItem Label="Create Scan Record">
-                <Switch @bind-Checked="Inputs.CreateScanRecord">Create Scan Record</Switch>
-            </FormItem>
+                <FormItem Label="Create Scan Record">
+                    <Switch @bind-Checked="Inputs.CreateScanRecord">Create Scan Record</Switch>
+                </FormItem>
 
-            <FormItem Label="Identifier" Required>
-                <Input @bind-Value="Inputs.Identifier"/>
-            </FormItem>
+                <FormItem Label="Identifier" Required>
+                    <Input @bind-Value="Inputs.Identifier"/>
+                </FormItem>
 
-            @if (ShowScanBarcode)
-            {
-                <BarcodeReader ScanResult="@BarcodeScan"
-                               ScanBtnTitle="Scan"
-                               ResetBtnTitle="Reset"
-                               CloseBtnTitle="Close"
-                               SelectDeviceBtnTitle="Select Device"
-                               Close="@(() => { ShowScanBarcode = false; })"/>
-            }
-            else
-            {
-                <Button OnClick="@(() => { ShowScanBarcode = true; })">Scan Barcode</Button>
-            }
+                @if (ShowScanBarcode)
+                {
+                    <BarcodeReader ScanResult="@BarcodeScan"
+                                   ScanBtnTitle="Scan"
+                                   ResetBtnTitle="Reset"
+                                   CloseBtnTitle="Close"
+                                   SelectDeviceBtnTitle="Select Device"
+                                   Close="@(() => { ShowScanBarcode = false; })"/>
+                }
+                else
+                {
+                    <Button OnClick="@(() => { ShowScanBarcode = true; })">Scan Barcode</Button>
+                }
 
-            <Button Disabled="@(Loading)" OnClick="@(() => Lookup())" HtmlType="submit" Loading="@Loading">
-                Submit
-            </Button>
-        </div>
+                <Button Disabled="@Loading" Loading="@Loading">
+                    Submit
+                </Button>
+            </div>
+        </Form>
 
         <div class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">Results
             @if (Loading)
             {
-                <Spin Size="SpinSize.Large" />
+                <Spin Size="SpinSize.Large"/>
             }
             @if (LastScan != null)
             {
@@ -64,149 +67,62 @@
                 {
                     <Alert Type="AlertType.Warning" Message="Label could not be found.">
                         <div>
-                            <Button class="btn btn-sm btn-primary" OnClick="@(() => Create())">Create New Item</Button>
-                            <Button class="btn btn-sm btn-primary" OnClick="@(() => Create())">Link Existing item</Button>
+                            <Button class="btn btn-sm btn-primary" OnClick="@Create">Create New Item</Button>
+                            <Button class="btn btn-sm btn-primary" OnClick="@Link">Link Existing item</Button>
                         </div>
                     </Alert>
                 }
                 else
                 {
-                    <legend class="fieldset-legend">Label</legend>
-                    <ul class="list bg-base-100 rounded-box shadow-md">
-                        <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">Label Details</li>
-                        <li class="list-row">
-                            <div>
-                                <div>Identifier</div>
-                                <div class="text-xs uppercase font-semibold opacity-60">@LastScan.Label.Identifier</div>
-                            </div>
-                        </li>
-                        <li class="list-row">
-                            <div>
-                                <div>Type</div>
-                                <div class="text-xs uppercase font-semibold opacity-60">@LastScan.Label.LabelType.Humanize()</div>
-                            </div>
-                        </li>
-                        @if (LastScan.Label.ForeignServer != null)
-                        {
-                            <li class="list-row">
-                                <div>
-                                    <div>Foreign Server</div>
-                                    <div class="text-xs uppercase font-semibold opacity-60">@LastScan.Label.ForeignServer.Namespace</div>
-                                </div>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="list-row">
-                                <div>
-                                    <div>Foreign Server</div>
-                                    <div class="text-xs uppercase font-semibold opacity-60">None</div>
-                                </div>
-                            </li>
-                        }
-                        <li class="list-row">
-                            <div>
-                                <div>Created</div>
-                                <div class="text-xs uppercase font-semibold opacity-60">@LastScan.Label.Created.Humanize()</div>
-                            </div>
-                        </li>
-                    </ul>
+                    <Card Title="Label">
+                        <Descriptions>
+                            <DescriptionsItem Title="Identifier">@LastScan.Label.Identifier</DescriptionsItem>
+                            <DescriptionsItem Title="Type">@LastScan.Label.LabelType.Humanize()</DescriptionsItem>
+                            <DescriptionsItem Title="Foreign Server">
+                                @if (LastScan.Label.ForeignServer != null)
+                                {
+                                    @LastScan.Label.ForeignServer.Namespace
+                                }
+                                else
+                                {
+                                    <span>None</span>
+                                }
+                            </DescriptionsItem>
+                            <DescriptionsItem Title="Created">@LastScan.Label.Created.Humanize()</DescriptionsItem>
+                        </Descriptions>
+                    </Card>
 
-                    <legend class="fieldset-legend">Item</legend>
-                    <ul class="list bg-base-100 rounded-box shadow-md">
-                        <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">Item Details</li>
-                        <li class="list-row">
-                            <div>
-                                <div>Name</div>
-                                <div class="text-xs uppercase font-semibold opacity-60">@LastScan.Item.Name</div>
-                            </div>
-                        </li>
-                        <li class="list-row">
-                            <div>
-                                <div>Description</div>
-                                <p class="list-col-wrap text-xs">@LastScan.Item.Description</p>
-                            </div>
-                        </li>
-                        @if (LastScan.Item.Parent != null)
-                        {
-                            <li class="list-row">
-                                <div>
-                                    <div>Parent</div>
-                                    <div class="text-xs uppercase font-semibold opacity-60">@LastScan.Item.Parent.Name</div>
-                                </div>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="list-row">
-                                <div>
-                                    <div>Parent</div>
-                                    <div class="text-xs uppercase font-semibold opacity-60">None</div>
-                                </div>
-                            </li>
-                        }
-                        <li class="list-row">
-                            <div>
-                                <div>Created</div>
-                                <div class="text-xs uppercase font-semibold opacity-60">@LastScan.Item.Created.Humanize()</div>
-                            </div>
-                        </li>
-                        <li class="list-row">
-                            <div>
-                                <div>Labels</div>
-                                <div class="text-xs uppercase font-semibold opacity-60">@LastScan.Item.Labels.Humanize()</div>
-                            </div>
-                        </li>
-                        <li class="list-row">
-                            <div>
-                                <div>Tags</div>
-                                <div class="text-xs uppercase font-semibold opacity-60">@LastScan.Item.Tags.Humanize()</div>
-                            </div>
-                        </li>
-                        <li class="list-row">
-                            <div>
-                                <div>Photos</div>
-                                <div class="text-xs uppercase font-semibold opacity-60">@LastScan.Item.Photos.Humanize()</div>
-                            </div>
-                        </li>
-                    </ul>
+                    <Card Title="Item">
+                        <Descriptions>
+                            <DescriptionsItem Title="Name">@LastScan.Item.Name</DescriptionsItem>
+                            <DescriptionsItem Title="Description">@LastScan.Item.Description</DescriptionsItem>
+                            <DescriptionsItem Title="Parent">
+                                @if (LastScan.Item.Parent != null)
+                                {
+                                    @LastScan.Item.Parent.Name
+                                }
+                                else
+                                {
+                                    <span>None</span>
+                                }
+                            </DescriptionsItem>
+                            <DescriptionsItem Title="Created">@LastScan.Item.Created.Humanize()</DescriptionsItem>
+                            <DescriptionsItem Title="Labels">@LastScan.Item.Labels?.Humanize()</DescriptionsItem>
+                            <DescriptionsItem Title="Tags">@LastScan.Item.Tags?.Humanize()</DescriptionsItem>
+                            <DescriptionsItem Title="Photos">@LastScan.Item.Photos?.Humanize()</DescriptionsItem>
+                        </Descriptions>
+                    </Card>
 
                     @if (LastScan.Scan != null)
                     {
-                        <legend class="fieldset-legend">Scan</legend>
-                        <ul class="list bg-base-100 rounded-box shadow-md">
-                            <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">Scan Details</li>
-                            <li class="list-row">
-                                <div>
-                                    <div>Scanner</div>
-                                    <div
-                                        class="text-xs uppercase font-semibold opacity-60">@LastScan.Scan.Scanner?.Name</div>
-                                </div>
-                            </li>
-                            <li class="list-row">
-                                <div>
-                                    <div>Location</div>
-                                    <div
-                                        class="text-xs uppercase font-semibold opacity-60">@LastScan.Scan.Latitude</div>
-                                    <div
-                                        class="text-xs uppercase font-semibold opacity-60">@LastScan.Scan.Longitude</div>
-                                </div>
-                            </li>
-                            <li class="list-row">
-                                <div>
-                                    <div>Timestamp</div>
-                                    <div
-                                        class="text-xs uppercase font-semibold opacity-60">@LastScan.Scan.Scanned.Humanize()</div>
-                                </div>
-                            </li>
-                            <li class="list-row">
-                                <div>
-                                    <div>Type</div>
-                                    <div
-                                        class="text-xs uppercase font-semibold opacity-60">@LastScan.Scan.ScanType.Humanize()</div>
-                                </div>
-                            </li>
-                        </ul>
+                        <Card Title="Scan">
+                            <Descriptions>
+                                <DescriptionsItem Title="Scanner">@LastScan.Scan.Scanner?.Name</DescriptionsItem>
+                                <DescriptionsItem Title="Location">@LastScan.Scan.Latitude<br/>@LastScan.Scan.Longitude</DescriptionsItem>
+                                <DescriptionsItem Title="Timestamp">@LastScan.Scan.Scanned.Humanize()</DescriptionsItem>
+                                <DescriptionsItem Title="Type">@LastScan.Scan.ScanType.Humanize()</DescriptionsItem>
+                            </Descriptions>
+                        </Card>
                     }
                 }
             }
@@ -215,5 +131,5 @@
                 <span>Scan a label to begin</span>
             }
         </div>
-    </Form>
+    </Flex>
 </Modal>

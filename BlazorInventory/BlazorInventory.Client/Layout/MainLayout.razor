@@ -3,6 +3,7 @@
 
 <Layout>
     <Header Class="header">
+        <Flex Direction="FlexDirection.Horizontal" Justify="FlexJustify.SpaceBetween">
         <div tabindex="0" role="button" class="logo">
             <a href="/">
                 <svg xmlns="http://www.w3.org/2000/svg" style="height: 25px;width: 15px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -22,7 +23,7 @@
             <MenuItem Title="Item 3"/>
         </Menu>
 
-        <Input Placeholder="Search" class="input input-bordered w-24 md:w-auto" TValue="string"/>
+        <Input Placeholder="Search" class="input input-bordered w-24 md:w-auto" TValue="string" Style="max-width: 25%;"/>
 
         <WebScan/>
 
@@ -47,6 +48,7 @@
             </NotAuthorized>
             <Authorizing>Logging in, please wait...</Authorizing>
         </AuthorizeView>
+        </Flex>
     </Header>
     <Content Style="padding: 0 50px;">
         @Body
@@ -109,7 +111,7 @@
 
             <Flex Direction="FlexDirection.Horizontal" class="rz-border-top rz-border-color-base-800 rz-mt-8 rz-pt-4">
                 <div class="rz-col-12" style="height: fit-content;">
-                    <p class="rz-text-body2 rz-m-0 rz-text-disabled-color">Copyright © 2024 - @DateTime.Now.Year, Company Name Inc. All rights reserved.</p>
+                    <p class="rz-text-body2 rz-m-0 rz-text-disabled-color">Copyright © 2024 - @DateTimeOffset.Now.Year, Company Name Inc. All rights reserved.</p>
                 </div>
             </Flex>
         </footer>

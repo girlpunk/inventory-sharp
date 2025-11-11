@@ -6,9 +6,9 @@ public partial class Index
     protected override async Task<Counts> ComputeState(CancellationToken cancellationToken) =>
         new()
         {
-            Items = await ItemService.Count(cancellationToken).ConfigureAwait(false),
-            Labels = await LabelService.Count(cancellationToken).ConfigureAwait(false),
-            Scans = await ScanService.Count(cancellationToken).ConfigureAwait(false),
+            Items = await ItemService.Count(cancellationToken),
+            Labels = await LabelService.Count(cancellationToken),
+            Scans = await ScanService.Count(cancellationToken),
             //var momentsAgo = await Time.GetMomentsAgo(changeTime);
             // return count; // $"{count}, changed {momentsAgo}";
         };

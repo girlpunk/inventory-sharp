@@ -16,7 +16,7 @@
     Deleting this data will permanently remove your account, and this cannot be recovered.
 </Alert>
 
-<EditForm FormName="delete-user" OnValidSubmit="OnValidSubmitAsync">
+<EditForm FormName="delete-user" OnValidSubmit="@OnValidSubmitAsync">
     <DataAnnotationsValidator />
     <ValidationSummary class="text-danger" role="alert" />
     <Button Danger="@true" Loading="@true">Delete data and close my account</Button>
