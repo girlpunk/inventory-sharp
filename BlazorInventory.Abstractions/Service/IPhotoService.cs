@@ -1,14 +1,14 @@
 using ActualLab.Fusion;
-using BlazorInventory.Abstractions.Models;
+using BlazorInventory.Abstractions.ViewModels;
 
 namespace BlazorInventory.Abstractions.Service;
 
 /// <inheritdoc />
-public interface IPhotoService : ICRUDService<ItemPhoto>
+public interface IPhotoService : ICRUDService<ItemPhotoView>
 {
     /// <summary>
     /// List photos for a specific item
     /// </summary>
     [ComputeMethod]
-    public Task<ICollection<ItemPhoto>> List(Guid itemId, CancellationToken cancellationToken = default);
+    public Task<ICollection<ItemPhotoView>> List(Guid itemId, CancellationToken cancellationToken = default);
 }

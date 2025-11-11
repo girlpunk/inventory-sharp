@@ -1,13 +1,13 @@
 using ActualLab.CommandR.Configuration;
 using ActualLab.Fusion;
 using BlazorInventory.Abstractions.Command;
-using BlazorInventory.Abstractions.Models;
 using BlazorInventory.Abstractions.Response;
+using BlazorInventory.Abstractions.ViewModels;
 
 namespace BlazorInventory.Abstractions.Service;
 
 /// <inheritdoc />
-public interface ILabelService : ICRUDService<ItemLabel>
+public interface ILabelService : ICRUDService<ItemLabelView>
 {
     /// <summary>
     /// Scan a label
@@ -19,5 +19,5 @@ public interface ILabelService : ICRUDService<ItemLabel>
     /// List labels for a given item
     /// </summary>
     [ComputeMethod]
-    public Task<ICollection<ItemLabel>> List(Guid itemId, CancellationToken cancellationToken = default);
+    public Task<ICollection<ItemLabelView>> List(Guid itemId, CancellationToken cancellationToken = default);
 }

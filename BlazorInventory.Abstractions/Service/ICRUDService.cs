@@ -7,8 +7,8 @@ namespace BlazorInventory.Abstractions.Service;
 /// <summary>
 /// Standard Create/Read/Update/Delete operations
 /// </summary>
-/// <typeparam name="T"></typeparam>
-public interface ICRUDService<T> : IComputeService
+/// <typeparam name="TViewModel"/>
+public interface ICRUDService<TViewModel> : IComputeService
 {
     /// <summary>
     /// Count of items
@@ -20,30 +20,30 @@ public interface ICRUDService<T> : IComputeService
     /// Create a new item
     /// </summary>
     [CommandHandler]
-    public Task<T> Create(CreateCommand<T> command, CancellationToken cancellationToken = default);
+    public Task<TViewModel> Create(CreateCommand<TViewModel> command, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Get an existing item
     /// </summary>
     [ComputeMethod]
-    public Task<T> Get(Guid id, CancellationToken cancellationToken = default);
+    public Task<TViewModel> Get(Guid id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// List all items
     /// </summary>
     [ComputeMethod]
-    public Task<ICollection<T>> List(CancellationToken cancellationToken = default);
+    public Task<ICollection<TViewModel>> List(CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Update an existing item
     /// </summary>
     [CommandHandler]
-    public Task Update(UpdateCommand<T> command, CancellationToken cancellationToken = default);
+    public Task Update(UpdateCommand<TViewModel> command, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Delete an item
     /// </summary>
     [CommandHandler]
-    public Task Delete(DeleteCommand<T> command,
+    public Task Delete(DeleteCommand<TViewModel> command,
         CancellationToken cancellationToken = default);
 }

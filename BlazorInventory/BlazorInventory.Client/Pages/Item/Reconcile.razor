@@ -1,8 +1,5 @@
 @page "/Item/{id:guid}/reconcile"
 @attribute [Authorize]
-@using ActualLab.Collections
-@using ActualLab.CommandR
-@using BlazorInventory.Abstractions.Models
 @using BlazorInventory.Abstractions.Service
 @inject IItemService ItemService
 @inject IItemService IScanService
@@ -44,26 +41,3 @@
         </Card>
     </Flex>
 </Flex>
-
-@code {
-    private ICollection<Item> OutstandingItems { get; } = [];
-    private ICollection<Item> CompletedItems { get; } = [];
-    private Item? Item { get; set; }
-
-    /// <summary>
-    /// ID of the item to reconcile the contents of
-    /// </summary>
-    [Parameter]
-    public Guid? Id { get; set; }
-
-    protected override async Task OnParametersSetAsync()
-    {
-        await base.OnParametersSetAsync();
-
-        if (Item == null && Id != null)
-        {
-            Item = await ItemService.Get(Id.Value);
-            OutstandingItems.AddRange(await ItemService.ListChildren(Id.Value));
-        }
-    }
-}

@@ -1,28 +1,41 @@
 @page "/Item/"
 @attribute [Authorize]
-@using BlazorInventory.Abstractions.Models
 @using BlazorInventory.Abstractions.Service
-@inherits ActualLab.Fusion.Blazor.ComputedStateComponent<IList<BlazorInventory.Abstractions.Models.Item>>
+@inherits ActualLab.Fusion.Blazor.ComputedStateComponent<IList<ItemView>>
 @inject IItemService ItemService
 
 @if (State.Error != null) {
     <Alert Type="AlertType.Warning" Message="@State.Error.Message" Banner />
 }
 
-<Table TItem="Item" DataSource="State.Value" >
-    <TitleTemplate>
-        <Flex Justify="FlexJustify.End" Gap="@("10")">
-            <a href="/Item/Create"><Button Type="@ButtonType.Primary">New</Button></a>
-        </Flex>
-    </TitleTemplate>
-    <ColumnDefinitions Context="row">
-        @* <GenerateColumns Definitions="@(static (_,c) => { c.Filterable = true; c.Sortable = true; })" /> *@
+@if (State.HasValue)
+{
+    <Table TItem="ItemView" DataSource="State.Value">
+        <TitleTemplate>
+            <Flex Justify="FlexJustify.End" Gap="@("10")">
+                <a href="/Item/Create"><Button Type="@ButtonType.Primary">New</Button></a>
+            </Flex>
+        </TitleTemplate>
+        <ColumnDefinitions Context="row">
+            @* <GenerateColumns Definitions="@(static (_,c) => { c.Filterable = true; c.Sortable = true; })" /> *@
 
-        <PropertyColumn Title="Name" Property="static r => r.Name" Sortable />
-        <PropertyColumn Title="Description" Property="static r => r.Description" Sortable />
+            <PropertyColumn Title="Name" Property="static r => r.Name" Sortable/>
+            <PropertyColumn Title="Description" Property="static r => r.Description" Sortable/>
 
-        <ActionColumn Title="Action">
-            <a href="/Item/@row.Id" class="btn btn-ghost btn-xs">Details</a>
-        </ActionColumn>
-    </ColumnDefinitions>
-</Table>
+            <ActionColumn Title="Action">
+                <a href="/Item/@row.Id" class="btn btn-ghost btn-xs">Details</a>
+            </ActionColumn>
+        </ColumnDefinitions>
+        <EmptyTemplate>
+            <Empty>
+                <DescriptionTemplate>
+                    <span>No items found</span>
+                </DescriptionTemplate>
+                <ChildContent>
+                    <Button Type="@ButtonType.Primary" >Create Now</Button>
+                </ChildContent>
+
+            </Empty>
+        </EmptyTemplate>
+    </Table>
+}

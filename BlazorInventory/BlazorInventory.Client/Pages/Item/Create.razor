@@ -11,7 +11,7 @@
 
 <Form Model="@Model" OnFinish="@Submit" TModel="CreateModel" LabelColSpan="8" WrapperColSpan="16">
     Item Details
-        <FormItem Label="Name" Required="@true">
+        <FormItem Label="Name" Required>
             <Input @bind-Value="Model.Name" MaxLength="120" Placeholder="Name" required/>
         </FormItem>
 
@@ -25,19 +25,13 @@
         </FormItem>
 
     Label Details
-        <FormItem Label="Identifier">
-            <Input @bind-Value="Model.Identifier" MaxLength="256" Placeholder="Identifier"/>
-        </FormItem>
+    <FormItem Label="Identifier">
+        <Input @bind-Value="Model.Identifier" MaxLength="256" Placeholder="Identifier"/>
+    </FormItem>
 
-        <FormItem Label="Label Type">
-            <RadioGroup @bind-Value="Model.LabelType" Name="Label Type" TValue="LabelType?">
-                <Radio TValue="LabelType?" Value="@null">None</Radio>
-                @foreach (var tagType in (LabelType[])Enum.GetValuesAsUnderlyingType<LabelType>())
-                {
-                    <Radio Value="@tagType">@tagType</Radio>
-                }
-            </RadioGroup>
-        </FormItem>
+    <FormItem Label="Label Type" Required>
+        <EnumSelect TEnum="LabelType?" @bind-Value="Model.LabelType" Mode="SelectMode.Default" EnableSearch="true" HideSelected="true" />
+    </FormItem>
 
         <FormItem Label="Foreign Server">
             <Input Value="@Model.ForeignServerId.ToString()"/>

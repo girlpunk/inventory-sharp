@@ -1,6 +1,6 @@
-using BlazorInventory.Abstractions.Models;
+using BlazorInventory.Abstractions.ViewModels;
 
 namespace BlazorInventory.Abstractions.Service;
 
 /// <inheritdoc />
-public interface IScannerService : ICRUDService<Scanner>;
+public interface IScannerService : ICRUDService<ScannerView>;

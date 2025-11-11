@@ -2,34 +2,54 @@
 @attribute [Authorize]
 @using ActualLab.CommandR
 @using BlazorInventory.Abstractions.Service
-@inherits ActualLab.Fusion.Blazor.ComputedStateComponent<BlazorInventory.Abstractions.Models.Item>
+@using Humanizer
+@inherits ActualLab.Fusion.Blazor.ComputedStateComponent<ItemView>
 @inject IItemService ItemService
 @inject ICommander Commander
 @inject NavigationManager NavigationManager
 
-<h3>Item Details</h3>
-
-<Card>
-    Item Details go Here<br/>
-    Name: @State.Value.Name<br/>
-    Description: @State.Value.Description<br/>
-    Create: @State.Value.Created<br/>
-    Parent: @State.Value.ParentId<br/>
-    Tags: <TagsWidget ItemId="@Id"/><br/>
-
-    <a class="btn btn-danger" @onclick="Delete">Delete</a>
-</Card>
-
-<Card>
-    <GridRow>
+@if (State.HasValue)
+{
+    @if (State.Value != null)
+    {
         <Card>
-            <LabelsWidget ItemId="@Id"/>
+            <Descriptions Bordered Title="Item Details" Size="DescriptionsSize.Middle">
+                <DescriptionsItem Title="Name">@State.Value.Name</DescriptionsItem>
+                <DescriptionsItem Title="Description">@State.Value.Description</DescriptionsItem>
+                <DescriptionsItem Title="Created">@State.Value.Created.Humanize()</DescriptionsItem>
+                <DescriptionsItem Title="Parent"><pre>@State.Value.ParentId</pre></DescriptionsItem>
+                <DescriptionsItem Title="Tags"><TagsWidget ItemId="@Id"/></DescriptionsItem>
+            </Descriptions>
+
+            <Button Danger @onclick="@Delete">Delete</Button>
         </Card>
+
         <Card>
-            <ImagesWidget ItemId="@Id"/>
+            <GridRow>
+                <GridCol Lg="8">
+                    <Card>
+                        <LabelsWidget ItemId="@Id"/>
+                    </Card>
+                </GridCol>
+                <GridCol Lg="8">
+                    <Card>
+                        <ImagesWidget ItemId="@Id"/>
+                    </Card>
+                </GridCol>
+                <GridCol Lg="8">
+                    <Card>
+                        <ScansWidget ItemId="@Id"/>
+                    </Card>
+                </GridCol>
+            </GridRow>
         </Card>
-        <Card>
-            <ScansWidget ItemId="@Id"/>
-        </Card>
-    </GridRow>
-</Card>
+    }
+    else
+    {
+        <span>State is null</span>
+    }
+}
+else
+{
+    <span>Waiting for State...</span>
+}

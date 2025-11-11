@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using ActualLab.CommandR;
 using BlazorInventory.Abstractions.Command;
 using BlazorInventory.Abstractions.Models;
+using BlazorInventory.Abstractions.ViewModels;
 using Microsoft.AspNetCore.Components;
 
 namespace BlazorInventory.Client.Pages.Item;
@@ -20,8 +21,8 @@ public sealed partial class Create
     [SupplyParameterFromQuery(Name = "type")]
     public int? LabelTypeRaw
     {
-        get => (int?)LabelType;
-        set => LabelType = (LabelType?)value;
+        get => (int?) LabelType;
+        set => LabelType = (LabelType?) value;
     }
 
     /// <summary>
@@ -92,24 +93,24 @@ public sealed partial class Create
     private async Task Submit()
     {
         //Create Item
-        var item = await Commander.Call(new CreateCommand<Abstractions.Models.Item>
+        var item = await Commander.Call(new CreateCommand<ItemView>
         {
-            Obj = new Abstractions.Models.Item
+            Obj = new ItemView
             {
                 Created = DateTime.Now,
                 Description = Model.Description,
                 Name = Model.Name,
                 ParentId = Model.ParentId,
             }
-        }).ConfigureAwait(false);
+        });
 
         //Create Label
         //TODO: Generate Identifier
-        if(Model.LabelType != null && Model.Identifier != null)
+        if (Model.LabelType != null && !string.IsNullOrWhiteSpace(Model.Identifier))
         {
-            var label = await Commander.Call(new CreateCommand<ItemLabel>
+            var label = await Commander.Call(new CreateCommand<ItemLabelView>
             {
-                Obj = new ItemLabel
+                Obj = new ItemLabelView
                 {
                     Identifier = Model.Identifier,
                     LabelType = Model.LabelType.Value,
@@ -117,7 +118,7 @@ public sealed partial class Create
                     ForeignServerId = Model.ForeignServerId,
                     Created = DateTime.Now,
                 }
-            }).ConfigureAwait(false);
+            });
 
             //Create Scan
             var scan = await Commander.Call(new ScanLabelCommand
@@ -129,7 +130,7 @@ public sealed partial class Create
                 CreateScanRecord = true,
                 ScannerLatitude = Latitude,
                 ScannerLongitude = Longitude
-            }).ConfigureAwait(false);
+            });
 
             //Go to scan page
             NavigationManager.NavigateTo($"/Scan/{scan.Scan!.Id}");
@@ -142,7 +143,7 @@ public sealed partial class Create
     /// <inheritdoc />
     protected override async Task OnParametersSetAsync()
     {
-        await base.OnParametersSetAsync().ConfigureAwait(false);
+        await base.OnParametersSetAsync();
 
         if (LabelType != null)
             Model.LabelType = LabelType.Value;
@@ -158,7 +159,7 @@ public sealed partial class Create
 
                 Model.Identifier = Identifier;
 
-                var foreignServer = await ForeignServerService.Find(url.Host).ConfigureAwait(false);
+                var foreignServer = await ForeignServerService.Find(url.Host);
                 if (foreignServer != null)
                 {
                     Model.ForeignServerId = foreignServer;
@@ -176,13 +177,13 @@ public sealed partial class Create
     {
         var url = new Uri(Model.Identifier, UriKind.Absolute);
 
-        var foreignServer = await Commander.Call(new CreateCommand<ForeignServer>
+        var foreignServer = await Commander.Call(new CreateCommand<ForeignServerView>
         {
-            Obj = new ForeignServer
+            Obj = new ForeignServerView
             {
                 Namespace = url.Host
             }
-        }).ConfigureAwait(false);
+        });
 
         Model.ForeignServerId = foreignServer.Id;
         Model.Identifier = url.AbsolutePath;

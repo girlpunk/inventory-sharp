@@ -14,12 +14,14 @@ using ActualLab.Fusion.Server;
 using ActualLab.Rpc;
 using ActualLab.Rpc.Server;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
-using BlazorInventory.Abstractions.Models;
 using BlazorInventory.Abstractions.Service;
 using BlazorInventory.Client;
+using BlazorInventory.Data.Models;
 using BlazorInventory.Services;
+using Mapster;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.IdentityModel.Logging;
 using Npgsql;
 using OpenTelemetry.Metrics;
@@ -110,7 +112,13 @@ builder.Services.AddPooledDbContextFactory<ApplicationDbContext>(options =>
     options.UseNpgsqlHintFormatter();
 
     if (builder.Environment.IsDevelopment())
+    {
         options.EnableSensitiveDataLogging();
+        options.ConfigureWarnings(static warnings =>
+        {
+            warnings.Log(RelationalEventId.PendingModelChangesWarning);
+        });
+    }
 });
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -129,6 +137,8 @@ builder.Services.AddDbContextServices<ApplicationDbContext>(static db =>
     //     QueryTransformer = carts => carts.Include(c => c.Items),
     // });
 });
+
+builder.Services.AddMapster();
 
 builder.Services.AddIdentityCore<ApplicationUser>(static options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -241,8 +251,8 @@ app.MapAdditionalIdentityEndpoints();
 app.MapRpcWebSocketServer();
 app.MapFusionRenderModeEndpoints();
 
-await using var db = await app.Services.GetRequiredService<IDbContextFactory<ApplicationDbContext>>().CreateDbContextAsync().ConfigureAwait(false);
-await db.Database.MigrateAsync().ConfigureAwait(false);
+await using var db = await app.Services.GetRequiredService<IDbContextFactory<ApplicationDbContext>>().CreateDbContextAsync();
+await db.Database.MigrateAsync();
 
 app.Run();
 return;

@@ -1,19 +1,21 @@
-using BlazorInventory.Abstractions.Models;
 using BlazorInventory.Abstractions.Service;
 using BlazorInventory.Data;
 using Microsoft.EntityFrameworkCore;
 using ActualLab.Fusion;
+using BlazorInventory.Abstractions.ViewModels;
+using BlazorInventory.Data.Models;
+using Mapster;
 
 namespace BlazorInventory.Services;
 
 /// <inheritdoc cref="IScanService" />
-public class ScanService(IServiceProvider serviceProvider) : CRUDService<LabelScan>(serviceProvider), IScanService
+public class ScanService(IServiceProvider serviceProvider) : CRUDService<LabelScan, LabelScanView>(serviceProvider), IScanService
 {
     /// <inheritdoc />
     public override Func<ApplicationDbContext, DbSet<LabelScan>> DbSet => static context => context.LabelScans;
 
     /// <inheritdoc />
-    public override void DoUpdate(LabelScan input, LabelScan output)
+    public override void DoUpdate(LabelScanView input, LabelScan output)
     {
         ArgumentNullException.ThrowIfNull(output);
         ArgumentNullException.ThrowIfNull(input);
@@ -29,9 +31,9 @@ public class ScanService(IServiceProvider serviceProvider) : CRUDService<LabelSc
 
     /// <inheritdoc />
     [ComputeMethod]
-    public virtual async Task<ICollection<LabelScan>> List(Guid itemId, CancellationToken cancellationToken = default)
+    public virtual async Task<ICollection<LabelScanView>> List(Guid itemId, CancellationToken cancellationToken = default)
     {
         await using var dbContext = await DbHub.CreateDbContext(cancellationToken);
-        return await DbSet(dbContext).Where(s => s.Label.ItemId == itemId).ToListAsync(cancellationToken).ConfigureAwait(false);
+        return await DbSet(dbContext).Where(s => s.Label.ItemId == itemId).ProjectToType<LabelScanView>().ToListAsync(cancellationToken);
     }
 }

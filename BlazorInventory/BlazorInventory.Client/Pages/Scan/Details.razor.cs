@@ -1,4 +1,4 @@
-using BlazorInventory.Abstractions.Models;
+using BlazorInventory.Abstractions.ViewModels;
 using Microsoft.AspNetCore.Components;
 
 namespace BlazorInventory.Client.Pages.Scan;
@@ -12,6 +12,6 @@ public partial class Details
     public Guid Id { get; set; }
 
     /// <inheritdoc />
-    protected override Task<LabelScan> ComputeState(CancellationToken cancellationToken) =>
+    protected override Task<LabelScanView> ComputeState(CancellationToken cancellationToken) =>
         ScanService.Get(Id, cancellationToken);
 }

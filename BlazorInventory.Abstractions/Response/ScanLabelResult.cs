@@ -1,24 +1,26 @@
-using BlazorInventory.Abstractions.Models;
+using BlazorInventory.Abstractions.ViewModels;
+using MemoryPack;
 
 namespace BlazorInventory.Abstractions.Response;
 
 /// <summary>
 /// Results of completing a scan
 /// </summary>
-public sealed record ScanLabelResult
+[MemoryPackable]
+public sealed partial record ScanLabelResult
 {
     /// <summary>
     /// Label that was scanned
     /// </summary>
-    public ItemLabel? Label { get; set; }
+    public ItemLabelView? Label { get; set; }
 
     /// <summary>
     /// Record of the scan
     /// </summary>
-    public LabelScan? Scan { get; set; }
+    public LabelScanView? Scan { get; set; }
 
     /// <summary>
     /// Item that was scanned
     /// </summary>
-    public Item? Item { get; set; }
+    public ItemView? Item { get; set; }
 }

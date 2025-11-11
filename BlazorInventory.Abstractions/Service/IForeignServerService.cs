@@ -1,10 +1,10 @@
 using ActualLab.Fusion;
-using BlazorInventory.Abstractions.Models;
+using BlazorInventory.Abstractions.ViewModels;
 
 namespace BlazorInventory.Abstractions.Service;
 
 /// <inheritdoc />
-public interface IForeignServerService : ICRUDService<ForeignServer>
+public interface IForeignServerService : ICRUDService<ForeignServerView>
 {
     /// <summary>
     /// Find a foreign server by its domain

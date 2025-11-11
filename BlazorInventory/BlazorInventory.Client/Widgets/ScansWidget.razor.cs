@@ -1,4 +1,4 @@
-using BlazorInventory.Abstractions.Models;
+using BlazorInventory.Abstractions.ViewModels;
 using Microsoft.AspNetCore.Components;
 
 namespace BlazorInventory.Client.Widgets;
@@ -12,6 +12,6 @@ public partial class ScansWidget
     public Guid ItemId { get; set; }
 
     /// <inheritdoc />
-    protected override Task<ICollection<LabelScan>> ComputeState(CancellationToken cancellationToken) =>
+    protected override Task<ICollection<LabelScanView>> ComputeState(CancellationToken cancellationToken) =>
         ScanService.List(ItemId, cancellationToken);
 }

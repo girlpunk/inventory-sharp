@@ -1,13 +1,14 @@
 @page "/Label/{Id:guid}"
 @attribute [Authorize]
 @using BlazorInventory.Abstractions.Service
-@inherits ActualLab.Fusion.Blazor.ComputedStateComponent<BlazorInventory.Abstractions.Models.ItemLabel>
+@using Humanizer
+@inherits ActualLab.Fusion.Blazor.ComputedStateComponent<ItemLabelView>
 @inject ILabelService LabelService
 
-<h3>Details</h3>
-
-Created: @State.Value.Created<br/>
-Foreign Server: @State.Value.ForeignServerId<br/>
-Identifier: @State.Value.Identifier<br/>
-Item ID: @State.Value.ItemId<br/>
-Label Type: @State.Value.LabelType<br/>
+<Descriptions Bordered Title="Label Details" Size="DescriptionsSize.Middle">
+    <DescriptionsItem Title="Created"> @State.Value.Created.Humanize()</DescriptionsItem>
+    <DescriptionsItem Title="Foreign Server"><pre>@State.Value.ForeignServerId</pre></DescriptionsItem>
+    <DescriptionsItem Title="Identifier"><pre>@State.Value.Identifier</pre></DescriptionsItem>
+    <DescriptionsItem Title="Item ID"><pre>@State.Value.ItemId</pre></DescriptionsItem>
+    <DescriptionsItem Title="Label Type"><Tag>@State.Value.LabelType</Tag></DescriptionsItem>
+</Descriptions>

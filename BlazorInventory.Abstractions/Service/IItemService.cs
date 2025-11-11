@@ -1,10 +1,10 @@
 using ActualLab.Fusion;
-using BlazorInventory.Abstractions.Models;
+using BlazorInventory.Abstractions.ViewModels;
 
 namespace BlazorInventory.Abstractions.Service;
 
 /// <inheritdoc />
-public interface IItemService : ICRUDService<Item>
+public interface IItemService : ICRUDService<ItemView>
 {
     /// <summary>
     /// List the direct children of a given item
@@ -12,5 +12,5 @@ public interface IItemService : ICRUDService<Item>
     /// <param name="id">Parent item</param>
     /// <param name="cancellationToken">Cancellation token</param>
     [ComputeMethod]
-    public Task<ICollection<Item>> ListChildren(Guid id, CancellationToken cancellationToken = default);
+    public Task<ICollection<ItemView>> ListChildren(Guid id, CancellationToken cancellationToken = default);
 }

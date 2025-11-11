@@ -1,5 +1,6 @@
 using ActualLab.CommandR;
 using BlazorInventory.Abstractions.Command;
+using BlazorInventory.Abstractions.ViewModels;
 using Microsoft.AspNetCore.Components;
 
 namespace BlazorInventory.Client.Pages.Item;
@@ -13,17 +14,17 @@ public sealed partial class Details
     public Guid Id { get; set; }
 
     /// <inheritdoc />
-    protected override Task<Abstractions.Models.Item> ComputeState(CancellationToken cancellationToken) =>
+    protected override Task<ItemView> ComputeState(CancellationToken cancellationToken) =>
         ItemService.Get(Id, cancellationToken);
 
     private async Task Delete()
     {
         //TODO: Verification popup
 
-        await Commander.Run(new DeleteCommand<Abstractions.Models.Item>
+        await Commander.Run(new DeleteCommand<ItemView>
         {
             Obj = State.Value
-        }).ConfigureAwait(false);
+        });
 
         NavigationManager.NavigateTo("/Item/");
     }

@@ -4,22 +4,24 @@ using ActualLab.CommandR;
 using ActualLab.Fusion;
 using ActualLab.Fusion.EntityFramework.Operations;
 using BlazorInventory.Abstractions.Command;
-using BlazorInventory.Abstractions.Models;
 using BlazorInventory.Abstractions.Response;
 using BlazorInventory.Abstractions.Service;
+using BlazorInventory.Abstractions.ViewModels;
 using BlazorInventory.Data;
+using BlazorInventory.Data.Models;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlazorInventory.Services;
 
 /// <inheritdoc cref="ILabelService" />
-public class LabelService(IServiceProvider serviceProvider) : CRUDService<ItemLabel>(serviceProvider), ILabelService
+public class LabelService(IServiceProvider serviceProvider) : CRUDService<ItemLabel, ItemLabelView>(serviceProvider), ILabelService
 {
     /// <inheritdoc />
     public override Func<ApplicationDbContext, DbSet<ItemLabel>> DbSet => static context => context.ItemLabels;
 
     /// <inheritdoc />
-    public override void DoUpdate(ItemLabel input, ItemLabel output)
+    public override void DoUpdate(ItemLabelView input, ItemLabel output)
     {
         ArgumentNullException.ThrowIfNull(output);
         ArgumentNullException.ThrowIfNull(input);
@@ -55,15 +57,16 @@ public class LabelService(IServiceProvider serviceProvider) : CRUDService<ItemLa
             return null!;
         }
 
-        await using var dbContext = await DbHub.CreateOperationDbContext(cancellationToken).ConfigureAwait(false);
+        await using var dbContext = await DbHub.CreateOperationDbContext(cancellationToken);
 
         ItemLabel? label;
 
         if (command.LabelId != null)
         {
-            label = await dbContext.ItemLabels.SingleOrDefaultAsync(l =>
-                    l.Id == command.LabelId, cancellationToken)
-                .ConfigureAwait(false);
+            label = await dbContext.ItemLabels
+                    .Include(static l => l.Item)
+                    .SingleOrDefaultAsync(l => l.Id == command.LabelId, cancellationToken)
+                ;
         }
         else
         {
@@ -76,18 +79,20 @@ public class LabelService(IServiceProvider serviceProvider) : CRUDService<ItemLa
 
                 var url = new Uri(command.Identifier, UriKind.Absolute);
 
-                label = await dbContext.ItemLabels.SingleOrDefaultAsync(l =>
-                        (l.ForeignServer == null && l.Identifier == command.Identifier) ||
-                        (l.ForeignServer != null && l.ForeignServer.Namespace == url.Host &&
-                         l.Identifier == url.AbsolutePath), cancellationToken)
-                    .ConfigureAwait(false);
+                label = await dbContext.ItemLabels
+                        .Include(static l => l.Item)
+                        .SingleOrDefaultAsync(l =>
+                            (l.ForeignServer == null && l.Identifier == command.Identifier) ||
+                            (l.ForeignServer != null && l.ForeignServer.Namespace == url.Host &&
+                             l.Identifier == url.AbsolutePath), cancellationToken)
+                    ;
             }
             else
             {
                 label = await dbContext.ItemLabels
-                    .SingleOrDefaultAsync(l => l.ForeignServer == null && l.Identifier == command.Identifier,
-                        cancellationToken)
-                    .ConfigureAwait(false);
+                        .Include(static l => l.Item)
+                        .SingleOrDefaultAsync(l => l.ForeignServer == null && l.Identifier == command.Identifier, cancellationToken)
+                    ;
             }
         }
 
@@ -96,20 +101,20 @@ public class LabelService(IServiceProvider serviceProvider) : CRUDService<ItemLa
         if (label == null)
             return result;
 
-        result.Label = label;
-        result.Item = label.Item;
+        result.Label = label.Adapt<ItemLabelView>();
+        result.Item = label.Item.Adapt<ItemView>();
 
         if (!command.CreateScanRecord)
             return result;
 
-        var scanner = await dbContext.Scanners.SingleOrDefaultAsync(s => s.Id == command.ScannerId, cancellationToken).ConfigureAwait(false);
+        var scanner = await dbContext.Scanners.SingleOrDefaultAsync(s => s.Id == command.ScannerId, cancellationToken);
 
         var scanRecord = new LabelScan()
         {
             ScannerId = command.ScannerId,
             LabelId = label.Id,
             ScanType = command.LabelType,
-            Scanned = DateTime.Now,
+            Scanned = DateTimeOffset.Now,
             Latitude = command.ScannerLatitude ?? scanner?.Latitude,
             Longitude = command.ScannerLongitude ?? scanner?.Longitude,
         };
@@ -121,20 +126,20 @@ public class LabelService(IServiceProvider serviceProvider) : CRUDService<ItemLa
             {
                 ItemId = label.ItemId,
                 ParentId = scanner.ParentItemId.Value
-            }, cancellationToken).ConfigureAwait(false);
+            }, cancellationToken);
 
-        await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        await dbContext.SaveChangesAsync(cancellationToken);
 
-        result.Scan = scanRecord;
+        result.Scan = scanRecord.Adapt<LabelScanView>();
 
         return result;
     }
 
     /// <inheritdoc />
     [ComputeMethod]
-    public virtual async Task<ICollection<ItemLabel>> List(Guid itemId, CancellationToken cancellationToken = default)
+    public virtual async Task<ICollection<ItemLabelView>> List(Guid itemId, CancellationToken cancellationToken = default)
     {
         await using var dbContext = await DbHub.CreateDbContext(cancellationToken);
-        return await DbSet(dbContext).Where(l => l.ItemId == itemId).ToListAsync(cancellationToken).ConfigureAwait(false);
+        return await DbSet(dbContext).Where(l => l.ItemId == itemId).ProjectToType<ItemLabelView>().ToListAsync(cancellationToken);
     }
 }

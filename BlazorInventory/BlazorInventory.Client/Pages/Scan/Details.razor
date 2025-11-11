@@ -1,19 +1,21 @@
 @page "/Scan/{Id:guid}"
 @attribute [Authorize]
 @using BlazorInventory.Abstractions.Service
-@inherits ActualLab.Fusion.Blazor.ComputedStateComponent<BlazorInventory.Abstractions.Models.LabelScan>
+@using Humanizer
+@inherits ActualLab.Fusion.Blazor.ComputedStateComponent<LabelScanView>
 @inject IScanService ScanService
 
 <h3>Details</h3>
 
-Label ID: @State.Value.LabelId<br/>
-Latitude: @State.Value.Latitude<br/>
-Longitude: @State.Value.Longitude<br/>
-Scanner: @State.Value.Scanned<br/>
-Scanner: @State.Value.ScannerId<br/>
-Scan Type: @State.Value.ScanType<br/>
+<Descriptions Title="Scan Details" Bordered Size="DescriptionsSize.Middle">
+    <DescriptionsItem Title="Label ID"><pre>@State.Value.LabelId</pre></DescriptionsItem>
+    <DescriptionsItem Title="Location"><pre>@State.Value.Latitude</pre><br/><pre>@State.Value.Longitude</pre></DescriptionsItem>
+    <DescriptionsItem Title="Scanned">@State.Value.Scanned.Humanize()</DescriptionsItem>
+    <DescriptionsItem Title="Scanner">@State.Value.ScannerId</DescriptionsItem>
+    <DescriptionsItem Title="Scan Type">@State.Value.ScanType</DescriptionsItem>
+</Descriptions>
 
-@if (State.Value.Latitude != null)
+@if (State is { HasValue: true, Value.Latitude: not null })
 {
     <MapBox Latitude="@State.Value.Latitude" Longitude="@State.Value.Longitude" Zoom="9" />
 }

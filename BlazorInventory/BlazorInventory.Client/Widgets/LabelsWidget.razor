@@ -1,15 +1,31 @@
 @using BlazorInventory.Abstractions.Service
-@inherits ActualLab.Fusion.Blazor.ComputedStateComponent<ICollection<BlazorInventory.Abstractions.Models.ItemLabel>>
+@using Humanizer
+@inherits ActualLab.Fusion.Blazor.ComputedStateComponent<ICollection<ItemLabelView>>
 @inject ILabelService LabelService
 
 <h3>LabelsWidget</h3>
 
-@foreach(var label in State.Value) {
-    <div>
-        Create: @label.Created<br/>
-        Foreign Server ID: @label.ForeignServerId<br/>
-        Identifier: @label.Identifier<br/>
-        Item ID: @label.ItemId<br/>
-        Label Type: @label.LabelType<br/>
-    </div>
+@if (State.HasValue)
+{
+    @if (State.Value != null)
+    {
+        @foreach (var label in State.Value)
+        {
+            <Descriptions Bordered Size="DescriptionsSize.Middle" Column="1">
+                <DescriptionsItem Title="Created">@label.Created.Humanize()</DescriptionsItem>
+                <DescriptionsItem Title="Foreign Server ID"><pre>@label.ForeignServerId</pre></DescriptionsItem>
+                <DescriptionsItem Title="Identifier"><pre>@label.Identifier</pre></DescriptionsItem>
+                <DescriptionsItem Title="Item ID"><pre>@label.ItemId</pre></DescriptionsItem>
+                <DescriptionsItem Title="Label Type"><Tag>@label.LabelType</Tag></DescriptionsItem>
+            </Descriptions>
+        }
+    }
+    else
+    {
+        <span>State is null</span>
+    }
+}
+else
+{
+    <span>Waiting for State...</span>
 }

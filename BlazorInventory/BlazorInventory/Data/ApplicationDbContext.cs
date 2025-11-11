@@ -1,5 +1,5 @@
 using ActualLab.Fusion.EntityFramework.Operations;
-using BlazorInventory.Abstractions.Models;
+using BlazorInventory.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
