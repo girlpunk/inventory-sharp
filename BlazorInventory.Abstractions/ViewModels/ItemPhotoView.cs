@@ -15,11 +15,6 @@ public partial record ItemPhotoView : BaseViewModel
     public Guid ItemId { get; init; }
 
     /// <summary>
-    /// Item the photo relates to
-    /// </summary>
-    public ItemView? Item { get; init; } = null!;
-
-    /// <summary>
     /// Title of the photo
     /// </summary>
     public string? Title { get; set; }

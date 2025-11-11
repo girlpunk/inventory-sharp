@@ -16,11 +16,6 @@ public partial record ItemLabelView : BaseViewModel
     public Guid ItemId { get; set; }
 
     /// <summary>
-    /// Item the label is associated with
-    /// </summary>
-    public ItemView? Item { get; set; } = null!;
-
-    /// <summary>
     /// Identifier shown on the label
     /// </summary>
     public required string Identifier { get; set; }

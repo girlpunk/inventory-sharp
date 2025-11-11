@@ -43,6 +43,7 @@
                                    ResetBtnTitle="Reset"
                                    CloseBtnTitle="Close"
                                    SelectDeviceBtnTitle="Select Device"
+                                   Decodeonce="@true"
                                    Close="@(() => { ShowScanBarcode = false; })"/>
                 }
                 else
@@ -97,9 +98,9 @@
                             <DescriptionsItem Title="Name">@LastScan.Item.Name</DescriptionsItem>
                             <DescriptionsItem Title="Description">@LastScan.Item.Description</DescriptionsItem>
                             <DescriptionsItem Title="Parent">
-                                @if (LastScan.Item.Parent != null)
+                                @if (LastScan.ParentItem != null)
                                 {
-                                    @LastScan.Item.Parent.Name
+                                    @LastScan.ParentItem.Name
                                 }
                                 else
                                 {
@@ -117,7 +118,7 @@
                     {
                         <Card Title="Scan">
                             <Descriptions>
-                                <DescriptionsItem Title="Scanner">@LastScan.Scan.Scanner?.Name</DescriptionsItem>
+                                <DescriptionsItem Title="Scanner">@LastScan.Scanner?.Name</DescriptionsItem>
                                 <DescriptionsItem Title="Location">@LastScan.Scan.Latitude<br/>@LastScan.Scan.Longitude</DescriptionsItem>
                                 <DescriptionsItem Title="Timestamp">@LastScan.Scan.Scanned.Humanize()</DescriptionsItem>
                                 <DescriptionsItem Title="Type">@LastScan.Scan.ScanType.Humanize()</DescriptionsItem>

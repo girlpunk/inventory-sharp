@@ -16,16 +16,9 @@ public partial record LabelScanView : BaseViewModel
     public Guid LabelId { get; set; }
 
     /// <summary>
-    /// ID of the label being scanned
-    /// </summary>
-    public ItemLabelView? Label { get; set; } = null!;
-
-    /// <summary>
     /// ID of the scanner that was used
     /// </summary>
     public Guid? ScannerId { get; set; }
-
-    public ScannerView? Scanner { get; set; }
 
     /// <summary>
     /// Latitude of the scan

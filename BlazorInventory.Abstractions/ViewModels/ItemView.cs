@@ -35,11 +35,6 @@ public partial record ItemView : BaseViewModel
     public ItemPhotoView[]? Photos { get; init; } = null!;
 
     /// <summary>
-    /// Parent item
-    /// </summary>
-    public ItemView? Parent { get; init; }
-
-    /// <summary>
     /// Labels applied to the item
     /// </summary>
     public ItemLabelView[]? Labels { get; init; } = null!;

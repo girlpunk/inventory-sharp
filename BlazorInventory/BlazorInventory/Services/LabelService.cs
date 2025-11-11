@@ -64,9 +64,8 @@ public class LabelService(IServiceProvider serviceProvider) : CRUDService<ItemLa
         if (command.LabelId != null)
         {
             label = await dbContext.ItemLabels
-                    .Include(static l => l.Item)
-                    .SingleOrDefaultAsync(l => l.Id == command.LabelId, cancellationToken)
-                ;
+                .Include(static l => l.Item).ThenInclude(static item => item.Parent)
+                .SingleOrDefaultAsync(l => l.Id == command.LabelId, cancellationToken);
         }
         else
         {
@@ -80,19 +79,19 @@ public class LabelService(IServiceProvider serviceProvider) : CRUDService<ItemLa
                 var url = new Uri(command.Identifier, UriKind.Absolute);
 
                 label = await dbContext.ItemLabels
-                        .Include(static l => l.Item)
-                        .SingleOrDefaultAsync(l =>
-                            (l.ForeignServer == null && l.Identifier == command.Identifier) ||
-                            (l.ForeignServer != null && l.ForeignServer.Namespace == url.Host &&
-                             l.Identifier == url.AbsolutePath), cancellationToken)
-                    ;
+                    .Include(static l => l.Item)
+                    .ThenInclude(static item => item.Parent)
+                    .SingleOrDefaultAsync(l =>
+                        (l.ForeignServer == null && l.Identifier == command.Identifier) ||
+                        (l.ForeignServer != null && l.ForeignServer.Namespace == url.Host &&
+                         l.Identifier == url.AbsolutePath), cancellationToken);
             }
             else
             {
                 label = await dbContext.ItemLabels
-                        .Include(static l => l.Item)
-                        .SingleOrDefaultAsync(l => l.ForeignServer == null && l.Identifier == command.Identifier, cancellationToken)
-                    ;
+                    .Include(static l => l.Item)
+                    .ThenInclude(static item => item.Parent)
+                    .SingleOrDefaultAsync(l => l.ForeignServer == null && l.Identifier == command.Identifier, cancellationToken);
             }
         }
 
@@ -103,6 +102,7 @@ public class LabelService(IServiceProvider serviceProvider) : CRUDService<ItemLa
 
         result.Label = label.Adapt<ItemLabelView>();
         result.Item = label.Item.Adapt<ItemView>();
+        result.ParentItem = label.Item.Parent?.Adapt<ItemView>();
 
         if (!command.CreateScanRecord)
             return result;
@@ -131,6 +131,7 @@ public class LabelService(IServiceProvider serviceProvider) : CRUDService<ItemLa
         await dbContext.SaveChangesAsync(cancellationToken);
 
         result.Scan = scanRecord.Adapt<LabelScanView>();
+        result.Scanner = scanner?.Adapt<ScannerView>();
 
         return result;
     }

@@ -17,9 +17,4 @@ public partial record ItemTagView
     /// Tag value
     /// </summary>
     public required string Tag { get; set; }
-
-    /// <summary>
-    /// Item the tag is applied to
-    /// </summary>
-    public ItemView? Item { get; init; } = null!;
 }

@@ -23,4 +23,14 @@ public sealed partial record ScanLabelResult
     /// Item that was scanned
     /// </summary>
     public ItemView? Item { get; set; }
+
+    /// <summary>
+    /// Parent of the item that was scanned
+    /// </summary>
+    public ItemView? ParentItem { get; set; }
+
+    /// <summary>
+    /// Scanner used to scan the label, if a scan record was created
+    /// </summary>
+    public ScannerView? Scanner { get; set; }
 }
