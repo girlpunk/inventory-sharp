@@ -31,7 +31,9 @@ public class LabelService(IServiceProvider serviceProvider) : CRUDService<ItemLa
         output.ForeignServerId = input.ForeignServerId;
         output.Identifier = input.Identifier;
         output.LabelType = input.LabelType;
-        output.Id = input.Id;
+
+        if (input.Id != null)
+            output.Id = input.Id.Value;
     }
 
     /// <inheritdoc />

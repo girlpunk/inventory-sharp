@@ -60,34 +60,10 @@ public abstract class CRUDService<TModel, TViewModel>(IServiceProvider services)
     public abstract void DoUpdate(TViewModel input, TModel output);
 
     /// <inheritdoc />
-    public virtual async Task Update(UpdateCommand<TViewModel> command, CancellationToken cancellationToken = default)
+    public virtual async Task<TViewModel> Update(UpdateCommand<TViewModel> command, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(command);
         ArgumentNullException.ThrowIfNull(command.Obj);
-
-        if (Invalidation.IsActive)
-        {
-            _ = Get(command.Obj.Id, CancellationToken.None);
-            _ = List(CancellationToken.None);
-            return;
-        }
-
-        await using var dbContext = await DbHub.CreateOperationDbContext(cancellationToken);
-
-        var item = await DbSet(dbContext).FindAsync(DbKey.Compose(command.Obj.Id), cancellationToken);
-
-        if (item != null)
-            DoUpdate(command.Obj, item);
-        else
-            throw new InvalidOperationException("Could not find object to update");
-
-        await dbContext.SaveChangesAsync(cancellationToken);
-    }
-
-    /// <inheritdoc />
-    public virtual async Task<TViewModel> Create(CreateCommand<TViewModel> command, CancellationToken cancellationToken = default)
-    {
-        ArgumentNullException.ThrowIfNull(command);
 
         var context = CommandContext.GetCurrent();
         DbOperationScope<ApplicationDbContext>.GetOrCreate(context).Require();
@@ -96,38 +72,88 @@ public abstract class CRUDService<TModel, TViewModel>(IServiceProvider services)
         {
             var id = context.Operation.Items.KeylessGet<Guid>();
 
-            _ = Get(command.Obj.Id, CancellationToken.None);
             _ = Get(id, CancellationToken.None);
             _ = List(CancellationToken.None);
-            _ = Count(CancellationToken.None);
+
+            if (command.Obj.Id == null)
+                _ = Count(CancellationToken.None);
+            else
+                _ = Get(command.Obj.Id.Value, CancellationToken.None);
 
             return null!;
         }
 
         await using var dbContext = await DbHub.CreateOperationDbContext(cancellationToken);
 
-        var item = (TModel) typeof(TModel).CreateInstance();
+        if (command.Obj.Id == null)
+        {
+            var item = (TModel) typeof(TModel).CreateInstance();
 
-        DoUpdate(command.Obj, item);
+            DoUpdate(command.Obj, item);
+            DbSet(dbContext).Add(item);
+            await dbContext.SaveChangesAsync(cancellationToken);
 
-        DbSet(dbContext).Add(item);
-        await dbContext.SaveChangesAsync(cancellationToken);
+            return item.Adapt<TViewModel>();
+        }
+        else
+        {
+            var item = await DbSet(dbContext).FindAsync(DbKey.Compose(command.Obj.Id), cancellationToken);
 
-        context.Operation.Items.KeylessSet(command.Obj.Id);
-        return command.Obj;
+            if (item != null)
+                DoUpdate(command.Obj, item);
+            else
+                throw new InvalidOperationException("Could not find object to update");
+
+            await dbContext.SaveChangesAsync(cancellationToken);
+            return item.Adapt<TViewModel>();
+        }
     }
+
+    // /// <inheritdoc />
+    // public virtual async Task<TViewModel> Create(CreateCommand<TViewModel> command, CancellationToken cancellationToken = default)
+    // {
+    //     ArgumentNullException.ThrowIfNull(command);
+    //
+    //     var context = CommandContext.GetCurrent();
+    //     DbOperationScope<ApplicationDbContext>.GetOrCreate(context).Require();
+    //
+    //     if (Invalidation.IsActive)
+    //     {
+    //         var id = context.Operation.Items.KeylessGet<Guid>();
+    //
+    //         _ = Get(command.Obj.Id, CancellationToken.None);
+    //         _ = Get(id, CancellationToken.None);
+    //         _ = List(CancellationToken.None);
+    //         _ = Count(CancellationToken.None);
+    //
+    //         return null!;
+    //     }
+    //
+    //     await using var dbContext = await DbHub.CreateOperationDbContext(cancellationToken);
+    //
+    //     var item = (TModel) typeof(TModel).CreateInstance();
+    //
+    //     DoUpdate(command.Obj, item);
+    //
+    //     DbSet(dbContext).Add(item);
+    //     await dbContext.SaveChangesAsync(cancellationToken);
+    //
+    //     context.Operation.Items.KeylessSet(command.Obj.Id);
+    //     return command.Obj;
+    // }
 
     /// <inheritdoc />
     public virtual async Task Delete(DeleteCommand<TViewModel> command, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(command);
+        ArgumentNullException.ThrowIfNull(command.Obj.Id);
 
         var context = CommandContext.GetCurrent();
         DbOperationScope<ApplicationDbContext>.GetOrCreate(context).Require();
 
         if (Invalidation.IsActive)
         {
-            _ = Get(command.Obj.Id, CancellationToken.None);
+            _ = Get(command.Obj.Id.Value, CancellationToken.None);
             _ = List(CancellationToken.None);
             _ = Count(CancellationToken.None);
             return;

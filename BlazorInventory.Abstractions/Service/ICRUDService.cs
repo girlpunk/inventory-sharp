@@ -16,11 +16,11 @@ public interface ICRUDService<TViewModel> : IComputeService
     [ComputeMethod]
     public Task<int> Count(CancellationToken cancellationToken = default);
 
-    /// <summary>
-    /// Create a new item
-    /// </summary>
-    [CommandHandler]
-    public Task<TViewModel> Create(CreateCommand<TViewModel> command, CancellationToken cancellationToken = default);
+    // /// <summary>
+    // /// Create a new item
+    // /// </summary>
+    // [CommandHandler]
+    // public Task<TViewModel> Create(CreateCommand<TViewModel> command, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Get an existing item
@@ -38,7 +38,7 @@ public interface ICRUDService<TViewModel> : IComputeService
     /// Update an existing item
     /// </summary>
     [CommandHandler]
-    public Task Update(UpdateCommand<TViewModel> command, CancellationToken cancellationToken = default);
+    public Task<TViewModel> Update(UpdateCommand<TViewModel> command, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Delete an item

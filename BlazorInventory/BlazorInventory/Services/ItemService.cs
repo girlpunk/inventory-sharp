@@ -24,7 +24,9 @@ public class ItemService(IServiceProvider serviceProvider) : CRUDService<Item, I
         output.Description = input.Description;
         output.Name = input.Name;
         output.ParentId = input.ParentId;
-        output.Id = input.Id;
+
+        if (input.Id != null)
+            output.Id = input.Id.Value;
     }
 
     /// <inheritdoc />

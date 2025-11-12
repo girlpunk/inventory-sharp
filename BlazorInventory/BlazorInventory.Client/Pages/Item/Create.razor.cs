@@ -93,7 +93,7 @@ public sealed partial class Create
     private async Task Submit()
     {
         //Create Item
-        var item = await Commander.Call(new CreateCommand<ItemView>
+        var item = await Commander.Call(new UpdateCommand<ItemView>
         {
             Obj = new ItemView
             {
@@ -108,13 +108,13 @@ public sealed partial class Create
         //TODO: Generate Identifier
         if (Model.LabelType != null && !string.IsNullOrWhiteSpace(Model.Identifier))
         {
-            var label = await Commander.Call(new CreateCommand<ItemLabelView>
+            var label = await Commander.Call(new UpdateCommand<ItemLabelView>
             {
                 Obj = new ItemLabelView
                 {
                     Identifier = Model.Identifier,
                     LabelType = Model.LabelType.Value,
-                    ItemId = item.Id,
+                    ItemId = item.Id.Value,
                     ForeignServerId = Model.ForeignServerId,
                     Created = DateTimeOffset.Now,
                 }
@@ -177,7 +177,7 @@ public sealed partial class Create
     {
         var url = new Uri(Model.Identifier, UriKind.Absolute);
 
-        var foreignServer = await Commander.Call(new CreateCommand<ForeignServerView>
+        var foreignServer = await Commander.Call(new UpdateCommand<ForeignServerView>
         {
             Obj = new ForeignServerView
             {

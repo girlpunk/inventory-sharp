@@ -50,39 +50,10 @@ public class TagService(IServiceProvider serviceProvider) : DbServiceBase<Applic
     }
 
     /// <inheritdoc />
-    public virtual async Task Update(UpdateCommand<ItemTagView> command, CancellationToken cancellationToken = default)
+    public virtual async Task<ItemTagView> Update(UpdateCommand<ItemTagView> command, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(command);
         ArgumentNullException.ThrowIfNull(command.Obj);
-
-        if (Invalidation.IsActive)
-        {
-            _ = Get(command.Obj.ItemId, CancellationToken.None);
-            _ = List(CancellationToken.None);
-            return;
-        }
-
-        await using var dbContext = await DbHub.CreateOperationDbContext(cancellationToken);
-
-        var item = await dbContext.ItemTags.FindAsync(DbKey.Compose(command.Obj.ItemId, command.Obj.Tag), cancellationToken);
-
-        if (item != null)
-        {
-            item.ItemId = command.Obj.ItemId;
-            item.Tag = command.Obj.Tag;
-        }
-        else
-        {
-            throw new InvalidOperationException("Could not find object to update");
-        }
-
-        await dbContext.SaveChangesAsync(cancellationToken);
-    }
-
-    /// <inheritdoc />
-    public virtual async Task<ItemTagView> Create(CreateCommand<ItemTagView> command, CancellationToken cancellationToken = default)
-    {
-        ArgumentNullException.ThrowIfNull(command);
 
         var context = CommandContext.GetCurrent();
         DbOperationScope<ApplicationDbContext>.GetOrCreate(context).Require();
@@ -101,16 +72,21 @@ public class TagService(IServiceProvider serviceProvider) : DbServiceBase<Applic
 
         await using var dbContext = await DbHub.CreateOperationDbContext(cancellationToken);
 
-        var item = (ItemTag) typeof(ItemTag).CreateInstance();
+        var item = await dbContext.ItemTags.FindAsync(DbKey.Compose(command.Obj.ItemId, command.Obj.Tag), cancellationToken);
+
+        if (item == null)
+        {
+            item = (ItemTag) typeof(ItemTag).CreateInstance();
+            dbContext.ItemTags.Add(item);
+        }
 
         item.ItemId = command.Obj.ItemId;
         item.Tag = command.Obj.Tag;
 
-        dbContext.ItemTags.Add(item);
         await dbContext.SaveChangesAsync(cancellationToken);
 
         context.Operation.Items.Set("itemId", command.Obj.ItemId);
-        return command.Obj;
+        return item.Adapt<ItemTagView>();
     }
 
     /// <inheritdoc />

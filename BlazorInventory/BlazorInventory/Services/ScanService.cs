@@ -26,7 +26,9 @@ public class ScanService(IServiceProvider serviceProvider) : CRUDService<LabelSc
         output.Scanned = input.Scanned;
         output.ScannerId = input.ScannerId;
         output.ScanType = input.ScanType;
-        output.Id = input.Id;
+
+        if (input.Id != null)
+            output.Id = input.Id.Value;
     }
 
     /// <inheritdoc />
