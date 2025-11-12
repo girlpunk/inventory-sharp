@@ -2,7 +2,7 @@ using MemoryPack;
 
 namespace BlazorInventory.Abstractions.ViewModels;
 
-/// <inheritdoc />
+/// <inheritdoc cref="BaseViewModel" />
 /// <summary>
 /// Photo of an item
 /// </summary>

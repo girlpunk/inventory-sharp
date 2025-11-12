@@ -1,14 +1,14 @@
 using System.Reactive;
-using System.Text.Json.Serialization;
 using ActualLab.CommandR;
+using MemoryPack;
 
 namespace BlazorInventory.Abstractions.Command;
 
 /// <summary>
 /// Set the parent of an item
 /// </summary>
-[JsonSerializable(typeof(SetItemParentCommand))]
-public sealed record SetItemParentCommand : ICommand<Unit>
+[MemoryPackable]
+public sealed partial record SetItemParentCommand : ICommand<Unit>
 {
     /// <summary>
     /// Item to be updated

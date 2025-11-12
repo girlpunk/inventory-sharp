@@ -3,7 +3,7 @@ using MemoryPack;
 
 namespace BlazorInventory.Abstractions.ViewModels;
 
-/// <inheritdoc />
+/// <inheritdoc cref="BaseViewModel" />
 /// <summary>
 /// Scan of a label
 /// </summary>

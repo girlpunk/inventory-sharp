@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
 using ActualLab.CommandR;
+using MemoryPack;
 
 namespace BlazorInventory.Abstractions.Command;
 
@@ -7,8 +7,8 @@ namespace BlazorInventory.Abstractions.Command;
 /// Update an item
 /// </summary>
 /// <typeparam name="T">Type of the item</typeparam>
-[JsonSerializable(typeof(CreateCommand<>))]
-public sealed record UpdateCommand<T> : ICommand<T>
+[MemoryPackable]
+public sealed partial record UpdateCommand<T> : ICommand<T>
 {
     /// <summary>
     /// Item to be updated

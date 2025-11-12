@@ -1,15 +1,15 @@
-using System.Text.Json.Serialization;
 using ActualLab.CommandR;
 using BlazorInventory.Abstractions.Models;
 using BlazorInventory.Abstractions.Response;
+using MemoryPack;
 
 namespace BlazorInventory.Abstractions.Command;
 
 /// <summary>
 /// Scan a label, record details (if appropriate) and return information about the label, item, and scan
 /// </summary>
-[JsonSerializable(typeof(ScanLabelCommand))]
-public sealed record ScanLabelCommand : ICommand<ScanLabelResult>
+[MemoryPackable]
+public sealed partial record ScanLabelCommand : ICommand<ScanLabelResult>
 {
     /// <summary>
     /// Identifier that was scanned, if a lookup is required
