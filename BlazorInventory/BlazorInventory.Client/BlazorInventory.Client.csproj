@@ -11,11 +11,11 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <PublishTrimmed>true</PublishTrimmed>
+        <!-- <PublishTrimmed>true</PublishTrimmed>
         <TrimMode>full</TrimMode>
         <IsTrimmable>true</IsTrimmable>
         <WasmEnableWebcil>true</WasmEnableWebcil>
-        <WasmEnableSIMD>true</WasmEnableSIMD>
+        <WasmEnableSIMD>true</WasmEnableSIMD> -->
 
         <MvcBuildViews Condition="'$(Configuration)'=='Debug'">false</MvcBuildViews>
         <MvcBuildViews Condition="'$(Configuration)'=='Release'">true</MvcBuildViews>
