@@ -202,6 +202,8 @@ builder.Services.AddDistributedMemoryCache();
 
 var app = builder.Build();
 
+app.UsePathBase(app.Configuration.GetValue<string>("base_path", "/"));
+
 StaticWebAssetsLoader.UseStaticWebAssets(app.Environment, app.Configuration);
 
 // Configure the HTTP request pipeline.
