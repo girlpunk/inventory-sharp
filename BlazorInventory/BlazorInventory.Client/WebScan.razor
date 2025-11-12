@@ -19,21 +19,22 @@
        DefaultMaximized="@false"
        Draggable="@true"
        Width="700"
+       Footer="@null"
        @bind-Visible="_visible">
     <Flex Direction="FlexDirection.Horizontal">
         <Form Model="@Inputs" OnFinish="@Lookup">
             <ValidationSummary/>
             <div class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">Label details
                 <FormItem Label="Label Type">
-                    <EnumSelect TEnum="LabelType" @bind-Value="Inputs.LabelType" Mode="SelectMode.Multiple" EnableSearch="true" AllowClear="true" HideSelected="true" ItemLabel="@(static l => l != LabelType.None ? l.Humanize() : "All")"/>
+                    <EnumSelect TEnum="LabelType" @bind-Value="context.LabelType" Mode="SelectMode.Multiple" EnableSearch="true" AllowClear="true" HideSelected="true" ItemLabel="@(static l => l != LabelType.None ? l.Humanize() : "All")"/>
                 </FormItem>
 
                 <FormItem Label="Create Scan Record">
-                    <Switch @bind-Checked="Inputs.CreateScanRecord">Create Scan Record</Switch>
+                    <Switch @bind-Checked="context.CreateScanRecord">Create Scan Record</Switch>
                 </FormItem>
 
                 <FormItem Label="Identifier" Required>
-                    <Input @bind-Value="Inputs.Identifier"/>
+                    <Input @bind-Value="context.Identifier"/>
                 </FormItem>
 
                 @if (ShowScanBarcode)
@@ -51,7 +52,7 @@
                     <Button OnClick="@(() => { ShowScanBarcode = true; })">Scan Barcode</Button>
                 }
 
-                <Button Disabled="@Loading" Loading="@Loading">
+                <Button Disabled="@Loading" Loading="@Loading" Type="@ButtonType.Primary" HtmlType="submit">
                     Submit
                 </Button>
             </div>

@@ -4,6 +4,7 @@ using ActualLab.CommandR;
 using BlazorInventory.Abstractions.Command;
 using BlazorInventory.Abstractions.Models;
 using BlazorInventory.Abstractions.Response;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace BlazorInventory.Client;
 
@@ -30,7 +31,7 @@ public sealed partial class WebScan
         _visible = true;
     }
 
-    private async Task Lookup()
+    private async Task Lookup(EditContext? editContext)
     {
         if (Loading)
             return;
@@ -135,6 +136,6 @@ public sealed partial class WebScan
     {
         Inputs.Identifier = e;
         ShowScanBarcode = false;
-        await Lookup();
+        await Lookup(null);
     }
 }
