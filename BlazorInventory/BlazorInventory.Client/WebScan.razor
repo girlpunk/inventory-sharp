@@ -18,13 +18,14 @@
        Centered="@true"
        DefaultMaximized="@false"
        Draggable="@true"
-       Width="700"
+       Width="75%"
        Footer="@null"
        @bind-Visible="_visible">
     <Flex Direction="FlexDirection.Horizontal">
-        <Form Model="@Inputs" OnFinish="@Lookup">
+        <Form Model="@Inputs" OnFinish="@Lookup" Style="min-width: 25%;">
             <ValidationSummary/>
-            <div class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">Label details
+            <div class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+                <h2>Label details</h2>
                 <FormItem Label="Label Type">
                     <EnumSelect TEnum="LabelType" @bind-Value="context.LabelType" Mode="SelectMode.Multiple" EnableSearch="true" AllowClear="true" HideSelected="true" ItemLabel="@(static l => l != LabelType.None ? l.Humanize() : "All")"/>
                 </FormItem>
@@ -58,7 +59,8 @@
             </div>
         </Form>
 
-        <div class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">Results
+        <div class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4" style="max-width: 25%;">
+            <h2>Results</h2>
             @if (Loading)
             {
                 <Spin Size="SpinSize.Large"/>
@@ -77,7 +79,7 @@
                 else
                 {
                     <Card Title="Label">
-                        <Descriptions>
+                        <Descriptions Column="2">
                             <DescriptionsItem Title="Identifier">@LastScan.Label.Identifier</DescriptionsItem>
                             <DescriptionsItem Title="Type">@LastScan.Label.LabelType.Humanize()</DescriptionsItem>
                             <DescriptionsItem Title="Foreign Server">
@@ -95,7 +97,7 @@
                     </Card>
 
                     <Card Title="Item">
-                        <Descriptions>
+                        <Descriptions Column="2">
                             <DescriptionsItem Title="Name">@LastScan.Item.Name</DescriptionsItem>
                             <DescriptionsItem Title="Description">@LastScan.Item.Description</DescriptionsItem>
                             <DescriptionsItem Title="Parent">
@@ -118,7 +120,7 @@
                     @if (LastScan.Scan != null)
                     {
                         <Card Title="Scan">
-                            <Descriptions>
+                            <Descriptions Column="2">
                                 <DescriptionsItem Title="Scanner">@LastScan.Scanner?.Name</DescriptionsItem>
                                 <DescriptionsItem Title="Location">@LastScan.Scan.Latitude<br/>@LastScan.Scan.Longitude</DescriptionsItem>
                                 <DescriptionsItem Title="Timestamp">@LastScan.Scan.Scanned.Humanize()</DescriptionsItem>
