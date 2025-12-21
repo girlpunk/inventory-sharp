@@ -238,11 +238,12 @@ app.UseFusionSession();
 app.UseBlazorFrameworkFiles();
 
 app.UseRouting();
-app.UseAuthorization();
 app.MapRpcWebSocketServer();
+
 app.UseForwardedHeaders();
 
 app.UseAuthentication();
+app.UseAuthorization();
 app.UseAntiforgery();
 app.UseOutputCache();
 
