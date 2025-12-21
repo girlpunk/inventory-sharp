@@ -238,16 +238,11 @@ app.UseFusionSession();
 app.UseBlazorFrameworkFiles();
 
 app.UseRouting();
-app.UseEndpoints(endpoints => {
-    endpoints.MapRpcWebSocketServer();
-    endpoints.MapFallbackToPage("/_Host"); // Typically needed for Blazor WASM
-});
-
+app.UseAuthorization();
+app.MapRpcWebSocketServer();
 app.UseForwardedHeaders();
 
-
 app.UseAuthentication();
-app.UseAuthorization();
 app.UseAntiforgery();
 app.UseOutputCache();
 
