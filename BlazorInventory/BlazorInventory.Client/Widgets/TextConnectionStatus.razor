@@ -1,0 +1,36 @@
+@using ActualLab.Fusion.Extensions
+@using ActualLab.Rpc
+@using ActualLab.Time
+@inherits StatefulComponentBase<RpcPeerState>
+
+@{
+    var m = State.Value;
+    var isOk = m.Kind is not RpcPeerStateKind.Disconnected;
+}
+
+<div style="@($"margin: 0 1px; color: ${(isOk ? "black" : "yellow")}")">
+    <span>Connection state: </span>
+    <strong>
+        <span>@(m.GetDescription(true))</span>
+        @if (m.ReconnectsIn != TimeSpan.Zero) {
+            <span> Will reconnect <TimerBadge ExpiresAt="@(Clock.Now + m.ReconnectsIn)"/>. </span>
+            <a style="color: green;" @onclick="Reconnect">Reconnect</a>
+        }
+    </strong>
+</div>
+
+@code {
+    [Inject] private RpcPeerStateMonitor Monitor { get; init; } = null!;
+    [Inject] private MomentClock Clock { get; init; } = null!;
+
+    [Parameter] public string CssClass { get; set; } = "";
+
+    protected override void OnInitialized()
+        => SetState(Monitor.State);
+
+    public override ValueTask DisposeAsync()
+        => default; // State shouldn't be disposed
+
+    private void Reconnect()
+        => Services.RpcHub().InternalServices.ClientPeerReconnectDelayer.CancelDelays();
+}

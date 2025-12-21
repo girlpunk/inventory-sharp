@@ -46,6 +46,8 @@ builder.WebHost.UseDefaultServiceProvider(static (ctx, options) =>
 ConfigureFusionServices();
 
 // Add services to the container.
+builder.Services.AddRazorPages();
+
 builder.Services.AddRazorComponents(options =>
     {
         if (builder.Environment.IsDevelopment())
@@ -233,8 +235,13 @@ app.UseWebSockets(new WebSocketOptions
     KeepAliveInterval = TimeSpan.FromSeconds(30),
 });
 app.UseFusionSession();
+app.UseBlazorFrameworkFiles();
 
 app.UseRouting();
+app.UseEndpoints(endpoints => {
+    endpoints.MapRpcWebSocketServer();
+    endpoints.MapFallbackToPage("/_Host"); // Typically needed for Blazor WASM
+});
 
 app.UseForwardedHeaders();
 

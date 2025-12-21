@@ -8,16 +8,26 @@
 @inject ICommander Commander
 @inject NavigationManager NavigationManager
 
-@if (State.HasValue)
+@{
+    var c = State.Computed;
+    var error = c.Error;
+    var model = c.ValueOrDefault; // ValueOrDefault returns default if there is an Error
+}
+
+<TextConnectionStatus />
+
+<WhenException Exception="@error" />
+
+@if (c.HasValue)
 {
-    @if (State.Value != null)
+    @if (model != null)
     {
         <Card>
             <Descriptions Bordered Title="Item Details" Size="DescriptionsSize.Middle">
-                <DescriptionsItem Title="Name">@State.Value.Name</DescriptionsItem>
-                <DescriptionsItem Title="Description">@State.Value.Description</DescriptionsItem>
-                <DescriptionsItem Title="Created">@State.Value.Created.Humanize()</DescriptionsItem>
-                <DescriptionsItem Title="Parent"><pre>@State.Value.ParentId</pre></DescriptionsItem>
+                <DescriptionsItem Title="Name">@model.Name</DescriptionsItem>
+                <DescriptionsItem Title="Description">@model.Description</DescriptionsItem>
+                <DescriptionsItem Title="Created">@model.Created.Humanize()</DescriptionsItem>
+                <DescriptionsItem Title="Parent"><pre>@model.ParentId</pre></DescriptionsItem>
                 <DescriptionsItem Title="Tags"><TagsWidget ItemId="@Id"/></DescriptionsItem>
             </Descriptions>
 
