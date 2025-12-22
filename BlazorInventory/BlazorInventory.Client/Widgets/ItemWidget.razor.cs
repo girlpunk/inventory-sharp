@@ -9,6 +9,7 @@ public partial class ItemWidget
     /// Item to show details for
     /// </summary>
     [Parameter]
+    [EditorRequired]
     public Guid ItemId { get; set; }
 
     /// <inheritdoc />

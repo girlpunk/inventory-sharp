@@ -9,6 +9,7 @@ public partial class LabelsWidget
     /// Item to show labels for
     /// </summary>
     [Parameter]
+    [EditorRequired]
     public Guid ItemId { get; set; }
 
     /// <inheritdoc />

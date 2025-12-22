@@ -1,9 +1,8 @@
 @if (Exception is not null) {
-    <Error @key="@Exception" Title="@Title" Dismissed="@Dismissed">@Exception.Message</Error>
+    <Alert Type="AlertType.Warning" Description="@Title" @Message="@Exception.Message"/>
 }
 
 @code {
     [Parameter] public string Title { get; set; } = "Error!";
     [Parameter] public Exception? Exception { get; set; }
-    [Parameter] public EventCallback Dismissed { get; set; }
 }

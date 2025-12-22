@@ -1,0 +1,64 @@
+@using ActualLab.Fusion.Authentication
+@using ActualLab.Fusion.Blazor.Authentication
+@inherits ComputedStateComponent<ActualLab.Fusion.Authentication.User?>
+@inject IAuth Auth
+@inject ClientAuthHelper ClientAuthHelper
+
+@{
+    if (State.IsInitial(out var user))
+        return;
+
+    user = user.OrGuest();
+    var isAuthenticated = user.IsAuthenticated();
+    var usedAuthSchemas = user.Identities.Select(static kv => kv.Key.Schema).ToHashSet() ?? new();
+    var unusedAuthSchemas = AuthSchemas.Where(p => !usedAuthSchemas.Contains(p.Name)).ToArray();
+    var signInOrAddFormat = isAuthenticated ? "Add {0} account" : "Sign in with {0}";
+    var signInIconName = isAuthenticated ? "plus" : "login";
+}
+
+<Menu Class="@CssClass">
+    <MenuItem>
+        @if (isAuthenticated) {
+            <Icon Type="user" Theme="IconThemeType.Outline"/>
+        }
+        else {
+            <Icon Type="user-switch" Theme="IconThemeType.Outline"/>
+        }
+        <span class="pl-1">@user.Name</span>
+    </MenuItem>
+    <MenuItem>
+        @foreach (var (name, displayName) in unusedAuthSchemas) {
+            <MenuItem Color="Color.Primary" @onclick="@(_ => ClientAuthHelper.SignIn(name))">
+
+                <Icon Type="@signInIconName" Theme="IconThemeType.Outline"/>
+                @(string.Format(signInOrAddFormat, displayName))
+            </MenuItem>
+        }
+        <AuthorizeView>
+            <Authorized>
+                <MenuItem @onclick="@(_ => ClientAuthHelper.SignOut())">
+                    <Icon Type="logout" />
+                    Sign out
+                </MenuItem>
+            </Authorized>
+        </AuthorizeView>
+    </MenuItem>
+</Menu>
+
+@code {
+    private (string Name, string DisplayName)[] AuthSchemas { get; set; } = [];
+
+    [Parameter] public string CssClass { get; set; } = "";
+
+    protected override Task<User?> ComputeState(CancellationToken cancellationToken)
+        => Auth.GetUser(Session, cancellationToken);
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender) {
+            // GetSchemas requires JS interop, so it can be called only at this point
+            AuthSchemas = await ClientAuthHelper.GetSchemas();
+            StateHasChanged();
+        }
+    }
+}

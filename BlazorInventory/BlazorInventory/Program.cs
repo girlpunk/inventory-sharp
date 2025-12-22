@@ -292,7 +292,21 @@ void ConfigureFusionServices()
 
     // Fusion
     var fusion = builder.Services.AddFusion(RpcServiceMode.Server, true);
-    var fusionServer = fusion.AddWebServer(hostKind == HostKind.BackendServer);
+    var fusionServer = fusion.AddWebServer();
+
+    fusionServer.ConfigureAuthEndpoint(_ => new() {
+        DefaultSignInScheme = OpenIdConnectDefaults.AuthenticationScheme,
+        SignInPropertiesBuilder = (_, properties) => {
+            properties.IsPersistent = true;
+        }
+    });
+    fusionServer.ConfigureServerAuthHelper(_ => new() {
+        NameClaimKeys = Array.Empty<string>(),
+    });
+
+    fusionServer.AddMvc().AddControllers();
+
+    fusion.AddDbAuthService<ApplicationDbContext, string>();
 
     // if (hostKind == HostKind.ApiServer) {
     //     fusion.AddClient<IAuth>(); // IAuth = a client of backend's IAuth
@@ -307,19 +321,6 @@ void ConfigureFusionServices()
     //     if (hostKind == HostKind.BackendServer)
     //         fusion.Rpc.Configure<IAuthBackend>().IsServer(typeof(IAuthBackend)); // Expose IAuthBackend via RPC
     // }
-
-    fusionServer.ConfigureAuthEndpoint(static _ => new()
-    {
-        DefaultSignInScheme = OpenIdConnectDefaults.AuthenticationScheme,
-        SignInPropertiesBuilder = static (_, properties) =>
-        {
-            properties.IsPersistent = true;
-        }
-    });
-    fusionServer.ConfigureServerAuthHelper(static _ => new()
-    {
-        NameClaimKeys = [],
-    });
 
     // Fusion services
     fusion.AddFusionTime(); // IFusionTime is one of built-in compute services you can use
@@ -342,7 +343,7 @@ void ConfigureFusionServices()
 void AddService<Interface, Implementation>(FusionBuilder fusion, HostKind hostKind) where Interface : class, IComputeService where Implementation : class, Interface
 {
     _ = hostKind switch {
-        HostKind.SingleServer => fusion.AddComputeService<Interface, Implementation>(),
+        HostKind.SingleServer => fusion.AddService<Interface, Implementation>(),
         HostKind.BackendServer => fusion.AddServer<Interface, Implementation>(),
         HostKind.ApiServer => fusion.AddClient<Interface>(),
         _ => throw new InvalidOperationException("Invalid host kind."),

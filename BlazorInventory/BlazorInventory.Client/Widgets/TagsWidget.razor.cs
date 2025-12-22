@@ -3,16 +3,16 @@ using Microsoft.AspNetCore.Components;
 
 namespace BlazorInventory.Client.Widgets;
 
-public partial class ScansWidget
+public partial class TagsWidget
 {
     /// <summary>
-    /// Item to display scans for
+    /// Item to show tags for
     /// </summary>
     [Parameter]
     [EditorRequired]
     public Guid ItemId { get; set; }
 
     /// <inheritdoc />
-    protected override Task<ICollection<LabelScanView>> ComputeState(CancellationToken cancellationToken) =>
-        ScanService.List(ItemId, cancellationToken);
+    protected override Task<ICollection<ItemTagView>> ComputeState(CancellationToken cancellationToken) =>
+        TagService.List(ItemId, cancellationToken);
 }

@@ -5,24 +5,17 @@
 
 <h3>LabelsWidget</h3>
 
-@if (State.HasValue)
+@if (State is { HasValue: true, ValueOrDefault: not null })
 {
-    @if (State.Value != null)
+    @foreach (var label in State.Value)
     {
-        @foreach (var label in State.Value)
-        {
-            <Descriptions Bordered Size="DescriptionsSize.Middle" Column="1">
-                <DescriptionsItem Title="Created">@label.Created.Humanize()</DescriptionsItem>
-                <DescriptionsItem Title="Foreign Server ID"><pre>@label.ForeignServerId</pre></DescriptionsItem>
-                <DescriptionsItem Title="Identifier"><pre>@label.Identifier</pre></DescriptionsItem>
-                <DescriptionsItem Title="Item ID"><pre>@label.ItemId</pre></DescriptionsItem>
-                <DescriptionsItem Title="Label Type"><Tag>@label.LabelType</Tag></DescriptionsItem>
-            </Descriptions>
-        }
-    }
-    else
-    {
-        <span>State is null</span>
+        <Descriptions Bordered Size="DescriptionsSize.Middle" Column="1">
+            <DescriptionsItem Title="Created">@label.Created.Humanize()</DescriptionsItem>
+            <DescriptionsItem Title="Foreign Server ID"><pre>@label.ForeignServerId</pre></DescriptionsItem>
+            <DescriptionsItem Title="Identifier"><pre>@label.Identifier</pre></DescriptionsItem>
+            <DescriptionsItem Title="Item ID"><pre>@label.ItemId</pre></DescriptionsItem>
+            <DescriptionsItem Title="Label Type"><Tag>@label.LabelType</Tag></DescriptionsItem>
+        </Descriptions>
     }
 }
 else

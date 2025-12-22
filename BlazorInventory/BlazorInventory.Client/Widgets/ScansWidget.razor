@@ -5,27 +5,20 @@
 
 <h3>ScansWidget</h3>
 
-@if (State.HasValue)
+@if (State.HasValue && State.ValueOrDefault != null)
 {
-    @if (State.Value != null)
+    @foreach (var scan in State.Value)
     {
-        @foreach (var scan in State.Value)
-        {
-            <Descriptions Bordered Size="DescriptionsSize.Middle" Column="1">
-                <DescriptionsItem Title="Label ID"><pre>@scan.LabelId</pre></DescriptionsItem>
-                <DescriptionsItem Title="Location"><pre>@scan.Latitude</pre><br/><pre>@scan.Longitude</pre></DescriptionsItem>
-                <DescriptionsItem Title="Scanned">@scan.Scanned.Humanize()</DescriptionsItem>
-                <DescriptionsItem Title="Scanner"><pre>@scan.ScannerId</pre></DescriptionsItem>
-                <DescriptionsItem Title="Scan Type"><Tag>@scan.ScanType</Tag></DescriptionsItem>
-            </Descriptions>
-        }
+        <Descriptions Bordered Size="DescriptionsSize.Middle" Column="1">
+            <DescriptionsItem Title="Label ID"><pre>@scan.LabelId</pre></DescriptionsItem>
+            <DescriptionsItem Title="Location"><pre>@scan.Latitude</pre><br/><pre>@scan.Longitude</pre></DescriptionsItem>
+            <DescriptionsItem Title="Scanned">@scan.Scanned.Humanize()</DescriptionsItem>
+            <DescriptionsItem Title="Scanner"><pre>@scan.ScannerId</pre></DescriptionsItem>
+            <DescriptionsItem Title="Scan Type"><Tag>@scan.ScanType</Tag></DescriptionsItem>
+        </Descriptions>
     }
-    else
-    {
-        <span>State is null</span>
-    }
-    }
-    else
-    {
-        <span>Waiting for State...</span>
-    }
+}
+else
+{
+    <span>Waiting for State...</span>
+}

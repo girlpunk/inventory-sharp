@@ -77,7 +77,7 @@ public static class ClientStartup
             }
 
             // If we're here, hostKind is Client, ApiServer, or SingleServer
-            // fusion.AddComputeService<Todos>(ServiceLifetime.Scoped);
+            // fusion.AddService<Todos>(ServiceLifetime.Scoped);
             services.AddScoped(static c => new RpcPeerStateMonitor(c, OSInfo.IsAnyClient ? RpcPeerRef.Default : null));
             services.AddScoped<IUpdateDelayer>(static c => new UpdateDelayer(c.UIActionTracker(), 0.25)); // 0.25s
 

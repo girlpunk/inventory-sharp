@@ -8,58 +8,46 @@
 @inject ICommander Commander
 @inject NavigationManager NavigationManager
 
-@{
-    var c = State.Computed;
-    var error = c.Error;
-    var model = c.ValueOrDefault; // ValueOrDefault returns default if there is an Error
-}
-
 <TextConnectionStatus />
 
-<WhenException Exception="@error" />
+<WhenException Exception="@State.Error" />
 
-@if (c.HasValue)
+@if (State.ValueOrDefault != null)
 {
-    @if (model != null)
-    {
-        <Card>
-            <Descriptions Bordered Title="Item Details" Size="DescriptionsSize.Middle">
-                <DescriptionsItem Title="Name">@model.Name</DescriptionsItem>
-                <DescriptionsItem Title="Description">@model.Description</DescriptionsItem>
-                <DescriptionsItem Title="Created">@model.Created.Humanize()</DescriptionsItem>
-                <DescriptionsItem Title="Parent"><pre>@model.ParentId</pre></DescriptionsItem>
-                <DescriptionsItem Title="Tags"><TagsWidget ItemId="@Id"/></DescriptionsItem>
-            </Descriptions>
+    <Card>
+        <Descriptions Bordered Title="Item Details" Size="DescriptionsSize.Middle">
+            <DescriptionsItem Title="Name">@State.ValueOrDefault.Name</DescriptionsItem>
+            <DescriptionsItem Title="Description">@State.ValueOrDefault.Description</DescriptionsItem>
+            <DescriptionsItem Title="Created">@State.ValueOrDefault.Created.Humanize()</DescriptionsItem>
+            <DescriptionsItem Title="Parent"><pre>@State.ValueOrDefault.ParentId</pre></DescriptionsItem>
+            <DescriptionsItem Title="Tags"><TagsWidget ItemId="@Id"/></DescriptionsItem>
+        </Descriptions>
 
-            <Button Danger @onclick="@Delete">Delete</Button>
-        </Card>
+        <Button Danger @onclick="@Delete">Delete</Button>
+    </Card>
 
-        <Card>
-            <GridRow>
-                <GridCol Lg="8">
-                    <Card>
-                        <LabelsWidget ItemId="@Id"/>
-                    </Card>
-                </GridCol>
-                <GridCol Lg="8">
-                    <Card>
-                        <ImagesWidget ItemId="@Id"/>
-                    </Card>
-                </GridCol>
-                <GridCol Lg="8">
-                    <Card>
-                        <ScansWidget ItemId="@Id"/>
-                    </Card>
-                </GridCol>
-            </GridRow>
-        </Card>
-    }
-    else
-    {
-        <span>State is null</span>
-    }
+    <Card>
+        <GridRow>
+            <GridCol Lg="8">
+                <Card>
+                    <LabelsWidget ItemId="@Id"/>
+                </Card>
+            </GridCol>
+            <GridCol Lg="8">
+                <Card>
+                    <ImagesWidget ItemId="@Id"/>
+                </Card>
+            </GridCol>
+            <GridCol Lg="8">
+                <Card>
+                    <ScansWidget ItemId="@Id"/>
+                </Card>
+            </GridCol>
+        </GridRow>
+    </Card>
 }
 else
 {
+    <span>State is null</span>
     <span>Waiting for State...</span>
 }
