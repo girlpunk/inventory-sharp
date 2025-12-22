@@ -1,29 +1,30 @@
 using System.Diagnostics;
 using System.Reflection;
 using ActualLab.Fusion;
-using ActualLab.Fusion.Authentication;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using BlazorInventory.Components.Account;
-using BlazorInventory.Data;
 using ActualLab.Fusion.Blazor;
 using ActualLab.Fusion.Blazor.Authentication;
 using ActualLab.Fusion.EntityFramework;
 using ActualLab.Fusion.EntityFramework.Npgsql;
 using ActualLab.Fusion.Extensions;
 using ActualLab.Fusion.Server;
+using ActualLab.Fusion.Server.Authentication;
+using ActualLab.Fusion.Server.Endpoints;
 using ActualLab.Rpc;
 using ActualLab.Rpc.Server;
 using BlazorInventory.Abstractions.Models;
-using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using BlazorInventory.Abstractions.Service;
 using BlazorInventory.Client;
+using BlazorInventory.Components.Account;
+using BlazorInventory.Data;
 using BlazorInventory.Data.Models;
 using BlazorInventory.Services;
 using Mapster;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.IdentityModel.Logging;
 using Npgsql;
@@ -288,25 +289,28 @@ void ConfigureLogging()
 
 void ConfigureFusionServices()
 {
-    var hostKind = HostKind.SingleServer;
+    const HostKind hostKind = HostKind.SingleServer;
 
     // Fusion
     var fusion = builder.Services.AddFusion(RpcServiceMode.Server, true);
     var fusionServer = fusion.AddWebServer();
 
-    fusionServer.ConfigureAuthEndpoint(_ => new() {
+    fusionServer.ConfigureAuthEndpoint(static _ => new AuthEndpoints.Options
+    {
         DefaultSignInScheme = OpenIdConnectDefaults.AuthenticationScheme,
-        SignInPropertiesBuilder = (_, properties) => {
+        SignInPropertiesBuilder = static (_, properties) =>
+        {
             properties.IsPersistent = true;
         }
     });
-    fusionServer.ConfigureServerAuthHelper(_ => new() {
-        NameClaimKeys = Array.Empty<string>(),
+    fusionServer.ConfigureServerAuthHelper(static _ => new ServerAuthHelper.Options
+    {
+        NameClaimKeys = [],
     });
 
     fusionServer.AddMvc().AddControllers();
-
-    fusion.AddDbAuthService<ApplicationDbContext, string>();
+    fusion.AddOperationReprocessor();
+    // fusion.AddDbAuthService<ApplicationDbContext, DbAuthSessionInfo, ApplicationUser, string>();
 
     // if (hostKind == HostKind.ApiServer) {
     //     fusion.AddClient<IAuth>(); // IAuth = a client of backend's IAuth
@@ -337,15 +341,16 @@ void ConfigureFusionServices()
     fusion.AddOperationReprocessor();
     builder.Services.AddBlazorCircuitActivitySuppressor();
 
-    ClientStartup.ConfigureSharedServices(builder.Services, hostKind/*, hostSettings.BackendUrl*/);
+    ClientStartup.ConfigureSharedServices(builder.Services, hostKind);
 }
 
-void AddService<Interface, Implementation>(FusionBuilder fusion, HostKind hostKind) where Interface : class, IComputeService where Implementation : class, Interface
+void AddService<TInterface, TImplementation>(FusionBuilder fusion, HostKind hostKind) where TInterface : class, IComputeService where TImplementation : class, TInterface
 {
-    _ = hostKind switch {
-        HostKind.SingleServer => fusion.AddService<Interface, Implementation>(),
-        HostKind.BackendServer => fusion.AddServer<Interface, Implementation>(),
-        HostKind.ApiServer => fusion.AddClient<Interface>(),
+    _ = hostKind switch
+    {
+        HostKind.SingleServer => fusion.AddService<TInterface, TImplementation>(),
+        HostKind.BackendServer => fusion.AddServer<TInterface, TImplementation>(),
+        HostKind.ApiServer => fusion.AddClient<TInterface>(),
         _ => throw new InvalidOperationException("Invalid host kind."),
     };
 }
