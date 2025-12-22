@@ -1,16 +1,13 @@
-@using ActualLab.Fusion.Blazor.Authentication
 @inherits CircuitHubComponentBase
 
 <Router AppAssembly="typeof(Program).Assembly">
     <Found Context="routeData">
-        <CascadingAuthState UsePresenceReporter="true">
-            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(Layout.MainLayout)">
-                <NotAuthorized>
-                    <RedirectToLogin />
-                </NotAuthorized>
-            </AuthorizeRouteView>
-            <FocusOnNavigate RouteData="routeData" Selector="h1" />
-        </CascadingAuthState>
+        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(Layout.MainLayout)">
+            <NotAuthorized>
+                <RedirectToLogin />
+            </NotAuthorized>
+        </AuthorizeRouteView>
+        <FocusOnNavigate RouteData="routeData" Selector="h1" />
     </Found>
     <NotFound>
         <LayoutView Layout="@typeof(Layout.MainLayout)">

@@ -28,7 +28,7 @@ public static class ClientStartup
         var fusion = services.AddFusion();
         // fusion.AddAuthClient();
         fusion.AddBlazor()
-            .AddAuthentication()
+            // .AddAuthentication()
             .AddPresenceReporter();
 
         var baseUri = new Uri(builder.HostEnvironment.BaseAddress);
