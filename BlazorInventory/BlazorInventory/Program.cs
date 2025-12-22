@@ -336,7 +336,7 @@ void ConfigureFusionServices()
     AddService<ITagService, TagService>(fusion, hostKind);
 
     fusion.AddBlazor()
-        .AddAuthentication()
+        // .AddAuthentication()
         .AddPresenceReporter();
     fusion.AddOperationReprocessor();
     builder.Services.AddBlazorCircuitActivitySuppressor();

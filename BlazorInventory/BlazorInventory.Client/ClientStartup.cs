@@ -1,34 +1,35 @@
 using System.Diagnostics.CodeAnalysis;
 using ActualLab.Fusion;
-using ActualLab.Fusion.Authentication;
 using ActualLab.Fusion.Blazor;
 using ActualLab.Fusion.Blazor.Authentication;
+using ActualLab.Fusion.Client.Interception;
+using ActualLab.Fusion.Diagnostics;
 using ActualLab.Fusion.Extensions;
 using ActualLab.Fusion.UI;
+using ActualLab.OS;
+using ActualLab.Rpc;
+using AntDesign;
+using BlazorInventory.Abstractions.Models;
 using BlazorInventory.Abstractions.Service;
 using BlazorInventory.Client.Geolocation;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using AntDesign;
-using ActualLab.Fusion.Client.Interception;
-using ActualLab.Fusion.Diagnostics;
-using ActualLab.OS;
-using ActualLab.Rpc;
-using BlazorInventory.Abstractions.Models;
 
 namespace BlazorInventory.Client;
 
 [UnconditionalSuppressMessage("Trimming", "IL2026:RequiresUnreferencedCodeAttribute", Justification = "Fine here")]
 public static class ClientStartup
 {
-    public static void ConfigureServices(IServiceCollection services, WebAssemblyHostBuilder builder)
+    internal static void ConfigureServices(IServiceCollection services, WebAssemblyHostBuilder builder)
     {
         // Logging
         builder.Logging.SetMinimumLevel(LogLevel.Information);
 
         // Fusion
         var fusion = services.AddFusion();
-        fusion.AddAuthClient();
-        fusion.AddBlazor().AddAuthentication().AddPresenceReporter();
+        // fusion.AddAuthClient();
+        fusion.AddBlazor()
+            // .AddAuthentication()
+            .AddPresenceReporter();
 
         var baseUri = new Uri(builder.HostEnvironment.BaseAddress);
         fusion.Rpc.AddWebSocketClient(baseUri);
@@ -40,10 +41,10 @@ public static class ClientStartup
         fusion.AddClient<IScanService>();
         fusion.AddClient<ITagService>();
 
-        ConfigureSharedServices(services, HostKind.Client/*, builder.HostEnvironment.BaseAddress*/);
+        ConfigureSharedServices(services, HostKind.Client);
     }
 
-    public static void ConfigureSharedServices(IServiceCollection services, HostKind hostKind/*, string remoteRpcHostUrl*/)
+    public static void ConfigureSharedServices(IServiceCollection services, HostKind hostKind)
     {
         // Other UI-related services
         var fusion = services.AddFusion();
@@ -69,12 +70,12 @@ public static class ClientStartup
             // ComputedState.DefaultOptions.FlowExecutionContext = true;
             // fusion.Rpc.AddWebSocketClient(remoteRpcHostUrl);
             if (hostKind is HostKind.ApiServer or HostKind.SingleServer)
-            {
+                // {
                 // All server-originating RPC connections should go to the default backend server
                 RpcPeerRef.Default = RpcPeerRef.GetDefaultPeerRef(true);
                 // And want to call the client via this server-side RPC client:
                 //fusion.Rpc.AddClient<ISimpleClientSideService>();
-            }
+            // }
 
             // If we're here, hostKind is Client, ApiServer, or SingleServer
             // fusion.AddService<Todos>(ServiceLifetime.Scoped);
