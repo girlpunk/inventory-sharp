@@ -294,19 +294,19 @@ void ConfigureFusionServices()
     var fusion = builder.Services.AddFusion(RpcServiceMode.Server, true);
     var fusionServer = fusion.AddWebServer(hostKind == HostKind.BackendServer);
 
-    if (hostKind == HostKind.ApiServer) {
-        fusion.AddClient<IAuth>(); // IAuth = a client of backend's IAuth
-        fusion.AddClient<IAuthBackend>(); // IAuthBackend = a client of backend's IAuthBackend
-        fusion.Rpc.Configure<IAuth>().IsServer(typeof(IAuth)).HasClient(); // Expose IAuth (a client) via RPC
-    }
-    else
-    {
-        // SingleServer or BackendServer
-        fusion.AddOperationReprocessor();
-        fusion.AddDbAuthService<ApplicationDbContext, string>();
-        if (hostKind == HostKind.BackendServer)
-            fusion.Rpc.Configure<IAuthBackend>().IsServer(typeof(IAuthBackend)); // Expose IAuthBackend via RPC
-    }
+    // if (hostKind == HostKind.ApiServer) {
+    //     fusion.AddClient<IAuth>(); // IAuth = a client of backend's IAuth
+    //     fusion.AddClient<IAuthBackend>(); // IAuthBackend = a client of backend's IAuthBackend
+    //     fusion.Rpc.Configure<IAuth>().IsServer(typeof(IAuth)).HasClient(); // Expose IAuth (a client) via RPC
+    // }
+    // else
+    // {
+    //     // SingleServer or BackendServer
+    //     fusion.AddOperationReprocessor();
+    //     fusion.AddDbAuthService<ApplicationDbContext, string>();
+    //     if (hostKind == HostKind.BackendServer)
+    //         fusion.Rpc.Configure<IAuthBackend>().IsServer(typeof(IAuthBackend)); // Expose IAuthBackend via RPC
+    // }
 
     fusionServer.ConfigureAuthEndpoint(static _ => new()
     {
