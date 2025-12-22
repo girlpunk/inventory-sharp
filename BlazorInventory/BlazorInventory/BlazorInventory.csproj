@@ -23,9 +23,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="ActualLab.Fusion.EntityFramework.Npgsql" Version="11.1.4" />
-        <PackageReference Include="ActualLab.Fusion.Server" Version="11.1.4" />
-        <PackageReference Include="ActualLab.Generators" Version="11.1.4">
+        <PackageReference Include="ActualLab.Fusion.EntityFramework.Npgsql" Version="11.3.84" />
+        <PackageReference Include="ActualLab.Fusion.Server" Version="11.3.84" />
+        <PackageReference Include="ActualLab.Generators" Version="11.3.84">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>

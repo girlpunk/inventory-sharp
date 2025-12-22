@@ -14,7 +14,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="ActualLab.Fusion" Version="11.1.4" />
+        <PackageReference Include="ActualLab.Fusion" Version="11.3.84" />
         <PackageReference Include="Roslynator.Analyzers" Version="4.14.1">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -27,7 +27,7 @@
 
     <!-- Roslyn generators/analyzers -->
     <ItemGroup>
-        <PackageReference Include="ActualLab.Generators" PrivateAssets="all" Version="11.1.4" />
+        <PackageReference Include="ActualLab.Generators" PrivateAssets="all" Version="11.3.84" />
         <PackageReference Include="MemoryPack.Generator" PrivateAssets="all" Version="1.21.4" />
     </ItemGroup>
 

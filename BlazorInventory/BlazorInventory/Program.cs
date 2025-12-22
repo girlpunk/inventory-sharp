@@ -1,18 +1,21 @@
 using System.Diagnostics;
 using System.Reflection;
 using ActualLab.Fusion;
+using ActualLab.Fusion.Authentication;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using BlazorInventory.Components.Account;
 using BlazorInventory.Data;
 using ActualLab.Fusion.Blazor;
+using ActualLab.Fusion.Blazor.Authentication;
 using ActualLab.Fusion.EntityFramework;
 using ActualLab.Fusion.EntityFramework.Npgsql;
 using ActualLab.Fusion.Extensions;
 using ActualLab.Fusion.Server;
 using ActualLab.Rpc;
 using ActualLab.Rpc.Server;
+using BlazorInventory.Abstractions.Models;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using BlazorInventory.Abstractions.Service;
 using BlazorInventory.Client;
@@ -148,8 +151,6 @@ builder.Services.AddIdentityCore<ApplicationUser>(static options => options.Sign
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddSignInManager()
     .AddDefaultTokenProviders();
-
-ClientStartup.ConfigureSharedServices(builder.Services);
 
 builder.Logging.AddOpenTelemetry(static logging =>
 {
@@ -287,20 +288,63 @@ void ConfigureLogging()
 
 void ConfigureFusionServices()
 {
+    var hostKind = HostKind.SingleServer;
+
     // Fusion
-    var fusion = builder.Services.AddFusion(RpcServiceMode.Server);
-    fusion.AddWebServer();
+    var fusion = builder.Services.AddFusion(RpcServiceMode.Server, true);
+    var fusionServer = fusion.AddWebServer(hostKind == HostKind.BackendServer);
+
+    if (hostKind == HostKind.ApiServer) {
+        fusion.AddClient<IAuth>(); // IAuth = a client of backend's IAuth
+        fusion.AddClient<IAuthBackend>(); // IAuthBackend = a client of backend's IAuthBackend
+        fusion.Rpc.Configure<IAuth>().IsServer(typeof(IAuth)).HasClient(); // Expose IAuth (a client) via RPC
+    }
+    else
+    {
+        // SingleServer or BackendServer
+        fusion.AddOperationReprocessor();
+        fusion.AddDbAuthService<ApplicationDbContext, string>();
+        if (hostKind == HostKind.BackendServer)
+            fusion.Rpc.Configure<IAuthBackend>().IsServer(typeof(IAuthBackend)); // Expose IAuthBackend via RPC
+    }
+
+    fusionServer.ConfigureAuthEndpoint(static _ => new()
+    {
+        DefaultSignInScheme = OpenIdConnectDefaults.AuthenticationScheme,
+        SignInPropertiesBuilder = static (_, properties) =>
+        {
+            properties.IsPersistent = true;
+        }
+    });
+    fusionServer.ConfigureServerAuthHelper(static _ => new()
+    {
+        NameClaimKeys = [],
+    });
 
     // Fusion services
     fusion.AddFusionTime(); // IFusionTime is one of built-in compute services you can use
 
-    fusion.AddService<IItemService, ItemService>();
-    fusion.AddService<ILabelService, LabelService>();
-    fusion.AddService<IForeignServerService, ForeignServerService>();
-    fusion.AddService<IScanService, ScanService>();
-    fusion.AddService<ITagService, TagService>();
+    AddService<IItemService, ItemService>(fusion, hostKind);
+    AddService<ILabelService, LabelService>(fusion, hostKind);
+    AddService<IForeignServerService, ForeignServerService>(fusion, hostKind);
+    AddService<IScanService, ScanService>(fusion, hostKind);
+    AddService<ITagService, TagService>(fusion, hostKind);
 
-    fusion.AddBlazor();
+    fusion.AddBlazor()
+        .AddAuthentication()
+        .AddPresenceReporter();
     fusion.AddOperationReprocessor();
     builder.Services.AddBlazorCircuitActivitySuppressor();
+
+    ClientStartup.ConfigureSharedServices(builder.Services, hostKind/*, hostSettings.BackendUrl*/);
+}
+
+void AddService<Interface, Implementation>(FusionBuilder fusion, HostKind hostKind) where Interface : class, IComputeService where Implementation : class, Interface
+{
+    _ = hostKind switch {
+        HostKind.SingleServer => fusion.AddComputeService<Interface, Implementation>(),
+        HostKind.BackendServer => fusion.AddServer<Interface, Implementation>(),
+        HostKind.ApiServer => fusion.AddClient<Interface>(),
+        _ => throw new InvalidOperationException("Invalid host kind."),
+    };
 }
