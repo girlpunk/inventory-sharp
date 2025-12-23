@@ -14,12 +14,15 @@
 
 @if (State.ValueOrDefault != null)
 {
+    Logger.LogDebug($"State is {State}");
+    Logger.LogDebug($"Value is {State.Value}");
+
     <Card>
         <Descriptions Bordered Title="Item Details" Size="DescriptionsSize.Middle">
-            <DescriptionsItem Title="Name">@State.ValueOrDefault.Name</DescriptionsItem>
-            <DescriptionsItem Title="Description">@State.ValueOrDefault.Description</DescriptionsItem>
-            <DescriptionsItem Title="Created">@State.ValueOrDefault.Created.Humanize()</DescriptionsItem>
-            <DescriptionsItem Title="Parent"><pre>@State.ValueOrDefault.ParentId</pre></DescriptionsItem>
+            <DescriptionsItem Title="Name">@State.Value.Name</DescriptionsItem>
+            <DescriptionsItem Title="Description">@State.Value.Description</DescriptionsItem>
+            <DescriptionsItem Title="Created">@State.Value.Created.Humanize()</DescriptionsItem>
+            <DescriptionsItem Title="Parent"><pre>@State.Value.ParentId</pre></DescriptionsItem>
             <DescriptionsItem Title="Tags"><TagsWidget ItemId="@Id"/></DescriptionsItem>
         </Descriptions>
 
