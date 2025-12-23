@@ -72,7 +72,7 @@ public static class ClientStartup
             if (hostKind is HostKind.ApiServer or HostKind.SingleServer)
                 // {
                 // All server-originating RPC connections should go to the default backend server
-                RpcPeerRef.Default = RpcPeerRef.GetDefaultPeerRef(true);
+                // RpcPeerRef.Default = RpcPeerRef.GetDefaultPeerRef(true);
                 // And want to call the client via this server-side RPC client:
                 //fusion.Rpc.AddClient<ISimpleClientSideService>();
             // }
@@ -84,37 +84,37 @@ public static class ClientStartup
 
             // Uncomment to make computed state components to re-render only on re-computation of their state.
             // Click on DefaultOptions to see when they re-render by default.
-            // ComputedStateComponent.DefaultOptions = ComputedStateComponentOptions.RecomputeStateOnParameterChange;
+            ComputedStateComponent.DefaultOptions = ComputedStateComponentOptions.RecomputeStateOnParameterChange;
         }
 
         // Diagnostics
         if (hostKind == HostKind.Client)
             RpcPeer.DefaultCallLogLevel = LogLevel.Debug;
 
-        services.AddHostedService(static c =>
-        {
-            var isWasm = OSInfo.IsWebAssembly;
-            return new FusionMonitor(c)
-            {
-                SleepPeriod = TimeSpan.FromSeconds(isWasm ? 0 : 15),
-                CollectPeriod = TimeSpan.FromSeconds(isWasm ? 5 : 15),
-                AccessFilter = isWasm
-                    ? static computed => computed.Input.Function is RemoteComputeMethodFunction
-                    : static _ => true,
-                AccessStatisticsPreprocessor = StatisticsPreprocessor,
-                RegistrationStatisticsPreprocessor = StatisticsPreprocessor,
-            };
-
-            static void StatisticsPreprocessor(Dictionary<string, (int, int)> stats)
-            {
-                foreach (var key in stats.Keys.ToList())
-                {
-                    if (key.Contains(".Pseudo"))
-                        stats.Remove(key);
-                    if (key.StartsWith("FusionTime.", StringComparison.Ordinal))
-                        stats.Remove(key);
-                }
-            }
-        });
+        // services.AddHostedService(static c =>
+        // {
+        //     var isWasm = OSInfo.IsWebAssembly;
+        //     return new FusionMonitor(c)
+        //     {
+        //         SleepPeriod = TimeSpan.FromSeconds(isWasm ? 0 : 15),
+        //         CollectPeriod = TimeSpan.FromSeconds(isWasm ? 5 : 15),
+        //         AccessFilter = isWasm
+        //             ? static computed => computed.Input.Function is RemoteComputeMethodFunction
+        //             : static _ => true,
+        //         AccessStatisticsPreprocessor = StatisticsPreprocessor,
+        //         RegistrationStatisticsPreprocessor = StatisticsPreprocessor,
+        //     };
+        //
+        //     static void StatisticsPreprocessor(Dictionary<string, (int, int)> stats)
+        //     {
+        //         foreach (var key in stats.Keys.ToList())
+        //         {
+        //             if (key.Contains(".Pseudo"))
+        //                 stats.Remove(key);
+        //             if (key.StartsWith("FusionTime.", StringComparison.Ordinal))
+        //                 stats.Remove(key);
+        //         }
+        //     }
+        // });
     }
 }

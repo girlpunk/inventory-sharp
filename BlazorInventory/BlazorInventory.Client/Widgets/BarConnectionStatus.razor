@@ -14,19 +14,15 @@
         : "Warning";
 }
 
-<div>
-    <Menu Class="@CssClass">
-        <MenuItem>
-            <Icon type="@iconName" Style="@($"color: ${textColor};")" />
-        </MenuItem>
-        <MenuItem Style="@($"color: ${textColor}")">
-            <span>@m.GetDescription(true)</span>
-            @if (m.ReconnectsIn != default) {
-                <span> Will reconnect <TimerBadge ExpiresAt="@(Clock.Now + m.ReconnectsIn)"/>. </span>
-                <Button Color="Color.Green1" @onclick="Reconnect">Reconnect</Button>
-            }
-        </MenuItem>
-    </Menu>
+<div class="@CssClass">
+    <Icon type="@iconName" Style="@($"color: ${textColor};")" />
+    <div Style="@($"color: ${textColor}")">
+        <span>@m.GetDescription(true)</span>
+        @if (m.ReconnectsIn != default) {
+            <span> Will reconnect <TimerBadge ExpiresAt="@(Clock.Now + m.ReconnectsIn)"/>. </span>
+            <Button Color="Color.Green1" @onclick="Reconnect">Reconnect</Button>
+        }
+    </div>
 </div>
 
 @code {
