@@ -26,13 +26,13 @@
 </div>
 
 @code {
-    [Inject] private RpcPeerStateMonitor Monitor { get; init; } = null!;
+    // [Inject] private RpcPeerStateMonitor Monitor { get; init; } = null!;
     [Inject] private MomentClock Clock { get; init; } = null!;
 
     [Parameter] public string CssClass { get; set; } = "";
 
-    protected override void OnInitialized()
-        => SetState(Monitor.State);
+    // protected override void OnInitialized()
+        // => SetState(Monitor.State);
 
     public override ValueTask DisposeAsync()
         => default; // State shouldn't be disposed
