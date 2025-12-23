@@ -13,9 +13,14 @@ public sealed partial class Details
     [Parameter]
     public Guid Id { get; set; }
 
+    [Inject] private ILogger<Details> Logger { get; set; }
+
     /// <inheritdoc />
-    protected override Task<ItemView> ComputeState(CancellationToken cancellationToken) =>
-        ItemService.Get(Id, cancellationToken);
+    protected override Task<ItemView> ComputeState(CancellationToken cancellationToken)
+    {
+        Logger.LogDebug("Item Details Compute Called");
+        return ItemService.Get(Id, cancellationToken);
+    }
 
     private async Task Delete()
     {
@@ -27,5 +32,11 @@ public sealed partial class Details
         });
 
         NavigationManager.NavigateTo("/Item/");
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        Logger.LogDebug("Item After Render Called");
+        base.OnAfterRender(firstRender);
     }
 }

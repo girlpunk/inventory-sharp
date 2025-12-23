@@ -84,7 +84,7 @@ public static class ClientStartup
 
             // Uncomment to make computed state components to re-render only on re-computation of their state.
             // Click on DefaultOptions to see when they re-render by default.
-            ComputedStateComponent.DefaultOptions = ComputedStateComponentOptions.RecomputeStateOnParameterChange;
+            // ComputedStateComponent.DefaultOptions = ComputedStateComponentOptions.RecomputeStateOnParameterChange;
         }
 
         // Diagnostics
