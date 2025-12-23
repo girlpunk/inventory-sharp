@@ -16,10 +16,13 @@ public sealed partial class Details
     [Inject] private ILogger<Details> Logger { get; set; }
 
     /// <inheritdoc />
-    protected override Task<ItemView> ComputeState(CancellationToken cancellationToken)
+    protected override async Task<ItemView> ComputeState(CancellationToken cancellationToken)
     {
         Logger.LogDebug("Item Details Compute Called");
-        return ItemService.Get(Id, cancellationToken);
+        var item = await ItemService.Get(Id, cancellationToken);
+
+        Logger.LogDebug($"Item Details Compute Completed: {item}");
+        return item;
     }
 
     private async Task Delete()
