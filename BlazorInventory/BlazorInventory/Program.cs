@@ -9,8 +9,8 @@ using ActualLab.Fusion.Extensions;
 using ActualLab.Fusion.Server;
 using ActualLab.Fusion.Server.Authentication;
 using ActualLab.Fusion.Server.Endpoints;
-using ActualLab.Rpc;
-using ActualLab.Rpc.Server;
+// using ActualLab.Rpc;
+// using ActualLab.Rpc.Server;
 using BlazorInventory.Abstractions.Models;
 using BlazorInventory.Abstractions.Service;
 using BlazorInventory.Client;
@@ -240,7 +240,7 @@ app.UseFusionSession();
 app.UseBlazorFrameworkFiles();
 
 app.UseRouting();
-app.MapRpcWebSocketServer();
+// app.MapRpcWebSocketServer();
 
 app.UseForwardedHeaders();
 
@@ -259,7 +259,7 @@ app.MapRazorComponents<BlazorInventory.Components.App>()
 app.MapAdditionalIdentityEndpoints();
 
 
-app.MapRpcWebSocketServer();
+// app.MapRpcWebSocketServer();
 app.MapFusionRenderModeEndpoints();
 
 await using var db = await app.Services.GetRequiredService<IDbContextFactory<ApplicationDbContext>>().CreateDbContextAsync();
@@ -292,7 +292,7 @@ void ConfigureFusionServices()
     const HostKind hostKind = HostKind.SingleServer;
 
     // Fusion
-    var fusion = builder.Services.AddFusion(RpcServiceMode.Server, true);
+    var fusion = builder.Services.AddFusion(/*RpcServiceMode.Server, true*/);
     var fusionServer = fusion.AddWebServer();
 
     fusionServer.ConfigureAuthEndpoint(static _ => new AuthEndpoints.Options
