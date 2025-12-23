@@ -31,8 +31,8 @@ public static class ClientStartup
             // .AddAuthentication()
             .AddPresenceReporter();
 
-        var baseUri = new Uri(builder.HostEnvironment.BaseAddress);
-        fusion.Rpc.AddWebSocketClient(baseUri);
+        // var baseUri = new Uri(builder.HostEnvironment.BaseAddress);
+        // fusion.Rpc.AddWebSocketClient(baseUri);
 
         // Fusion service clients
         fusion.AddClient<IItemService>();
@@ -52,7 +52,7 @@ public static class ClientStartup
         fusion.AddFusionTime();
 
         // Default update delay is set to 0.1s
-        // services.AddTransient<IUpdateDelayer>(static c => new UpdateDelayer(c.UIActionTracker(), 0.01));
+        services.AddTransient<IUpdateDelayer>(static c => new UpdateDelayer(c.UIActionTracker(), 0.01));
 
         services.AddScoped<IGeolocationService, GeolocationService>();
 
@@ -69,7 +69,7 @@ public static class ClientStartup
             // Lets ComputedState to be dependent on, e.g., current culture - use only if you need this:
             // ComputedState.DefaultOptions.FlowExecutionContext = true;
             // fusion.Rpc.AddWebSocketClient(remoteRpcHostUrl);
-            if (hostKind is HostKind.ApiServer or HostKind.SingleServer)
+            // if (hostKind is HostKind.ApiServer or HostKind.SingleServer)
                 // {
                 // All server-originating RPC connections should go to the default backend server
                 // RpcPeerRef.Default = RpcPeerRef.GetDefaultPeerRef(true);
@@ -79,8 +79,8 @@ public static class ClientStartup
 
             // If we're here, hostKind is Client, ApiServer, or SingleServer
             // fusion.AddService<Todos>(ServiceLifetime.Scoped);
-            services.AddScoped(static c => new RpcPeerStateMonitor(c, OSInfo.IsAnyClient ? RpcPeerRef.Default : null));
-            services.AddScoped<IUpdateDelayer>(static c => new UpdateDelayer(c.UIActionTracker(), 0.1)); // 0.25s
+            // services.AddScoped(static c => new RpcPeerStateMonitor(c, OSInfo.IsAnyClient ? RpcPeerRef.Default : null));
+            // services.AddScoped<IUpdateDelayer>(static c => new UpdateDelayer(c.UIActionTracker(), 0.1)); // 0.25s
 
             // Uncomment to make computed state components to re-render only on re-computation of their state.
             // Click on DefaultOptions to see when they re-render by default.
