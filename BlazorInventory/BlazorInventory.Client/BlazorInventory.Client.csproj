@@ -39,7 +39,7 @@
         <PackageReference Include="Humanizer.Core" Version="3.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.11" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="9.0.11" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.2" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.1" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.1" />
         <PackageReference Include="ActualLab.Fusion.Blazor" Version="11.3.84" />
