@@ -59,7 +59,7 @@
 
     <!-- Roslyn generators/analyzers -->
     <ItemGroup>
-        <PackageReference Include="ActualLab.Generators" PrivateAssets="all" Version="11.3.84" />
+        <PackageReference Include="ActualLab.Generators" PrivateAssets="all" Version="11.4.7" />
     </ItemGroup>
 
 
