@@ -50,7 +50,7 @@
         </PackageReference>
 
         <PackageReference Include="Npgsql.OpenTelemetry" Version="10.0.1" />
-        <PackageReference Include="OpenTelemetry.AutoInstrumentation" Version="1.13.0" />
+        <PackageReference Include="OpenTelemetry.AutoInstrumentation" Version="1.14.1" />
         <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.14.0" />
         <PackageReference Include="Roslynator.Analyzers" Version="4.15.0">
           <PrivateAssets>all</PrivateAssets>
