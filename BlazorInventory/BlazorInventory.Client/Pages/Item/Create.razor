@@ -10,7 +10,11 @@
 <h3>Create</h3>
 
 <Form Model="@Model" OnFinish="@Submit" TModel="CreateModel" LabelColSpan="8" WrapperColSpan="16">
-    Item Details
+    <ValidationSummary/>
+
+    <div class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+        <h2>Item details</h2>
+
         <FormItem Label="Name" Required>
             <Input @bind-Value="Model.Name" MaxLength="120" Placeholder="Name" required/>
         </FormItem>
@@ -23,15 +27,18 @@
             @* <AutoComplete @bind-Value="Model.ParentId" DisplayName="Parent" /> *@
             @* <Input @bind-Value="Model.ParentId" /> *@
         </FormItem>
+    </div>
 
-    Label Details
-    <FormItem Label="Identifier">
-        <Input @bind-Value="Model.Identifier" MaxLength="256" Placeholder="Identifier"/>
-    </FormItem>
+    <div class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+        <h2>Label Details</h2>
 
-    <FormItem Label="Label Type" Required>
-        <EnumSelect TEnum="LabelType?" @bind-Value="Model.LabelType" Mode="SelectMode.Default" EnableSearch="true" HideSelected="true" />
-    </FormItem>
+        <FormItem Label="Identifier">
+            <Input @bind-Value="Model.Identifier" MaxLength="256" Placeholder="Identifier"/>
+        </FormItem>
+
+        <FormItem Label="Label Type">
+            <EnumSelect TEnum="LabelType?" @bind-Value="Model.LabelType" Mode="SelectMode.Default" EnableSearch="true" HideSelected="true" />
+        </FormItem>
 
         <FormItem Label="Foreign Server">
             <Input Value="@Model.ForeignServerId.ToString()"/>
@@ -43,6 +50,7 @@
                 <Button @onclick="ConvertNamespace">Convert to Foreign Server</Button>
             }
         </FormItem>
+    </div>
 
     <Button Type="@ButtonType.Primary" HtmlType="submit">Create</Button>
 </Form>
