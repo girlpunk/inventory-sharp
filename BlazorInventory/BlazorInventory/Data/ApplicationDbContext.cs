@@ -46,6 +46,12 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<DbOperation> Operations { get; protected set; } = null!;
     public DbSet<DbEvent> Events { get; protected set; } = null!;
 
+    // ActualLab.Fusion.EntityFramework tables
+    // public DbSet<DbAuthUser> AuthUsers { get; protected set; } = null!;
+    // public DbSet<DbUserIdentity<long>> AuthUserIdentities { get; protected set; } = null!;
+    // public DbSet<DbAuthSessionInfo> AuthSessions { get; protected set; } = null!;
+    // public DbSet<DbKeyValue> KeyValues { get; protected set; } = null!;
+
     /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -7,7 +7,10 @@ using ActualLab.Fusion.EntityFramework;
 using ActualLab.Fusion.EntityFramework.Npgsql;
 using ActualLab.Fusion.Extensions;
 using ActualLab.Fusion.Server;
-using ActualLab.Fusion.Server.Authentication;
+//using ActualLab.Fusion.Server.Authentication;
+using ActualLab.Fusion.Authentication.Services;
+using ActualLab.Fusion.Authentication;
+using ActualLab.Fusion.Authentication.Endpoints;
 using ActualLab.Fusion.Server.Endpoints;
 // using ActualLab.Rpc;
 // using ActualLab.Rpc.Server;
@@ -32,7 +35,7 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using IPAddress = System.Net.IPAddress;
-using IPNetwork = Microsoft.AspNetCore.HttpOverrides.IPNetwork;
+using IPNetwork = System.Net.IPNetwork;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -81,7 +84,7 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
     {
         Console.WriteLine($"Adding known proxy network: {network}");
         var parts = network.Split('/');
-        options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse(parts[0]), int.Parse(parts[1])));
+        options.KnownIPNetworks.Add(new IPNetwork(IPAddress.Parse(parts[0]), int.Parse(parts[1])));
     }
 });
 

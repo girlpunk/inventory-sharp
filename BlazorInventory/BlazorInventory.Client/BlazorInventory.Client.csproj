@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
@@ -34,17 +34,17 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AntDesign" Version="1.5.1" />
-        <PackageReference Include="ActualLab.Fusion" Version="11.4.7" />
-        <PackageReference Include="Humanizer.Core" Version="3.0.1" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.12" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="9.0.12" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.2" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.2" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.2" />
-        <PackageReference Include="ActualLab.Fusion.Blazor" Version="11.4.7" />
-        <PackageReference Include="ActualLab.Fusion.Blazor.Authentication" Version="11.4.7" />
-        <PackageReference Include="ActualLab.Fusion.Ext.Contracts" Version="11.4.7" />
+        <PackageReference Include="AntDesign" Version="1.6.0" />
+        <PackageReference Include="ActualLab.Fusion" Version="12.1.130" />
+        <PackageReference Include="Humanizer.Core" Version="3.0.10" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="10.0.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.5" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.5" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.5" />
+        <PackageReference Include="ActualLab.Fusion.Blazor" Version="12.1.130" />
+        <PackageReference Include="ActualLab.Fusion.Blazor.Authentication" Version="12.1.130" />
+        <PackageReference Include="ActualLab.Fusion.Ext.Contracts" Version="12.1.130" />
         <PackageReference Include="Roslynator.Analyzers" Version="4.15.0">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -54,12 +54,12 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="UAParser" Version="3.1.47" />
-        <PackageReference Include="ZXingBlazor" Version="1.1.5" />
+        <PackageReference Include="ZXingBlazor" Version="1.1.6" />
     </ItemGroup>
 
     <!-- Roslyn generators/analyzers -->
     <ItemGroup>
-        <PackageReference Include="ActualLab.Generators" PrivateAssets="all" Version="11.3.84" />
+        <PackageReference Include="ActualLab.Generators" PrivateAssets="all" Version="12.1.130" />
     </ItemGroup>
 
 
