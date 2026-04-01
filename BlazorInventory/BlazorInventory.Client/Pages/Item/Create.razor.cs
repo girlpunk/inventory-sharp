@@ -154,7 +154,6 @@ public sealed partial class Create
                 Identifier.StartsWith("http://", StringComparison.OrdinalIgnoreCase))
             {
                 //https://r.lu.gl/a/A808AZ
-
                 var url = new Uri(Identifier, UriKind.Absolute);
 
                 Model.Identifier = Identifier;
