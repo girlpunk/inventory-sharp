@@ -42,7 +42,7 @@
     private string _authSchemas = "";
     private string _sessionId = "";
 
-    [Inject] private ServerAuthHelper ServerAuthHelper { get; init; } = null!;
+    // [Inject] private ServerAuthHelper ServerAuthHelper { get; init; } = null!;
     [CascadingParameter] private HttpContext HttpContext { get; set; } = null!;
 
     public override async Task SetParametersAsync(ParameterView parameters)
@@ -54,9 +54,9 @@
             parameters.SetParameterProperties(this); // This call must be executed ASAP
             if (HttpContext.AcceptsInteractiveRouting())
                 _renderMode = RenderModeEndpoint.GetRenderMode(HttpContext);
-            await ServerAuthHelper.UpdateAuthState(HttpContext);
-            _authSchemas = await ServerAuthHelper.GetSchemas(HttpContext);
-            _sessionId = ServerAuthHelper.Session.Id;
+            // await ServerAuthHelper.UpdateAuthState(HttpContext);
+            //_authSchemas = await ServerAuthHelper.GetSchemas(HttpContext);
+            //_sessionId = ServerAuthHelper.Session.Id;
         }
         await base.SetParametersAsync(parameters);
     }

@@ -298,6 +298,8 @@ void ConfigureFusionServices()
     var fusion = builder.Services.AddFusion(/*RpcServiceMode.Server, true*/);
     var fusionServer = fusion.AddWebServer();
 
+    fusionServer.AddAuthEndpoints();
+
     fusionServer.ConfigureAuthEndpoint(static _ => new AuthEndpoints.Options
     {
         DefaultSignInScheme = OpenIdConnectDefaults.AuthenticationScheme,
