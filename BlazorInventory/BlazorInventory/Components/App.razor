@@ -26,7 +26,7 @@
 </head>
 
 <body>
-    <BlazorInventory.Client.App @rendermode="@(_renderMode?.Mode)" SessionId="@_sessionId" RenderModeKey="@(_renderMode?.Key)"/>
+    <BlazorInventory.Client.App @rendermode="@(_renderMode?.Mode)"  RenderModeKey="@(_renderMode?.Key)"/>
 
     <script src="_framework/blazor.web.js"></script>
     <script src="_content/AntDesign/js/ant-design-blazor.js"></script>
@@ -37,6 +37,8 @@
 </html>
 
 @code {
+    // SessionId="@_sessionId"
+
     private bool _isInitialized;
     private RenderModeDef? _renderMode; // Static by default
     private string _authSchemas = "";
