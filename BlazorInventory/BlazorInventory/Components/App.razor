@@ -26,7 +26,7 @@
 </head>
 
 <body>
-    <BlazorInventory.Client.App @rendermode="@(_renderMode?.Mode)"  RenderModeKey="@(_renderMode?.Key)"/>
+    <BlazorInventory.Client.App @rendermode="@(_renderMode?.Mode)" SessionId="@_sessionId" RenderModeKey="@(_renderMode?.Key)"/>
 
     <script src="_framework/blazor.web.js"></script>
     <script src="_content/AntDesign/js/ant-design-blazor.js"></script>
@@ -37,14 +37,13 @@
 </html>
 
 @code {
-    // SessionId="@_sessionId"
-
     private bool _isInitialized;
     private RenderModeDef? _renderMode; // Static by default
     private string _authSchemas = "";
     private string _sessionId = "";
 
     // [Inject] private ServerAuthHelper ServerAuthHelper { get; init; } = null!;
+    [Inject] private ISessionResolver SessionResolver { get; init; } = null!;
     [CascadingParameter] private HttpContext HttpContext { get; set; } = null!;
 
     public override async Task SetParametersAsync(ParameterView parameters)
@@ -56,6 +55,7 @@
             parameters.SetParameterProperties(this); // This call must be executed ASAP
             if (HttpContext.AcceptsInteractiveRouting())
                 _renderMode = RenderModeEndpoint.GetRenderMode(HttpContext);
+            _sessionId = SessionResolver.Session.Id;
             // await ServerAuthHelper.UpdateAuthState(HttpContext);
             //_authSchemas = await ServerAuthHelper.GetSchemas(HttpContext);
             //_sessionId = ServerAuthHelper.Session.Id;
