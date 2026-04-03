@@ -20,13 +20,13 @@
     <script>
         window.FusionAuth.schemas = "@_authSchemas";
     </script>
-    <HeadOutlet @rendermode="@(_renderMode?.Mode)" />
+    <HeadOutlet @rendermode="InteractiveServer" />
 
     <link href="https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.css" rel="stylesheet">
 </head>
 
 <body>
-    <BlazorInventory.Client.App  SessionId="@_sessionId" RenderModeKey="@(_renderMode?.Key)"/>
+    <BlazorInventory.Client.App @rendermode="InteractiveServer" SessionId="@_sessionId" RenderModeKey="@(_renderMode?.Key)"/>
 
     <script src="_framework/blazor.web.js"></script>
     <script src="_content/AntDesign/js/ant-design-blazor.js"></script>
