@@ -26,7 +26,7 @@
 </head>
 
 <body>
-    <BlazorInventory.Client.App @rendermode="@(_renderMode?.Mode)" SessionId="@_sessionId" RenderModeKey="@(_renderMode?.Key)"/>
+    <BlazorInventory.Client.App  SessionId="@_sessionId" RenderModeKey="@(_renderMode?.Key)"/>
 
     <script src="_framework/blazor.web.js"></script>
     <script src="_content/AntDesign/js/ant-design-blazor.js"></script>
@@ -37,6 +37,7 @@
 </html>
 
 @code {
+    // @rendermode="@(_renderMode?.Mode)"
     private bool _isInitialized;
     private RenderModeDef? _renderMode; // Static by default
     private string _authSchemas = "";
@@ -44,17 +45,23 @@
 
     // [Inject] private ServerAuthHelper ServerAuthHelper { get; init; } = null!;
     [Inject] private ISessionResolver SessionResolver { get; init; } = null!;
+    [Inject] private ILogger<App> Logger { get; init; } = null!;
     [CascadingParameter] private HttpContext HttpContext { get; set; } = null!;
 
     public override async Task SetParametersAsync(ParameterView parameters)
     {
         // We want to postpone the very first render till the moment the async code below completes.
         // That's why we override SetParametersAsync instead of OnInitializedAsync.
-        if (!_isInitialized) {
+        if (!_isInitialized)
+        {
             _isInitialized = true;
             parameters.SetParameterProperties(this); // This call must be executed ASAP
             if (HttpContext.AcceptsInteractiveRouting())
-                _renderMode = RenderModeEndpoint.GetRenderMode(HttpContext);
+            {
+                Logger.LogDebug($"Trying to set render mode to {RenderModeEndpoint.GetRenderMode(HttpContext)}");
+                //_renderMode = RenderModeEndpoint.GetRenderMode(HttpContext);
+            }
+
             _sessionId = SessionResolver.Session.Id;
             // await ServerAuthHelper.UpdateAuthState(HttpContext);
             //_authSchemas = await ServerAuthHelper.GetSchemas(HttpContext);
