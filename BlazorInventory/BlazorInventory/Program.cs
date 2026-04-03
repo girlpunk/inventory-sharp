@@ -119,15 +119,16 @@ builder.Services.AddAuthorization();
 builder.Services.AddPooledDbContextFactory<ApplicationDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), static npgsql => npgsql.EnableRetryOnFailure(0));
-
     options.UseNpgsqlHintFormatter();
 
     if (builder.Environment.IsDevelopment())
     {
         options.EnableSensitiveDataLogging();
+
         options.ConfigureWarnings(static warnings =>
         {
             warnings.Log(RelationalEventId.PendingModelChangesWarning);
+            warnings.Throw(RelationalEventId.MultipleCollectionIncludeWarning);
         });
     }
 });
