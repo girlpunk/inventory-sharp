@@ -44,7 +44,7 @@
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.5" />
         <PackageReference Include="ActualLab.Fusion.Blazor" Version="12.1.130" />
         <PackageReference Include="ActualLab.Fusion.Blazor.Authentication" Version="12.1.130" />
-        <PackageReference Include="ActualLab.Fusion.Ext.Contracts" Version="12.1.130" />
+        <PackageReference Include="ActualLab.Fusion.Ext.Contracts" Version="12.3.74" />
         <PackageReference Include="Roslynator.Analyzers" Version="4.15.0">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
