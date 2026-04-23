@@ -23,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="ActualLab.Fusion.EntityFramework.Npgsql" Version="12.1.130" />
+        <PackageReference Include="ActualLab.Fusion.EntityFramework.Npgsql" Version="12.3.74" />
         <PackageReference Include="ActualLab.Fusion.Server" Version="12.1.130" />
         <PackageReference Include="ActualLab.Generators" Version="12.1.130">
           <PrivateAssets>all</PrivateAssets>
