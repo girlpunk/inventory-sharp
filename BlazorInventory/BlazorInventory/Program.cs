@@ -344,7 +344,6 @@ void ConfigureFusionServices()
     fusion.AddBlazor()
         // .AddAuthentication()
         .AddPresenceReporter();
-    fusion.AddOperationReprocessor();
     builder.Services.AddBlazorCircuitActivitySuppressor();
 
     ClientStartup.ConfigureSharedServices(builder.Services, hostKind);

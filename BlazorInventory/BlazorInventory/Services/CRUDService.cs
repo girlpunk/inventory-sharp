@@ -12,6 +12,8 @@ using BlazorInventory.Data;
 using BlazorInventory.Data.Models;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace BlazorInventory.Services;
 
@@ -36,7 +38,16 @@ public abstract class CRUDService<TModel, TViewModel>(IServiceProvider services)
     public virtual async Task<ICollection<TViewModel>> List(CancellationToken cancellationToken = default)
     {
         await using var dbContext = await DbHub.CreateDbContext(cancellationToken);
-        return await DbSet(dbContext).ProjectToType<TViewModel>().ToListAsync(cancellationToken);
+        var rawCount = await DbSet(dbContext).CountAsync(cancellationToken);
+
+        var result = await DbSet(dbContext).ProjectToType<TViewModel>().ToListAsync(cancellationToken);
+
+        // TEMP DIAGNOSTIC: remove once the empty-list-on-first-load bug is resolved.
+        Log.LogWarning(
+            "DIAG {Service}.List: rawCount={RawCount}, projectedCount={ProjectedCount}, sessionId={SessionId}",
+            typeof(TModel).Name, rawCount, result.Count, GetDiagnosticSessionId());
+
+        return result;
     }
 
     /// <inheritdoc />
@@ -51,6 +62,19 @@ public abstract class CRUDService<TModel, TViewModel>(IServiceProvider services)
     /// How to access the database table
     /// </summary>
     public abstract Func<ApplicationDbContext, DbSet<TModel>> DbSet { get; }
+
+    // TEMP DIAGNOSTIC: remove once the empty-list-on-first-load bug is resolved.
+    private string GetDiagnosticSessionId()
+    {
+        try
+        {
+            return Services.GetRequiredService<ISessionResolver>().Session.Id;
+        }
+        catch (Exception e)
+        {
+            return $"(unresolved: {e.GetType().Name})";
+        }
+    }
 
     /// <summary>
     /// Update a database object
@@ -71,6 +95,11 @@ public abstract class CRUDService<TModel, TViewModel>(IServiceProvider services)
         if (Invalidation.IsActive)
         {
             var id = context.Operation.Items.KeylessGet<Guid>();
+
+            // TEMP DIAGNOSTIC: remove once the empty-list-on-first-load bug is resolved.
+            Log.LogWarning(
+                "DIAG {Service}.Update invalidation: keylessId={KeylessId}, objId={ObjId}",
+                typeof(TModel).Name, id, command.Obj.Id);
 
             _ = Get(id, CancellationToken.None);
             _ = List(CancellationToken.None);
@@ -93,6 +122,13 @@ public abstract class CRUDService<TModel, TViewModel>(IServiceProvider services)
             DbSet(dbContext).Add(item);
             await dbContext.SaveChangesAsync(cancellationToken);
 
+            context.Operation.Items.KeylessSet(item.Id);
+
+            // TEMP DIAGNOSTIC: remove once the empty-list-on-first-load bug is resolved.
+            Log.LogWarning(
+                "DIAG {Service}.Update(create): saved itemId={ItemId}, keylessId={KeylessId}",
+                typeof(TModel).Name, item.Id, context.Operation.Items.KeylessGet<Guid>());
+
             return item.Adapt<TViewModel>();
         }
         else
@@ -105,6 +141,14 @@ public abstract class CRUDService<TModel, TViewModel>(IServiceProvider services)
                 throw new InvalidOperationException("Could not find object to update");
 
             await dbContext.SaveChangesAsync(cancellationToken);
+
+            context.Operation.Items.KeylessSet(item.Id);
+
+            // TEMP DIAGNOSTIC: remove once the empty-list-on-first-load bug is resolved.
+            Log.LogWarning(
+                "DIAG {Service}.Update(update): saved itemId={ItemId}, keylessId={KeylessId}",
+                typeof(TModel).Name, item.Id, context.Operation.Items.KeylessGet<Guid>());
+
             return item.Adapt<TViewModel>();
         }
     }

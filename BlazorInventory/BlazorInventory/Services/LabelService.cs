@@ -11,6 +11,7 @@ using BlazorInventory.Data;
 using BlazorInventory.Data.Models;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace BlazorInventory.Services;
 
@@ -48,7 +49,10 @@ public class LabelService(IServiceProvider serviceProvider) : CRUDService<ItemLa
         {
             if (!command.CreateScanRecord) return null!;
 
-            var id = context.Items.Get<Guid?>("id", null);
+            var id = context.Operation.Items.Get<Guid?>("id", null);
+
+            // TEMP DIAGNOSTIC: remove once the empty-list-on-first-load bug is resolved.
+            Log.LogWarning("DIAG LabelService.Scan invalidation: id={Id}", id);
 
             if (id == null)
                 return null!;
@@ -108,6 +112,9 @@ public class LabelService(IServiceProvider serviceProvider) : CRUDService<ItemLa
 
         if (!command.CreateScanRecord)
             return result;
+
+        // The invalidation pass of this command reads "id" from the operation items.
+        context.Operation.Items.Set("id", label.Id);
 
         var scanner = await dbContext.Scanners.SingleOrDefaultAsync(s => s.Id == command.ScannerId, cancellationToken);
 
