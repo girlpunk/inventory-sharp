@@ -1,0 +1,41 @@
+@page "/NotFound"
+@using System.Runtime.InteropServices
+@inject NavigationManager Nav
+@inject ILogger<NotFoundPage> Logger
+
+<PageTitle>Not found</PageTitle>
+
+<h1>Not found</h1>
+<p>No page matches this address.</p>
+<pre>@info</pre>
+<p><a href="/">Go home</a></p>
+
+@code {
+    private string info = "";
+
+    protected override void OnInitialized()
+    {
+        string relative;
+        var codes = "";
+        try
+        {
+            var path = Nav.ToBaseRelativePath(Nav.Uri);
+            relative = path;
+            codes = string.Join(", ", path.Select(static item => $"{item}={((int)item):X4}"));
+        }
+        catch (Exception ex)
+        {
+            relative = $"ToBaseRelativePath threw: {ex.Message}";
+        }
+
+        info =
+            $"uri: {Nav.Uri}\n" +
+            $"base: {Nav.BaseUri}\n" +
+            $"relative path: {relative}\n" +
+            $"char codes: {codes}\n" +
+            $"runtime: {RuntimeInformation.FrameworkDescription}";
+        Logger.LogWarning(
+            "DIAG 404 page rendered: uri={Uri}, base={Base}, relative={Relative}",
+            Nav.Uri, Nav.BaseUri, relative);
+    }
+}

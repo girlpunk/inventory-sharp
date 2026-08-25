@@ -1,0 +1,79 @@
+@page "/DebugRoutes"
+@using System.Reflection
+@using System.Runtime.InteropServices
+@using Microsoft.AspNetCore.Components
+@inject NavigationManager Nav
+@inject ILogger<DebugRoutes> Logger
+
+<PageTitle>Debug routes</PageTitle>
+
+<h1>Debug routes</h1>
+<pre>@string.Join("\n", lines)</pre>
+
+@code {
+    private readonly List<string> lines = new();
+
+    protected override void OnInitialized()
+    {
+        Add("=== Runtime ===");
+        Add(RuntimeInformation.FrameworkDescription);
+        Add(Environment.Version.ToString());
+
+        Add("=== Assemblies (router input) ===");
+        var server = typeof(Program).Assembly;
+        var client = typeof(BlazorInventory.Client._Imports).Assembly;
+        Add($"AppAssembly: {server.FullName}");
+        Add($"AdditionalAssembly: {client.FullName}");
+        Add($"Same assembly: {server == client}");
+
+        foreach (var assembly in new[] { server, client })
+        {
+            Add($"=== Routable components in {assembly.GetName().Name} ===");
+            try
+            {
+                var types = assembly.GetExportedTypes();
+                Add($"ExportedTypes count: {types.Length}");
+                var routable = 0;
+                foreach (var type in types)
+                {
+                    if (typeof(IComponent).IsAssignableFrom(type)
+                        && type.IsDefined(typeof(RouteAttribute), inherit: false)
+                        && !type.IsDefined(typeof(ExcludeFromInteractiveRoutingAttribute)))
+                    {
+                        var templates = type.GetCustomAttributes<RouteAttribute>(inherit: false)
+                            .Select(static attribute => attribute.Template)
+                            .ToList();
+                        Add($"  {type.FullName} -> [{string.Join(", ", templates)}]");
+                        routable++;
+                    }
+                }
+                Add($"Routable count: {routable}");
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                Add($"ReflectionTypeLoadException! Partially loaded types: {ex.Types.Length}");
+                foreach (var loader in ex.LoaderExceptions.Where(static item => item is not null).Distinct())
+                    Add($"  loader: {loader}");
+            }
+        }
+
+        Add("=== Navigation ===");
+        Add($"BaseUri: {Nav.BaseUri}");
+        Add($"Uri: {Nav.Uri}");
+        try
+        {
+            var relative = Nav.ToBaseRelativePath(Nav.Uri);
+            Add($"ToBaseRelativePath: '{relative}'");
+            Add($"char codes: {string.Join(", ", relative.Select(static item => $"{item}={((int)item):X4}"))}");
+        }
+        catch (Exception ex)
+        {
+            Add($"ToBaseRelativePath threw: {ex}");
+        }
+
+        Logger.LogWarning("DIAG DebugRoutes visited: runtime={Runtime}, base={Base}, uri={Uri}",
+            RuntimeInformation.FrameworkDescription, Nav.BaseUri, Nav.Uri);
+    }
+
+    private void Add(string line) => lines.Add(line);
+}

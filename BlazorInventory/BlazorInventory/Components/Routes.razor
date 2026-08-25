@@ -1,7 +1,8 @@
 ﻿@using ActualLab.Fusion.Blazor
 @inherits CircuitHubComponentBase
 
-<Router AppAssembly="typeof(Program).Assembly" AdditionalAssemblies="new[] { typeof(Client._Imports).Assembly }">
+<Router AppAssembly="typeof(Program).Assembly" AdditionalAssemblies="new[] { typeof(Client._Imports).Assembly }"
+        NotFoundPage="typeof(BlazorInventory.Components.NotFoundPage)">
     <Found Context="routeData">
         <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Client.Layout.MainLayout)">
             <NotAuthorized>
