@@ -31,7 +31,7 @@
         </PackageReference>
         <PackageReference Include="ActualLab.Fusion.Ext.Services" Version="12.1.130" />
         <PackageReference Include="Mapster" Version="10.0.6" />
-        <PackageReference Include="Mapster.DependencyInjection" Version="10.0.6" />
+        <PackageReference Include="Mapster.DependencyInjection" Version="10.0.12" />
         <PackageReference Include="Mapster.EFCore" Version="10.0.6" />
         <PackageReference Include="MemoryPack.Generator" Version="1.21.4">
           <PrivateAssets>all</PrivateAssets>
