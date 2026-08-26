@@ -20,13 +20,13 @@
     <script>
         window.FusionAuth.schemas = "@_authSchemas";
     </script>
-    <HeadOutlet @rendermode="InteractiveServer" />
+    <HeadOutlet @rendermode="PageRenderMode" />
 
     <link href="https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.css" rel="stylesheet">
 </head>
 
 <body>
-    <Routes @rendermode="InteractiveServer" SessionId="@_sessionId" RenderModeKey="@(_renderMode?.Key)"/>
+    <Routes @rendermode="PageRenderMode" SessionId="@_sessionId" RenderModeKey="@(_renderMode?.Key)"/>
 
     <script src="_framework/blazor.web.js"></script>
     <script src="_content/AntDesign/js/ant-design-blazor.js"></script>
@@ -47,6 +47,9 @@
     [Inject] private ISessionResolver SessionResolver { get; init; } = null!;
     [Inject] private ILogger<App> Logger { get; init; } = null!;
     [CascadingParameter] private HttpContext HttpContext { get; set; } = null!;
+
+    private IComponentRenderMode? PageRenderMode =>
+        HttpContext.AcceptsInteractiveRouting() ? RenderMode.InteractiveServer : null;
 
     public override async Task SetParametersAsync(ParameterView parameters)
     {
