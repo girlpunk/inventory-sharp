@@ -80,11 +80,16 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
         options.KnownProxies.Add(IPAddress.Parse(proxy));
     }
 
-    foreach (var network in headerSettings.GetSection("network").Get<string[]>() ?? [])
+    foreach (var network in headerSettings.GetSection("networks").Get<string[]>() ?? [])
     {
-        Console.WriteLine($"Adding known proxy network: {network}");
         var parts = network.Split('/');
-        options.KnownIPNetworks.Add(new IPNetwork(IPAddress.Parse(parts[0]), int.Parse(parts[1])));
+        var address = IPAddress.Parse(parts[0]);
+        var prefixLength = parts.Length > 1
+            ? int.Parse(parts[1])
+            : address.GetAddressBytes().Length == 16 ? 128 : 32;
+        var ipNetwork = new IPNetwork(address, prefixLength);
+        Console.WriteLine($"Adding known proxy network: {ipNetwork}");
+        options.KnownIPNetworks.Add(ipNetwork);
     }
 });
 
@@ -210,6 +215,15 @@ builder.Services.AddDistributedMemoryCache();
 
 var app = builder.Build();
 
+app.UseForwardedHeaders();
+
+// TEMP DIAGNOSTIC: verify proxy trust / X-Forwarded-Proto application; remove once https scheme is confirmed
+app.Use(static (context, next) =>
+{
+    Console.WriteLine($"DIAG forwarded: path={context.Request.Path} remote={context.Connection.RemoteIpAddress}:{context.Connection.RemotePort} X-Forwarded-Proto='{context.Request.Headers["X-Forwarded-Proto"]}' scheme={context.Request.Scheme} host={context.Request.Host}");
+    return next(context);
+});
+
 app.UsePathBase(app.Configuration.GetValue<string>("base_path", "/"));
 
 StaticWebAssetsLoader.UseStaticWebAssets(app.Environment, app.Configuration);
@@ -245,8 +259,6 @@ app.UseBlazorFrameworkFiles();
 
 app.UseRouting();
 // app.MapRpcWebSocketServer();
-
-app.UseForwardedHeaders();
 
 app.UseAuthentication();
 app.UseAuthorization();
