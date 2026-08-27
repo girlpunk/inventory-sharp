@@ -99,6 +99,14 @@
             false,
             true);
 
+        // TEMP DIAGNOSTIC: confirm the external login callback outcome; remove once the login flow is verified.
+        Logger.LogWarning(
+            "DIAG external login callback: provider={Provider} key={Key} result={Result} returnUrl={ReturnUrl}",
+            _externalLoginInfo.LoginProvider,
+            _externalLoginInfo.ProviderKey,
+            result,
+            ReturnUrl);
+
         if (result.Succeeded)
         {
             Logger.LogInformation(
@@ -110,6 +118,29 @@
         else if (result.IsLockedOut)
         {
             RedirectManager.RedirectTo("Account/Lockout");
+        }
+        else
+        {
+            // The account may predate external login (the provider was never linked to it).
+            // If a user with the IdP email already exists, link the login and sign in instead
+            // of failing with a duplicate email when creating the account.
+            var email = _externalLoginInfo.Principal.FindFirstValue(ClaimTypes.Email);
+            if (email != null)
+            {
+                var existing = await UserManager.FindByEmailAsync(email);
+                if (existing is not null)
+                {
+                    var logins = await UserManager.GetLoginsAsync(existing);
+                    if (!logins.Any(l => l.LoginProvider == _externalLoginInfo.LoginProvider))
+                    {
+                        await UserManager.AddLoginAsync(existing, _externalLoginInfo);
+                    }
+
+                    Logger.LogInformation("Linked {LoginProvider} login to existing user {Email}.", _externalLoginInfo.LoginProvider, email);
+                    await SignInManager.SignInAsync(existing, false, _externalLoginInfo.LoginProvider);
+                    RedirectManager.RedirectTo(ReturnUrl);
+                }
+            }
         }
 
         // If the user does not have an account, then ask the user to create an account.

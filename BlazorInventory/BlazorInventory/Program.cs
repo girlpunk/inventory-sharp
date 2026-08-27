@@ -113,7 +113,7 @@ builder.Services.AddAuthentication(static options =>
             options.CorrelationCookie.Name = "OIDC-Correlation";
             options.NonceCookie.Name = "OIDC-Nonce";
 
-            options.SignInScheme = IdentityConstants.ApplicationScheme;
+            options.SignInScheme = IdentityConstants.ExternalScheme;
         })
     .AddIdentityCookies();
 
@@ -157,7 +157,7 @@ builder.Services.AddDbContextServices<ApplicationDbContext>(static db =>
 
 builder.Services.AddMapster();
 
-builder.Services.AddIdentityCore<ApplicationUser>(static options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddIdentityCore<ApplicationUser>(static options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddSignInManager()
     .AddDefaultTokenProviders();

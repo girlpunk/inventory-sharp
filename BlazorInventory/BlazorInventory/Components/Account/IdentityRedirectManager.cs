@@ -18,7 +18,9 @@ internal sealed class IdentityRedirectManager(NavigationManager navigationManage
     [DoesNotReturn]
     public void RedirectTo(string? uri)
     {
-        uri ??= "";
+        // A missing return url (e.g. login via the header link) lands on the home page.
+        if (string.IsNullOrEmpty(uri))
+            uri = "/";
 
         // Prevent open redirects.
         if (!Uri.IsWellFormedUriString(uri, UriKind.Relative))
