@@ -22,7 +22,7 @@
     Please enter an email address for this site below and click the Register button to finish logging in.
 </Alert>
 
-<form method="post">
+<form @formname="external-login" @onsubmit="OnValidSubmitAsync" method="post">
     <AntiforgeryToken />
 
     <div class="ant-form-item">
@@ -72,12 +72,6 @@
         }
 
         _externalLoginInfo = info;
-
-        if (HttpMethods.IsPost(HttpContext.Request.Method))
-        {
-            await OnValidSubmitAsync();
-            return;
-        }
 
         if (HttpMethods.IsGet(HttpContext.Request.Method))
         {
