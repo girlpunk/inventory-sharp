@@ -25,9 +25,12 @@
 <form method="post">
     <AntiforgeryToken />
 
-    <FormItem Name="Email" Required>
-        <Input @bind-Value="Input.Email" Name="Email" AutoCompleteType="AutoCompleteType.Email" Placeholder="Please enter your email." aria-required="true"/>
-    </FormItem>
+    <div class="ant-form-item">
+        <label class="ant-form-item-label" for="register-email">Email</label>
+        <div class="ant-form-item-control">
+            <Input @bind-Value="Input.Email" Name="Email" Id="register-email" AutoCompleteType="AutoCompleteType.Email" Placeholder="Please enter your email." aria-required="true"/>
+        </div>
+    </div>
 
     <button type="submit" class="ant-btn ant-btn-lg ant-btn-primary">Register</button>
 </form>
