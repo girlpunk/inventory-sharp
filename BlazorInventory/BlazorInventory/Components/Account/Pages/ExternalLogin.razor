@@ -18,7 +18,7 @@
 <h2>Associate your @ProviderDisplayName account.</h2>
 <hr />
 
-<Alert Message="@($"You've successfully authenticated with <strong>{ProviderDisplayName}</strong>.")" Type="AlertType.Info">
+<Alert Message="@($"You've successfully authenticated with {ProviderDisplayName}.")" Type="AlertType.Info">
     Please enter an email address for this site below and click the Register button to finish logging in.
 </Alert>
 
@@ -148,8 +148,12 @@
         // If the user does not have an account, then ask the user to create an account.
         if (_externalLoginInfo.Principal.HasClaim(static c => c.Type == ClaimTypes.Email))
         {
+            Input.Username = _externalLoginInfo.Principal.FindFirstValue(ClaimTypes.Name) ?? "";
             Input.Email = _externalLoginInfo.Principal.FindFirstValue(ClaimTypes.Email) ?? "";
         }
+
+        // See if we have all the details from the IDP
+        await OnValidSubmitAsync();
     }
 
     private async Task OnValidSubmitAsync()
@@ -170,8 +174,10 @@
         var emailStore = GetEmailStore();
         var user = CreateUser();
 
-        await UserStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
-        await emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+        await UserStore.SetUserNameAsync(user, Input.Username, CancellationToken.None);
+
+        if(!string.IsNullOrWhiteSpace(Input.Email))
+            await emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 
         var result = await UserManager.CreateAsync(user);
         if (result.Succeeded)
@@ -213,8 +219,10 @@
 
     private sealed class InputModel
     {
-        [Required]
         [EmailAddress]
         public string Email { get; set; } = "";
+
+        [Required]
+        public string Username { get; set; } = "";
     }
 }
