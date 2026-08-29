@@ -123,7 +123,11 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddPooledDbContextFactory<ApplicationDbContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), static npgsql => npgsql.EnableRetryOnFailure(0));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), static npgsql =>
+    {
+        npgsql.EnableRetryOnFailure(0);
+        npgsql.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+    });
     options.UseNpgsqlHintFormatter();
 
     if (builder.Environment.IsDevelopment())
@@ -133,7 +137,7 @@ builder.Services.AddPooledDbContextFactory<ApplicationDbContext>(options =>
         options.ConfigureWarnings(static warnings =>
         {
             warnings.Log(RelationalEventId.PendingModelChangesWarning);
-            warnings.Throw(RelationalEventId.MultipleCollectionIncludeWarning);
+            warnings.Log(RelationalEventId.MultipleCollectionIncludeWarning);
         });
     }
 });

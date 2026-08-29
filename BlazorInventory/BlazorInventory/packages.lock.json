@@ -112,9 +112,9 @@
       },
       "Microsoft.AspNetCore.App.Internal.Assets": {
         "type": "Direct",
-        "requested": "[10.0.8, )",
-        "resolved": "10.0.8",
-        "contentHash": "v6KocthydFtUHBIRI29YsOHKOgsqcQubkNywVOxiYr4GSDSv+XO/AeyMJywlX+1tGUTGdydu/X7V+Tzeq4SsoA=="
+        "requested": "[10.0.10, )",
+        "resolved": "10.0.10",
+        "contentHash": "8k0KoYKvNrSqP8E3oDJMBVKavlTEE6BacdLGtEDcxv9Hz0XxWFkD6JdLJsxXUlGeAfZ6YfvWmxKenl73qeCTSA=="
       },
       "Microsoft.AspNetCore.Authentication.OpenIdConnect": {
         "type": "Direct",
@@ -546,8 +546,8 @@
       },
       "Microsoft.DotNet.HotReload.WebAssembly.Browser": {
         "type": "Transitive",
-        "resolved": "10.0.108",
-        "contentHash": "NLGmqCbkWslYuPGrOR8BRq3yTaYYTe8xtnRnCSNE3kwOBSjRhW60vH28l6s6/wywBPyjStfx94uuxJusGVWnhA=="
+        "resolved": "10.0.110",
+        "contentHash": "v2QuCGg7GLcuILPU+S57gi2bnLMcROOBFvLjqFKb3fF420eimHOmmZdALkRkd+qMku83SaGLy2bsL8Z1WFWbVw=="
       },
       "Microsoft.EntityFrameworkCore": {
         "type": "Transitive",
@@ -1484,7 +1484,7 @@
           "Microsoft.AspNetCore.Components.WebAssembly": "[10.0.5, )",
           "Microsoft.AspNetCore.Components.WebAssembly.Authentication": "[10.0.5, )",
           "Microsoft.AspNetCore.Components.WebAssembly.DevServer": "[10.0.5, )",
-          "Microsoft.DotNet.HotReload.WebAssembly.Browser": "[10.0.108, )",
+          "Microsoft.DotNet.HotReload.WebAssembly.Browser": "[10.0.110, )",
           "UAParser": "[3.1.47, )",
           "ZXingBlazor": "[1.1.6, )"
         }
