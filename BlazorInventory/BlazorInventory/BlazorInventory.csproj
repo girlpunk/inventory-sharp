@@ -11,6 +11,18 @@
         <MvcBuildViews Condition="'$(Configuration)'=='Debug'">false</MvcBuildViews>
         <MvcBuildViews Condition="'$(Configuration)'=='Release'">true</MvcBuildViews>
         <MvcRazorCompileOnPublish>true</MvcRazorCompileOnPublish>
+
+        <PreserveCompilationContext>true</PreserveCompilationContext>
+
+        <EnableNETAnalyzers>true</EnableNETAnalyzers>
+        <AnalysisLevel>latest</AnalysisLevel>
+        <AnalysisMode>All</AnalysisMode>
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+        <EnablePackageValidation>true</EnablePackageValidation>
+        <EnableStrictModeForBaselineValidation>true</EnableStrictModeForBaselineValidation>
+        <EnableStrictModeForCompatibleFrameworksInPackage>true</EnableStrictModeForCompatibleFrameworksInPackage>
+
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     </PropertyGroup>
 
     <ItemGroup>
@@ -23,13 +35,26 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="ActualLab.Fusion.EntityFramework.Npgsql" Version="12.1.130" />
-        <PackageReference Include="ActualLab.Fusion.Server" Version="12.1.130" />
-        <PackageReference Include="ActualLab.Generators" Version="12.1.130">
+        <PackageReference Include="ActualLab.Fusion.EntityFramework.Npgsql" Version="14.3.34" />
+        <PackageReference Include="ActualLab.Fusion.Server" Version="14.3.34" />
+        <PackageReference Include="ActualLab.Generators" Version="14.3.34">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="ActualLab.Fusion.Ext.Services" Version="12.1.130" />
+        <PackageReference Include="ActualLab.Fusion.Ext.Services" Version="14.3.34" />
+        <PackageReference Include="AsyncFixer" Version="2.1.0">
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+          <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="IDisposableAnalyzers" Version="4.0.8">
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+          <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="JetBrains.Annotations" Version="2026.2.0" />
+        <PackageReference Include="Lindhart.Analyser.MissingAwaitWarning" Version="3.2.0">
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+          <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
         <PackageReference Include="Mapster" Version="10.0.6" />
         <PackageReference Include="Mapster.DependencyInjection" Version="10.0.6" />
         <PackageReference Include="Mapster.EFCore" Version="10.0.6" />
@@ -37,6 +62,11 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Meziantou.Analyzer" Version="3.0.191">
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+          <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Meziantou.Analyzer.Annotations" Version="1.7.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.5" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.5" />
         <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="10.0.5" />
@@ -44,24 +74,32 @@
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.5" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="10.0.5" />
         <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="10.0.5" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.400">
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+          <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.5">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
 
-        <PackageReference Include="Npgsql.OpenTelemetry" Version="10.0.2" />
-        <PackageReference Include="OpenTelemetry.AutoInstrumentation" Version="1.14.1" />
-        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.15.1" />
-        <PackageReference Include="Roslynator.Analyzers" Version="4.15.0">
+        <PackageReference Include="Npgsql.OpenTelemetry" Version="10.0.3" />
+        <PackageReference Include="OpenTelemetry.AutoInstrumentation" Version="1.16.0" />
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.18.0" />
+        <PackageReference Include="Roslynator.Analyzers" Version="5.0.0">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Roslynator.Formatting.Analyzers" Version="4.15.0">
+        <PackageReference Include="Roslynator.CodeFixes" Version="5.0.0">
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+          <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Roslynator.Formatting.Analyzers" Version="5.0.0">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="SharpAbp.Abp.OpenTelemetry.Exporter.Prometheus.AspNetCore" Version="4.6.9" />
+        <PackageReference Include="SharpAbp.Abp.OpenTelemetry.Exporter.Prometheus.AspNetCore" Version="4.7.3" />
     </ItemGroup>
     
     <ItemGroup>
