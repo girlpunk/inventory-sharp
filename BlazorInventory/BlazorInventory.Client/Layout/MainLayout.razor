@@ -1,5 +1,9 @@
+@using Microsoft.Extensions.Hosting
+@using System.Diagnostics
+@using System.Reflection
 @using System.Security.Claims
 @inherits LayoutComponentBase
+@inject IHostEnvironment Env
 
 <Layout>
     <Header Class="header">
@@ -113,7 +117,7 @@
 
             <Flex Direction="FlexDirection.Horizontal" class="rz-border-top rz-border-color-base-800 rz-mt-8 rz-pt-4">
                 <div class="rz-col-12" style="height: fit-content;">
-                    <p class="rz-text-body2 rz-m-0 rz-text-disabled-color">InventorySharp © 2024 - @DateTimeOffset.Now.Year, Version @FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion</p>
+                    <p class="rz-text-body2 rz-m-0 rz-text-disabled-color">InventorySharp © 2024 - @DateTimeOffset.Now.Year, Version @FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion, Environment @Env.EnvironmentName</p>
                 </div>
             </Flex>
         </footer>
