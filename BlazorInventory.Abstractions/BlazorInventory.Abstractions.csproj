@@ -22,6 +22,10 @@
         <EnableStrictModeForCompatibleFrameworksInPackage>true</EnableStrictModeForCompatibleFrameworksInPackage>
 
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+
+        <RepositoryUrl>https://github.com/girlpunk/inventory-sharp.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>

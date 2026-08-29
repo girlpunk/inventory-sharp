@@ -20,6 +20,10 @@
         <EnableStrictModeForCompatibleFrameworksInPackage>true</EnableStrictModeForCompatibleFrameworksInPackage>
 
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+
+        <RepositoryUrl>https://github.com/girlpunk/inventory-sharp.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -100,7 +104,6 @@
         <PackageReference Include="ActualLab.Generators" PrivateAssets="all" Version="14.3.34" />
     </ItemGroup>
 
-
     <ItemGroup>
       <AdditionalFiles Include="Layout\MainLayout.razor" />
       <AdditionalFiles Include="Pages\Item\Create.razor" />
@@ -116,4 +119,13 @@
       <AdditionalFiles Include="Widgets\TagsWidget.razor" />
     </ItemGroup>
 
+    <Target Name="SetSourceRevisionId" BeforeTargets="InitializeSourceControlInformation">
+        <Exec
+          Command="git describe --long --always --dirty --exclude=* --abbrev=8"
+          ConsoleToMSBuild="True"
+          IgnoreExitCode="False"
+        >
+          <Output PropertyName="SourceRevisionId" TaskParameter="ConsoleOutput"/>
+        </Exec>
+    </Target>
 </Project>

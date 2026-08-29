@@ -17,7 +17,8 @@ RUN dotnet build "./BlazorInventory.csproj" -c $BUILD_CONFIGURATION -o /app/buil
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./BlazorInventory.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+ARG HASH="none"
+RUN dotnet publish "./BlazorInventory.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false /p:VersionSuffix=${HASH}
 
 FROM base AS final
 WORKDIR /app
