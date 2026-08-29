@@ -42,10 +42,15 @@
     <button type="submit" class="ant-btn ant-btn-lg ant-btn-primary">Register</button>
 </form>
 
+<ul>
 @foreach (var claim in _externalLoginInfo?.Principal.Claims ?? [])
 {
-  Response.Write("CLAIM TYPE: " + claim.Type + "; CLAIM VALUE: " + claim.Value + "</br>");
+  <li>
+    Type: @claim.Type
+    Value: @claim.Value
+  </li>
 }
+</ul>
 
 @code {
     internal const string LoginCallbackAction = "LoginCallback";
