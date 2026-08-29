@@ -112,9 +112,9 @@
       },
       "Microsoft.AspNetCore.App.Internal.Assets": {
         "type": "Direct",
-        "requested": "[10.0.10, )",
-        "resolved": "10.0.10",
-        "contentHash": "8k0KoYKvNrSqP8E3oDJMBVKavlTEE6BacdLGtEDcxv9Hz0XxWFkD6JdLJsxXUlGeAfZ6YfvWmxKenl73qeCTSA=="
+        "requested": "[10.0.11, )",
+        "resolved": "10.0.11",
+        "contentHash": "tYYYBZsuF2DSz1I3hcfB8qC4nNekIKufkYZOJ2R28fNK3PkS7fJao/mIX5H84NH94UACZQ4dhvt8GDlkrJFwLg=="
       },
       "Microsoft.AspNetCore.Authentication.OpenIdConnect": {
         "type": "Direct",
@@ -374,8 +374,8 @@
       },
       "AntDesign": {
         "type": "Transitive",
-        "resolved": "1.6.0",
-        "contentHash": "tMjVvOaRWEddSMaVb39dNqkcfPetmsC1+cxnN6VpfRAFmrpdK8KesUtKB0Dm1i2AYRDJQdWy1Ghk77qBjAty4A==",
+        "resolved": "1.6.2",
+        "contentHash": "+xOKfi28sW/HIqJGWevRrI3wMeHCkcPf+kImg1plR2oQ9fypoVylWpwinMdscRI81ZVv1Lb5i4UvinTD0tjDTQ==",
         "dependencies": {
           "OneOf": "3.0.271"
         }
@@ -543,11 +543,6 @@
           "Newtonsoft.Json": "13.0.3",
           "System.Composition": "9.0.0"
         }
-      },
-      "Microsoft.DotNet.HotReload.WebAssembly.Browser": {
-        "type": "Transitive",
-        "resolved": "10.0.110",
-        "contentHash": "v2QuCGg7GLcuILPU+S57gi2bnLMcROOBFvLjqFKb3fF420eimHOmmZdALkRkd+qMku83SaGLy2bsL8Z1WFWbVw=="
       },
       "Microsoft.EntityFrameworkCore": {
         "type": "Transitive",
@@ -1476,7 +1471,7 @@
           "ActualLab.Fusion.Blazor": "[14.3.34, )",
           "ActualLab.Fusion.Blazor.Authentication": "[14.3.34, )",
           "ActualLab.Fusion.Ext.Contracts": "[14.3.34, )",
-          "AntDesign": "[1.6.0, )",
+          "AntDesign": "[1.6.2, )",
           "BlazorInventory.Abstractions": "[1.0.0, )",
           "Humanizer.Core": "[3.0.10, )",
           "JetBrains.Annotations": "[2026.2.0, )",
@@ -1484,7 +1479,6 @@
           "Microsoft.AspNetCore.Components.WebAssembly": "[10.0.5, )",
           "Microsoft.AspNetCore.Components.WebAssembly.Authentication": "[10.0.5, )",
           "Microsoft.AspNetCore.Components.WebAssembly.DevServer": "[10.0.5, )",
-          "Microsoft.DotNet.HotReload.WebAssembly.Browser": "[10.0.110, )",
           "UAParser": "[3.1.47, )",
           "ZXingBlazor": "[1.1.6, )"
         }
