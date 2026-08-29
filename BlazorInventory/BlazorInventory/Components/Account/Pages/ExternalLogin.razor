@@ -163,11 +163,8 @@
         }
 
         // If the user does not have an account, then ask the user to create an account.
-        if (_externalLoginInfo.Principal.HasClaim(static c => c.Type == ClaimTypes.Email))
-        {
-            Input.Username = _externalLoginInfo.Principal.FindFirstValue(ClaimTypes.Name) ?? "";
-            Input.Email = _externalLoginInfo.Principal.FindFirstValue(ClaimTypes.Email) ?? "";
-        }
+        Input.Email = _externalLoginInfo.Principal.FindFirstValue(ClaimTypes.Email) ?? "";
+        Input.Username = _externalLoginInfo.Principal.FindFirstValue("preferred_username") ?? "";
 
         // See if we have all the details from the IDP
         await OnValidSubmitAsync();
@@ -237,9 +234,9 @@
     private sealed class InputModel
     {
         [EmailAddress]
-        public string Email { get; set; } = "";
+        public string? Email { get; set; } = "";
 
         [Required]
-        public string Username { get; set; } = "";
+        public string? Username { get; set; } = "";
     }
 }

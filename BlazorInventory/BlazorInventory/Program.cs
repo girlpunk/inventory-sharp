@@ -217,13 +217,6 @@ var app = builder.Build();
 
 app.UseForwardedHeaders();
 
-// TEMP DIAGNOSTIC: verify proxy trust / X-Forwarded-Proto application; remove once https scheme is confirmed
-app.Use(static (context, next) =>
-{
-    Console.WriteLine($"DIAG forwarded: path={context.Request.Path} remote={context.Connection.RemoteIpAddress}:{context.Connection.RemotePort} X-Forwarded-Proto='{context.Request.Headers["X-Forwarded-Proto"]}' scheme={context.Request.Scheme} host={context.Request.Host}");
-    return next(context);
-});
-
 app.UsePathBase(app.Configuration.GetValue<string>("base_path", "/"));
 
 StaticWebAssetsLoader.UseStaticWebAssets(app.Environment, app.Configuration);
