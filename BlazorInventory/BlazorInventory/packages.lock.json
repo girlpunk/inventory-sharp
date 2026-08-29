@@ -1479,6 +1479,8 @@
           "AntDesign": "[1.6.0, )",
           "BlazorInventory.Abstractions": "[1.0.0, )",
           "Humanizer.Core": "[3.0.10, )",
+          "JetBrains.Annotations": "[2026.2.0, )",
+          "Meziantou.Analyzer.Annotations": "[1.7.0, )",
           "Microsoft.AspNetCore.Components.WebAssembly": "[10.0.5, )",
           "Microsoft.AspNetCore.Components.WebAssembly.Authentication": "[10.0.5, )",
           "Microsoft.AspNetCore.Components.WebAssembly.DevServer": "[10.0.5, )",

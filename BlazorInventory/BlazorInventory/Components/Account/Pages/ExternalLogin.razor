@@ -26,14 +26,26 @@
     <AntiforgeryToken />
 
     <div class="ant-form-item">
+        <label class="ant-form-item-label" for="register-email">Username</label>
+        <div class="ant-form-item-control">
+            <Input @bind-Value="Input.Username" Name="Username" Id="register-username" Placeholder="Please enter your username." aria-required="true"/>
+        </div>
+    </div>
+
+    <div class="ant-form-item">
         <label class="ant-form-item-label" for="register-email">Email</label>
         <div class="ant-form-item-control">
-            <Input @bind-Value="Input.Email" Name="Email" Id="register-email" AutoCompleteType="AutoCompleteType.Email" Placeholder="Please enter your email." aria-required="true"/>
+            <Input @bind-Value="Input.Email" Name="Email" Id="register-email" AutoCompleteType="AutoCompleteType.Email" Placeholder="Please enter your email."/>
         </div>
     </div>
 
     <button type="submit" class="ant-btn ant-btn-lg ant-btn-primary">Register</button>
 </form>
+
+@foreach (var claim in _externalLoginInfo?.Principal.Claims ?? [])
+{
+  Response.Write("CLAIM TYPE: " + claim.Type + "; CLAIM VALUE: " + claim.Value + "</br>");
+}
 
 @code {
     internal const string LoginCallbackAction = "LoginCallback";
