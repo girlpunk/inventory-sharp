@@ -2,7 +2,7 @@
 @attribute [Authorize]
 @using BlazorInventory.Abstractions.Service
 @using Humanizer
-@inherits ActualLab.Fusion.Blazor.ComputedStateComponent<ItemLabelView>
+@inherits AwaitedComputedStateComponent<ItemLabelView>
 @inject ILabelService LabelService
 
 <Descriptions Bordered Title="Label Details" Size="DescriptionsSize.Middle">

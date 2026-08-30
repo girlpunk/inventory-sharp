@@ -2,7 +2,7 @@
 @attribute [Authorize]
 @using BlazorInventory.Abstractions.Service
 @using Humanizer
-@inherits ActualLab.Fusion.Blazor.ComputedStateComponent<Index.Counts>
+@inherits AwaitedComputedStateComponent<Index.Counts>
 @inject IItemService ItemService
 @inject ILabelService LabelService
 @inject IScanService ScanService
