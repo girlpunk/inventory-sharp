@@ -1,36 +1,25 @@
-@using ActualLab.Fusion.Extensions
-@using ActualLab.Rpc
-@using ActualLab.Time
-@inherits StatefulComponentBase<RpcPeerState>
+@inherits StatefulComponentBase<CircuitConnectionInfo>
 
 @{
-    var m = State.Value;
-    var isOk = m.Kind is not RpcPeerStateKind.Disconnected;
+    var kind = State.Value.Kind;
+    var text = kind switch {
+        CircuitConnectionKind.Connected => "Connected",
+        CircuitConnectionKind.Disconnected => "Disconnected (reconnecting…)",
+        _ => "Unknown",
+    };
 }
 
-<div style="@($"margin: 0 1px; color: ${(isOk ? "black" : "yellow")}")">
+<div style="@($"margin: 0 1px; color: {(kind == CircuitConnectionKind.Disconnected ? "yellow" : "black")}")">
     <span>Connection state: </span>
-    <strong>
-        <span>@(m.GetDescription(true))</span>
-        @if (m.ReconnectsIn != TimeSpan.Zero) {
-            <span> Will reconnect <TimerBadge ExpiresAt="@(Clock.Now + m.ReconnectsIn)"/>. </span>
-            <a style="color: green;" @onclick="Reconnect">Reconnect</a>
-        }
-    </strong>
+    <strong>@text</strong>
 </div>
 
 @code {
-    [Inject] private RpcPeerStateMonitor Monitor { get; init; } = null!;
-    [Inject] private MomentClock Clock { get; init; } = null!;
-
-    [Parameter] public string CssClass { get; set; } = "";
+    [Inject] private ICircuitConnectionState CircuitState { get; init; } = null!;
 
     protected override void OnInitialized()
-        => SetState(Monitor.State);
+        => SetState(CircuitState.State);
 
     public override ValueTask DisposeAsync()
-        => default; // State shouldn't be disposed
-
-    private void Reconnect()
-        => Services.RpcHub().InternalServices.ClientPeerReconnectDelayer.CancelDelays();
+        => default; // State is owned by the scoped service
 }

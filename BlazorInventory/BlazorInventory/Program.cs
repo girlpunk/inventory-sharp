@@ -356,6 +356,9 @@ void ConfigureFusionServices()
     builder.Services.AddBlazorCircuitActivitySuppressor();
 
     ClientStartup.ConfigureSharedServices(builder.Services, hostKind);
+
+    // Publishes the Blazor circuit (browser WebSocket) connection state to ICircuitConnectionState
+    builder.Services.AddScoped<CircuitConnectionHandler>();
 }
 
 void AddService<TInterface, TImplementation>(FusionBuilder fusion, HostKind hostKind) where TInterface : class, IComputeService where TImplementation : class, TInterface

@@ -80,6 +80,7 @@ public static class ClientStartup
             // If we're here, hostKind is Client, ApiServer, or SingleServer
             // fusion.AddService<Todos>(ServiceLifetime.Scoped);
             services.AddScoped(c => new RpcPeerStateMonitor(c.RpcHub(), OSInfo.IsAnyClient ? RpcRef.Default : null));
+            services.AddScoped<ICircuitConnectionState, CircuitConnectionState>();
             // services.AddScoped<IUpdateDelayer>(static c => new UpdateDelayer(c.UIActionTracker(), 0.1)); // 0.25s
 
             // Uncomment to make computed state components to re-render only on re-computation of their state.
