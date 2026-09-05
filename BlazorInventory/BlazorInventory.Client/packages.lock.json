@@ -93,9 +93,9 @@
       },
       "Meziantou.Analyzer": {
         "type": "Direct",
-        "requested": "[3.0.191, )",
-        "resolved": "3.0.191",
-        "contentHash": "koTThgx8TuNelm3lKWDkBLhuWswQa1DHRS5L83zOjjm8Eum0NQqW306+3RpN3gFz3Ncx85e4HaB/cJexhzmTOg=="
+        "requested": "[3.0.205, )",
+        "resolved": "3.0.205",
+        "contentHash": "hfr4SFqwOHdjCtXsPOFhGljie10BccNDSAUvM9kOQ0raqsolg7EWRFsJcGTtvydPcN+06a4ltlZ7pXA4YLMurA=="
       },
       "Meziantou.Analyzer.Annotations": {
         "type": "Direct",
@@ -105,9 +105,9 @@
       },
       "Microsoft.AspNetCore.App.Internal.Assets": {
         "type": "Direct",
-        "requested": "[10.0.10, )",
-        "resolved": "10.0.10",
-        "contentHash": "8k0KoYKvNrSqP8E3oDJMBVKavlTEE6BacdLGtEDcxv9Hz0XxWFkD6JdLJsxXUlGeAfZ6YfvWmxKenl73qeCTSA=="
+        "requested": "[10.0.11, )",
+        "resolved": "10.0.11",
+        "contentHash": "tYYYBZsuF2DSz1I3hcfB8qC4nNekIKufkYZOJ2R28fNK3PkS7fJao/mIX5H84NH94UACZQ4dhvt8GDlkrJFwLg=="
       },
       "Microsoft.AspNetCore.Components.WebAssembly": {
         "type": "Direct",
@@ -138,12 +138,6 @@
         "resolved": "10.0.5",
         "contentHash": "tZwWmlI7WWT1KnDA/S5tkqHd2ZXxnYL0VLqbPAmDVppVlIqqQZLP3+OiW+IgcVSsAgi6WMlGcAd3DrhpFHw/uw=="
       },
-      "Microsoft.DotNet.HotReload.WebAssembly.Browser": {
-        "type": "Direct",
-        "requested": "[10.0.110, )",
-        "resolved": "10.0.110",
-        "contentHash": "v2QuCGg7GLcuILPU+S57gi2bnLMcROOBFvLjqFKb3fF420eimHOmmZdALkRkd+qMku83SaGLy2bsL8Z1WFWbVw=="
-      },
       "Microsoft.Extensions.DependencyInjection": {
         "type": "Direct",
         "requested": "[10.0.5, )",
@@ -166,15 +160,15 @@
       },
       "Microsoft.NET.ILLink.Tasks": {
         "type": "Direct",
-        "requested": "[10.0.10, )",
-        "resolved": "10.0.10",
-        "contentHash": "uR9SuPGnC2NtBAn62LI0cZpPwSX5WdYkYV2pgs5BkT8VszvHvkqoUK9D6FMj4Y6+F16sFeA/zOWwamGd+fKbqQ=="
+        "requested": "[10.0.11, )",
+        "resolved": "10.0.11",
+        "contentHash": "IBf7lbovvjGWVWXZX5cJ/cO0WXbId0Zq4BuSeT94mGZuOAP66oMeH9PTBZ9Jpp3Jb6jtK0qm/NyUbPRo1gC/wQ=="
       },
       "Microsoft.NET.Sdk.WebAssembly.Pack": {
         "type": "Direct",
-        "requested": "[10.0.10, )",
-        "resolved": "10.0.10",
-        "contentHash": "gvkxv3MsFo+okExR2N8eo1asV/xnfSSvp8duAGyQARar/V+OStp4QfkFI1Ek6SkT3k7U3+3XLj2nqDFJaEL8Cg=="
+        "requested": "[10.0.11, )",
+        "resolved": "10.0.11",
+        "contentHash": "qTQsflEOjG1xG8FCfQJZbVd7DErJdKqKoW4gxH1HlgGQ5IBBloehLvXhMhzYqogYyajU7YEUKZvJ4n/vA7sAmQ=="
       },
       "Microsoft.SourceLink.GitHub": {
         "type": "Direct",
