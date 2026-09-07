@@ -50,7 +50,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AntDesign" Version="1.6.0" />
+        <PackageReference Include="AntDesign" Version="1.6.2" />
         <PackageReference Include="ActualLab.Fusion" Version="14.3.34" />
         <PackageReference Include="AsyncFixer" Version="2.1.0">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
